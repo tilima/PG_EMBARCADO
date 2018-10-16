@@ -41,7 +41,7 @@ const int SensorTensao_2 = A3;
 const int SensorCorrente_3 = A6;
 const int SensorTensao_3 = A7;
 
-//    ORGANIZA OS DADOS MEDIDOS    //
+//    ORGANIZA OS DADOS MEDIDOS    // POSSUI ERRO
 void prepara_dado(double rP, double aP, double pF, double sV, double Ir){
   dtostrf(rP, 5, 2, rP1);
   dtostrf(aP, 5, 2, aP1);
@@ -60,7 +60,7 @@ void prepara_dado(double rP, double aP, double pF, double sV, double Ir){
   dados_arduino += ", ";
 }
 
-//   ENVIA OS DADOS  //
+//   ENVIA OS DADOS  // POSSUI ERRO
 void requestEvent() {
     if(flag_envio == true){ 
         Wire.write(dados_arduino);
