@@ -108,7 +108,7 @@ void write_from_file(EthernetClient &client, char * filename){
   }
 }
  
-void iniciar_ethernet_01(){
+void iniciar_ethernet(){
   byte ip[4]      = {192,168,0,40};                    
   byte gateway[4] = {192,168,0,1};
   byte subnet[4]  = {255,255,255,0};
@@ -117,10 +117,6 @@ void iniciar_ethernet_01(){
   server = new EthernetServer(porta);
   Ethernet.begin(mac, ip, gateway, subnet);
   server->begin();
-}
- 
-void iniciar_ethernet(){
-  iniciar_ethernet_01();               
 }
  
 void html_cab_200_ok(EthernetClient &client){   
