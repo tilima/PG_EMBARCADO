@@ -6,11 +6,34 @@ EnergyMonitor emon1;
 EnergyMonitor emon2;
 EnergyMonitor emon3;
 
+//   DECLARA GRANDEZAS   //
+
+//    MEDIDOR 01    //
+  float realPower1;           
+  float apparentPower1;      
+  float powerFActor1;       
+  float supplyVoltage1;              
+  float Irms1;           
+
+//    MEDIDOR 02    //
+  float realPower2;           
+  float apparentPower2;      
+  float powerFActor2;       
+  float supplyVoltage2;              
+  float Irms2;           
+
+//    MEDIDOR 03    //
+  float realPower3;           
+  float apparentPower3;      
+  float powerFActor3;       
+  float supplyVoltage3;              
+  float Irms3;                        
+
 //   FLAG GLOBAL   //
 boolean flag_envio = false;
 
 //   DECLARA MENSAGEM   //
-String dados_arduino;
+char dados_arduino;
 
 //   MEDIDOR 01   //
 char rP1[7];
@@ -42,31 +65,41 @@ const int SensorCorrente_3 = A6;
 const int SensorTensao_3 = A7;
 
 //    ORGANIZA OS DADOS MEDIDOS    // POSSUI ERRO
-void prepara_dado(double rP, double aP, double pF, double sV, double Ir){
-  dtostrf(rP, 5, 2, rP1);
-  dtostrf(aP, 5, 2, aP1);
-  dtostrf(pF, 4, 2, pF1);
-  dtostrf(sV, 6, 2, sV1);
-  dtostrf(Ir, 5, 3, Ir1);
-  dados_arduino += rP1;
-  dados_arduino += ", ";
-  dados_arduino += aP1;
-  dados_arduino += ", ";
-  dados_arduino += pF1;
-  dados_arduino += ", ";
-  dados_arduino += sV1;
-  dados_arduino += ", ";
-  dados_arduino += Ir1;
-  dados_arduino += ", ";
+void prepara_dado(){  
+  dtostrf(realPower1, 5, 2, rP1);
+  dtostrf(apparentPower1, 5, 2, aP1);
+  dtostrf(powerFActor1, 4, 2, pF1);
+  dtostrf(supplyVoltage1, 6, 2, sV1);
+  dtostrf(Irms1, 5, 3, Ir1);  
+  dtostrf(realPower2, 5, 2, rP2);
+  dtostrf(apparentPower2, 5, 2, aP2);
+  dtostrf(powerFActor2, 4, 2, pF2);
+  dtostrf(supplyVoltage2, 6, 2, sV2);
+  dtostrf(Irms2, 5, 3, Ir2);  
+  dtostrf(realPower3, 5, 2, rP3);
+  dtostrf(apparentPower3, 5, 2, aP3);
+  dtostrf(powerFActor3, 4, 2, pF3);
+  dtostrf(supplyVoltage3, 6, 2, sV3);
+  dtostrf(Irms3, 5, 3, Ir3);
 }
 
 //   ENVIA OS DADOS  // POSSUI ERRO
 void requestEvent() {
-    if(flag_envio == true){ 
-        Wire.write(dados_arduino);
-        dados_arduino = "";
-        flag_envio = false;
-    }
+        Wire.write(rP1); 
+//        Wire.write(aP1); 
+        Wire.write(pF1); 
+//        Wire.write(sV1); 
+//        Wire.write(Ir1); 
+//        Wire.write(rP2); 
+//        Wire.write(aP2); 
+//        Wire.write(pF2); 
+//        Wire.write(sV2); 
+//        Wire.write(Ir2); 
+//        Wire.write(rP3); 
+//        Wire.write(aP3); 
+//        Wire.write(pF3); 
+//        Wire.write(sV3); 
+//        Wire.write(Ir3);
 }
 
 void setup() {
@@ -84,7 +117,7 @@ void setup() {
   Wire.onRequest(requestEvent); 
 
 // INICIALIZA A PORTA SERIAL
-  Serial.begin(9600);
+//  Serial.begin(9600);
 
 //   INICIALIZA OS SENSORES   //
   emon1.current(SensorCorrente_1,0.98); // (PINO,GANHO/CALIBRAÇÃO)
@@ -99,35 +132,31 @@ void loop() {
 
 //    MEDIDOR DE ENERGIA    //
   emon1.calcVI(20,2000);
-  emon2.calcVI(20,2000);
-  emon3.calcVI(20,2000);
+//  emon2.calcVI(20,2000);
+//  emon3.calcVI(20,2000);
 
 //    MEDIDOR 01    //
-  double realPower1       = emon1.realPower;        
-  double apparentPower1   = emon1.apparentPower;    
-  double powerFActor1     = emon1.powerFactor;      
-  double supplyVoltage1   = emon1.Vrms;             
-  double Irms1            = emon1.Irms;             
+  realPower1       = emon1.realPower;        
+  apparentPower1   = emon1.apparentPower;    
+  powerFActor1     = emon1.powerFactor;      
+  supplyVoltage1   = emon1.Vrms;             
+  Irms1            = emon1.Irms;             
 
 //    MEDIDOR 02    //
-  float realPower2       = emon2.realPower;        
-  float apparentPower2   = emon2.apparentPower;    
-  float powerFActor2     = emon2.powerFactor;     
-  float supplyVoltage2   = emon2.Vrms;             
-  float Irms2            = emon2.Irms;             
+  realPower2       = emon2.realPower;        
+  apparentPower2   = emon2.apparentPower;    
+  powerFActor2     = emon2.powerFactor;     
+  supplyVoltage2   = emon2.Vrms;             
+  Irms2            = emon2.Irms;             
 
 //    MEDIDOR 03    //
-  float realPower3       = emon3.realPower;        
-  float apparentPower3   = emon3.apparentPower;    
-  float powerFActor3     = emon3.powerFactor;      
-  float supplyVoltage3   = emon3.Vrms;             
-  float Irms3            = emon3.Irms;             
+  realPower3       = emon3.realPower;        
+  apparentPower3   = emon3.apparentPower;    
+  powerFActor3     = emon3.powerFactor;      
+  supplyVoltage3   = emon3.Vrms;             
+  Irms3            = emon3.Irms;             
 
-  prepara_dado(realPower1,apparentPower1,powerFActor1,supplyVoltage1,Irms1);
-  prepara_dado(realPower2,apparentPower2,powerFActor2,supplyVoltage2,Irms2);
-  prepara_dado(realPower3,apparentPower3,powerFActor3,supplyVoltage3,Irms3);
-  flag_envio = true; // STRING PRONTA PARA ENVIO
-
+  prepara_dado();
   delay(100);
 }
 

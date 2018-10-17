@@ -28,7 +28,7 @@ char pF1[2];
 char sV1[8];
 char Ir1[2];
 byte data;
-unsigned char mensagem;
+char mensagem;
 String dados_arduino_00;
 String dados_arduino_01;
 String dados_arduino_02;
@@ -65,13 +65,20 @@ void prepara_dado(double rP, double aP, double pF, double sV, double Ir){
 }
 
 //    RECEBE OS DADOS DO DISPOSITIVO ESCRAVO    //
-char recebe_escravo(int endereco, int tamanho){ 
-  Wire.requestFrom(endereco, tamanho);    // (ENDEREÇO,QUANTIDADE DE BYTES)
-  while (Wire.available()){ 
-    mensagem = Wire.read(); 
-    Serial.print(mensagem); 
-  }
-  return mensagem;
+void recebe_escravo(int endereco){ 
+  Wire.requestFrom(endereco,9);    // (ENDEREÇO,QUANTIDADE DE BYTES)
+  while (Wire.available()){
+    for(int i = 0; i < 5; i++){
+      mensagem = Wire.read(); 
+      dados_arduino_01 += mensagem;
+    }
+    dados_arduino_01 += ", ";
+    for(int i = 0; i < 4; i++){
+      mensagem = Wire.read(); 
+      dados_arduino_01 += mensagem;
+    }
+    dados_arduino_01 += ", "; 
+  }  
 }
 
 //    USUARIO E SENHA   // 
@@ -386,15 +393,17 @@ void loop() {
   prepara_dado(realPower1,apparentPower1,powerFActor1,supplyVoltage1,Irms1);
   //    TESTE LEITURA   //
   //emon1.serialprint();
-  //Serial.println(dados_arduino_00);
-  banco_de_dados(dados_arduino_00);
+//  Serial.println(dados_arduino_00);
+  //banco_de_dados(dados_arduino_00);
   dados_arduino_00 = "";
 
   //    AQUISIÇÃO DE DADOS    //
   //data = recebe_escravo(RTC,???);
-  dados_arduino_01 = recebe_escravo(arduino_01,89);
-  dados_arduino_02 = recebe_escravo(arduino_02,89);
-  dados_arduino_03 = recebe_escravo(arduino_03,89);
+  recebe_escravo(arduino_01);
+  Serial.println(dados_arduino_01);
+  dados_arduino_01 = "";
+//  dados_arduino_02 = recebe_escravo(arduino_02,75);
+// dados_arduino_03 = recebe_escravo(arduino_03,75);
 }
 
  
