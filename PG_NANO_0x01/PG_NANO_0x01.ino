@@ -8,6 +8,8 @@ EnergyMonitor emon3;
 
 //   DECLARA GRANDEZAS   //
 
+int flag = 0;
+
 //    MEDIDOR 01    //
   float realPower1;           
   float apparentPower1;      
@@ -33,28 +35,60 @@ EnergyMonitor emon3;
 boolean flag_envio = false;
 
 //   DECLARA MENSAGEM   //
-char dados_arduino;
+char size_1c[4];
+char size_2c[4];
+char size_3c[4];
+char size_4c[4];
+char size_5c[4];
+char size_6c[4];
+char size_7c[4];
+char size_8c[4];
+char size_9c[4];
+char size_10c[4];
+char size_11c[4];
+char size_12c[4];
+char size_13c[4];
+char size_14c[4];
+char size_15c[4];
+
+String size_1;
+String size_2;
+String size_3;
+String size_4;
+String size_5;
+String size_6;
+String size_7;
+String size_8;
+String size_9;
+String size_10;
+String size_11;
+String size_12;
+String size_13;
+String size_14;
+String size_15;
+
+String dados_arduino;
 
 //   MEDIDOR 01   //
-char rP1[7];
-char aP1[7];
-char pF1[2];
+char rP1[8];
+char aP1[8];
+char pF1[8];
 char sV1[8];
-char Ir1[2];
+char Ir1[8];
 
 //   MEDIDOR 02   //
-char rP2[7];
-char aP2[7];
-char pF2[2];
+char rP2[8];
+char aP2[8];
+char pF2[8];
 char sV2[8];
-char Ir2[2];
+char Ir2[8];
 
 //   MEDIDOR 03   //
-char rP3[7];
-char aP3[7];
-char pF3[2];
+char rP3[8];
+char aP3[8];
+char pF3[8];
 char sV3[8];
-char Ir3[2];
+char Ir3[8];
 
 //    DECLARA OS PINOS DO ARDUINO   //
 const int SensorCorrente_1 = A0;
@@ -64,42 +98,107 @@ const int SensorTensao_2 = A3;
 const int SensorCorrente_3 = A6;
 const int SensorTensao_3 = A7;
 
-//    ORGANIZA OS DADOS MEDIDOS    // POSSUI ERRO
-void prepara_dado(){  
-  dtostrf(realPower1, 5, 2, rP1);
-  dtostrf(apparentPower1, 5, 2, aP1);
-  dtostrf(powerFActor1, 4, 2, pF1);
-  dtostrf(supplyVoltage1, 6, 2, sV1);
-  dtostrf(Irms1, 5, 3, Ir1);  
-  dtostrf(realPower2, 5, 2, rP2);
-  dtostrf(apparentPower2, 5, 2, aP2);
-  dtostrf(powerFActor2, 4, 2, pF2);
-  dtostrf(supplyVoltage2, 6, 2, sV2);
-  dtostrf(Irms2, 5, 3, Ir2);  
-  dtostrf(realPower3, 5, 2, rP3);
-  dtostrf(apparentPower3, 5, 2, aP3);
-  dtostrf(powerFActor3, 4, 2, pF3);
-  dtostrf(supplyVoltage3, 6, 2, sV3);
-  dtostrf(Irms3, 5, 3, Ir3);
+//    ORGANIZA OS DADOS MEDIDOS    //
+void prepara_dado(){
+
+  dtostrf(realPower1, String(realPower1).length(), 2, rP1);
+  dtostrf(apparentPower1, String(apparentPower1).length(), 2, aP1);
+  dtostrf(powerFActor1, String(powerFActor1).length(), 2, pF1);
+  dtostrf(supplyVoltage1, String(supplyVoltage1).length(), 2, sV1);
+  dtostrf(Irms1, String(Irms1).length(), 2, Ir1); 
+  dtostrf(realPower2, String(realPower2).length(), 2, rP2);
+  dtostrf(apparentPower2, String(apparentPower2).length(), 2, aP2);
+  dtostrf(powerFActor2, String(powerFActor2).length(), 2, pF2);
+  dtostrf(supplyVoltage2, String(supplyVoltage2).length(), 2, sV2);
+  dtostrf(Irms2, String(Irms2).length(), 2, Ir2); 
+  dtostrf(realPower3, String(realPower3).length(), 2, rP3);
+  dtostrf(apparentPower3, String(apparentPower3).length(), 2, aP3);
+  dtostrf(powerFActor3, String(powerFActor3).length(), 2, pF3);
+  dtostrf(supplyVoltage3, String(supplyVoltage3).length(), 2, sV3);
+  dtostrf(Irms3, String(Irms3).length(), 3, Ir3); 
+
+  size_1 = String(realPower1).length();  
+  size_2 = String(apparentPower1).length();
+  size_3 = String(powerFActor1).length();
+  size_4 = String(supplyVoltage1).length();
+  size_5 = String(Irms1).length();
+  size_6 = String(realPower2).length();  
+  size_7 = String(apparentPower2).length();
+  size_8 = String(powerFActor2).length();
+  size_9 = String(supplyVoltage2).length();
+  size_10 = String(Irms2).length();
+  size_11 = String(realPower3).length();  
+  size_12 = String(apparentPower3).length();
+  size_13 = String(powerFActor3).length();
+  size_14 = String(supplyVoltage3).length();
+  size_15 = String(Irms3).length();
+  
+  size_1.toCharArray(size_1c,String(realPower1).length());
+  size_2.toCharArray(size_2c,String(apparentPower1).length());
+  size_3.toCharArray(size_3c,String(powerFActor1).length());
+  size_4.toCharArray(size_4c,String(supplyVoltage1).length());
+  size_5.toCharArray(size_5c,String(Irms1).length());
+  size_6.toCharArray(size_6c,String(realPower2).length());
+  size_7.toCharArray(size_7c,String(apparentPower2).length());
+  size_8.toCharArray(size_8c,String(powerFActor2).length());
+  size_9.toCharArray(size_9c,String(supplyVoltage2).length());
+  size_10.toCharArray(size_10c,String(Irms2).length());
+  size_11.toCharArray(size_11c,String(realPower3).length());
+  size_12.toCharArray(size_12c,String(apparentPower3).length());
+  size_13.toCharArray(size_13c,String(powerFActor3).length());
+  size_14.toCharArray(size_14c,String(supplyVoltage3).length());
+  size_15.toCharArray(size_15c,String(Irms3).length());
 }
 
-//   ENVIA OS DADOS  // POSSUI ERRO
+//   ENVIA OS DADOS  //
 void requestEvent() {
-        Wire.write(rP1); 
-//        Wire.write(aP1); 
-        Wire.write(pF1); 
-//        Wire.write(sV1); 
-//        Wire.write(Ir1); 
-//        Wire.write(rP2); 
-//        Wire.write(aP2); 
-//        Wire.write(pF2); 
-//        Wire.write(sV2); 
-//        Wire.write(Ir2); 
-//        Wire.write(rP3); 
-//        Wire.write(aP3); 
-//        Wire.write(pF3); 
-//        Wire.write(sV3); 
-//        Wire.write(Ir3);
+  switch (flag) {
+    case 0:
+      Wire.write(size_1c);
+      Wire.write(size_2c);
+      Wire.write(size_3c);
+      Wire.write(size_4c);
+      Wire.write(size_5c);
+      Wire.write(size_6c);
+      Wire.write(size_7c);
+      Wire.write(size_8c);
+      Wire.write(size_9c);
+      Wire.write(size_10c);
+      Wire.write(size_11c);
+      Wire.write(size_12c);
+      Wire.write(size_13c);
+      Wire.write(size_14c);
+      Wire.write(size_15c);
+      flag = 1;
+      break;
+
+    case 1:
+      Wire.write(rP1); 
+      Wire.write(aP1); 
+      Wire.write(pF1); 
+      Wire.write(sV1); 
+      Wire.write(Ir1); 
+      flag = 2;
+      break;
+
+    case 2:
+      Wire.write(rP2); 
+      Wire.write(aP2); 
+      Wire.write(pF2); 
+      Wire.write(sV2); 
+      Wire.write(Ir2); 
+      flag = 3;
+      break;
+
+    case 3:
+      Wire.write(rP3); 
+      Wire.write(aP3); 
+      Wire.write(pF3); 
+      Wire.write(sV3); 
+      Wire.write(Ir3);
+      flag = 0;
+      break;
+    }
 }
 
 void setup() {
@@ -117,7 +216,7 @@ void setup() {
   Wire.onRequest(requestEvent); 
 
 // INICIALIZA A PORTA SERIAL
-//  Serial.begin(9600);
+  Serial.begin(9600);
 
 //   INICIALIZA OS SENSORES   //
   emon1.current(SensorCorrente_1,0.98); // (PINO,GANHO/CALIBRAÇÃO)
@@ -132,8 +231,8 @@ void loop() {
 
 //    MEDIDOR DE ENERGIA    //
   emon1.calcVI(20,2000);
-//  emon2.calcVI(20,2000);
-//  emon3.calcVI(20,2000);
+  emon2.calcVI(20,2000);
+  emon3.calcVI(20,2000);
 
 //    MEDIDOR 01    //
   realPower1       = emon1.realPower;        
@@ -157,6 +256,32 @@ void loop() {
   Irms3            = emon3.Irms;             
 
   prepara_dado();
-  delay(100);
+//  Serial.println(dados_arduino);
+  Serial.println(size_1);
+  Serial.println(size_1c);
+  Serial.println(rP1);
+  Serial.println(aP1);
+  Serial.println(pF1);
+  Serial.println(sV1);
+  Serial.println(Ir1);
+  Serial.println(rP2);
+  Serial.println(aP2);
+  Serial.println(pF2);
+  Serial.println(sV2);
+  Serial.println(Ir2);
+  Serial.println(rP3);
+  Serial.println(aP3);
+  Serial.println(pF3);
+  Serial.println(sV3);
+  Serial.println(Ir3);
+  //Serial.println(realPower1);
+  //Serial.println(String(apparentPower1).length());
+  //Serial.println(aP1);
+  //Serial.println(apparentPower1);
+  //Serial.println(powerFActor1);
+  //Serial.println(supplyVoltage1);
+  //Serial.println(Irms1);
+  //dados_arduino = "";
+  delay(1);
 }
 

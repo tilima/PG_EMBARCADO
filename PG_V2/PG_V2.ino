@@ -22,11 +22,29 @@ int arduino_02 = 0x02;
 int arduino_03 = 0x03;
 
 //    DECLARA MENSAGEM    //
-char rP1[7];
-char aP1[7];
-char pF1[2];
+int size_1;
+int size_2;
+int size_3;
+int size_4;
+int size_5;
+int size_6;
+int size_7;
+int size_8;
+int size_9;
+int size_10;
+int size_11;
+int size_12;
+int size_13;
+int size_14;
+int size_15;
+int total_size1;
+int total_size2;
+int total_size3;
+char rP1[8];
+char aP1[8];
+char pF1[8];
 char sV1[8];
-char Ir1[2];
+char Ir1[8];
 byte data;
 char mensagem;
 String dados_arduino_00;
@@ -47,12 +65,12 @@ void banco_de_dados(String dataString){
 }
 
 //    ORGANIZA OS DADOS MEDIDOS    //
-void prepara_dado(double rP, double aP, double pF, double sV, double Ir){
-  dtostrf(rP, 5, 2, rP1);
-  dtostrf(aP, 5, 2, aP1);
-  dtostrf(pF, 4, 2, pF1);
-  dtostrf(sV, 6, 2, sV1);
-  dtostrf(Ir, 5, 3, Ir1);
+void prepara_dado(float rP, float aP, float pF, float sV, float Ir){
+  dtostrf(rP, String(rP1).length(), 2, rP1);
+  dtostrf(aP, String(aP1).length(), 2, aP1);
+  dtostrf(pF, String(pF1).length(), 2, pF1);
+  dtostrf(sV, String(sV1).length(), 2, sV1);
+  dtostrf(Ir, String(Ir1).length(), 2, Ir1);
   dados_arduino_00 += rP1;
   dados_arduino_00 += ", ";
   dados_arduino_00 += aP1;
@@ -62,22 +80,139 @@ void prepara_dado(double rP, double aP, double pF, double sV, double Ir){
   dados_arduino_00 += sV1;
   dados_arduino_00 += ", ";
   dados_arduino_00 += Ir1;
+  dados_arduino_00 += ", ";
+}
+
+void recebe_tamanho(int endereco){
+  Wire.requestFrom(endereco,15);
+  while (Wire.available()){
+    mensagem = Wire.read();
+    size_1 = String(mensagem).toInt();
+    mensagem = Wire.read();
+    size_2 = String(mensagem).toInt();
+    mensagem = Wire.read();
+    size_3 = String(mensagem).toInt();
+    mensagem = Wire.read();
+    size_4 = String(mensagem).toInt();
+    mensagem = Wire.read();
+    size_5 = String(mensagem).toInt();
+    mensagem = Wire.read();
+    size_6 = String(mensagem).toInt();
+    mensagem = Wire.read();
+    size_7 = String(mensagem).toInt();
+    mensagem = Wire.read();
+    size_8 = String(mensagem).toInt();
+    mensagem = Wire.read();
+    size_9 = String(mensagem).toInt();
+    mensagem = Wire.read();
+    size_10 = String(mensagem).toInt();
+    mensagem = Wire.read();
+    size_11 = String(mensagem).toInt();
+    mensagem = Wire.read();
+    size_12 = String(mensagem).toInt();
+    mensagem = Wire.read();
+    size_13 = String(mensagem).toInt();
+    mensagem = Wire.read();
+    size_14 = String(mensagem).toInt();
+    mensagem = Wire.read();
+    size_15 = String(mensagem).toInt();
+  }
+  total_size1 = size_1 + size_2 + size_3 + size_4 + size_5;
+  total_size2 = size_6 + size_7 + size_8 + size_9 + size_10;
+  total_size3 = size_11 + size_12 + size_13 + size_14 + size_15;
 }
 
 //    RECEBE OS DADOS DO DISPOSITIVO ESCRAVO    //
-void recebe_escravo(int endereco){ 
-  Wire.requestFrom(endereco,9);    // (ENDEREÇO,QUANTIDADE DE BYTES)
+void recebe1_escravo(int endereco){ 
+  Wire.requestFrom(endereco,total_size1);    // (ENDEREÇO,QUANTIDADE DE BYTES)
   while (Wire.available()){
-    for(int i = 0; i < 5; i++){
-      mensagem = Wire.read(); 
-      dados_arduino_01 += mensagem;
-    }
-    dados_arduino_01 += ", ";
-    for(int i = 0; i < 4; i++){
+    for(int i = 0; i < size_1; i++){
       mensagem = Wire.read(); 
       dados_arduino_01 += mensagem;
     }
     dados_arduino_01 += ", "; 
+    for(int i = 0; i < size_2; i++){
+      mensagem = Wire.read(); 
+      dados_arduino_01 += mensagem;
+    }
+    dados_arduino_01 += ", "; 
+    for(int i = 0; i < size_3; i++){
+      mensagem = Wire.read(); 
+      dados_arduino_01 += mensagem;
+    }
+    dados_arduino_01 += ", "; 
+    for(int i = 0; i < size_4; i++){
+      mensagem = Wire.read(); 
+      dados_arduino_01 += mensagem;
+    }
+    dados_arduino_01 += ", "; 
+    for(int i = 0; i < size_5; i++){
+      mensagem = Wire.read(); 
+      dados_arduino_01 += mensagem;
+    }
+  }
+}
+
+void recebe2_escravo(int endereco){ 
+  Wire.requestFrom(endereco,total_size2);    // (ENDEREÇO,QUANTIDADE DE BYTES)
+  while (Wire.available()){
+    dados_arduino_01 += ", "; 
+    for(int i = 0; i < size_6; i++){
+      mensagem = Wire.read(); 
+      dados_arduino_02 += mensagem;
+    }
+    dados_arduino_02 += ", "; 
+    for(int i = 0; i < size_7; i++){
+      mensagem = Wire.read(); 
+      dados_arduino_02 += mensagem;
+    }
+    dados_arduino_02 += ", "; 
+    for(int i = 0; i < size_8; i++){
+      mensagem = Wire.read(); 
+      dados_arduino_02 += mensagem;
+    }
+    dados_arduino_02 += ", "; 
+    for(int i = 0; i < size_9; i++){
+      mensagem = Wire.read(); 
+      dados_arduino_02 += mensagem;
+    }
+    dados_arduino_02 += ", "; 
+    for(int i = 0; i < size_10; i++){
+      mensagem = Wire.read(); 
+      dados_arduino_02 += mensagem;
+    }
+    dados_arduino_02 += ", ";
+  }
+}
+
+void recebe3_escravo(int endereco){ 
+  Wire.requestFrom(endereco,total_size3);    // (ENDEREÇO,QUANTIDADE DE BYTES)
+  while (Wire.available()){ 
+    for(int i = 0; i < size_11; i++){
+      mensagem = Wire.read(); 
+      dados_arduino_03 += mensagem;
+    }
+    dados_arduino_03 += ", "; 
+    for(int i = 0; i < size_12; i++){
+      mensagem = Wire.read(); 
+      dados_arduino_03 += mensagem;
+    }
+    dados_arduino_03 += ", "; 
+    for(int i = 0; i < size_13; i++){
+      mensagem = Wire.read(); 
+      dados_arduino_03 += mensagem;
+    }
+    dados_arduino_03 += ", "; 
+    for(int i = 0; i < size_14; i++){
+      mensagem = Wire.read(); 
+      dados_arduino_03 += mensagem;
+    }
+    dados_arduino_03 += ", "; 
+    for(int i = 0; i < size_15; i++){
+      mensagem = Wire.read(); 
+      dados_arduino_03 += mensagem;
+    }
+    dados_arduino_03 += ", ";        
   }  
 }
 
@@ -385,25 +520,39 @@ void loop() {
   emon1.calcVI(20,2000);
 
   //    MEDIDOR 01    //
-  double realPower1       = emon1.realPower;        
-  double apparentPower1   = emon1.apparentPower;    
-  double powerFActor1     = emon1.powerFactor;      
-  double supplyVoltage1   = emon1.Vrms;             
-  double Irms1            = emon1.Irms;
+  float realPower1       = emon1.realPower;        
+  float apparentPower1   = emon1.apparentPower;    
+  float powerFActor1     = emon1.powerFactor;      
+  float supplyVoltage1   = emon1.Vrms;             
+  float Irms1            = emon1.Irms;
   prepara_dado(realPower1,apparentPower1,powerFActor1,supplyVoltage1,Irms1);
   //    TESTE LEITURA   //
   //emon1.serialprint();
 //  Serial.println(dados_arduino_00);
-  //banco_de_dados(dados_arduino_00);
-  dados_arduino_00 = "";
+
+  
 
   //    AQUISIÇÃO DE DADOS    //
   //data = recebe_escravo(RTC,???);
-  recebe_escravo(arduino_01);
+  recebe_tamanho(arduino_01);
+  recebe1_escravo(arduino_01);
+  recebe2_escravo(arduino_01);
+  recebe3_escravo(arduino_01);
+  Serial.println(dados_arduino_00);
   Serial.println(dados_arduino_01);
-  dados_arduino_01 = "";
+  Serial.println(dados_arduino_02);
+  Serial.println(dados_arduino_03);
 //  dados_arduino_02 = recebe_escravo(arduino_02,75);
 // dados_arduino_03 = recebe_escravo(arduino_03,75);
+//  Serial.println(sizeof(rP1));
+  banco_de_dados(dados_arduino_00);
+  banco_de_dados(dados_arduino_01);
+  banco_de_dados(dados_arduino_02);
+  banco_de_dados(dados_arduino_03);
+  dados_arduino_00 = "";
+  dados_arduino_01 = "";
+  dados_arduino_02 = "";
+  dados_arduino_03 = "";
 }
 
  
