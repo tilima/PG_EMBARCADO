@@ -525,6 +525,7 @@ void loop() {
   float powerFActor1     = emon1.powerFactor;      
   float supplyVoltage1   = emon1.Vrms;             
   float Irms1            = emon1.Irms;
+
   prepara_dado(realPower1,apparentPower1,powerFActor1,supplyVoltage1,Irms1);
   //    TESTE LEITURA   //
   //emon1.serialprint();
@@ -545,6 +546,7 @@ void loop() {
 //  dados_arduino_02 = recebe_escravo(arduino_02,75);
 // dados_arduino_03 = recebe_escravo(arduino_03,75);
 //  Serial.println(sizeof(rP1));
+
   banco_de_dados(dados_arduino_00);
   banco_de_dados(dados_arduino_01);
   banco_de_dados(dados_arduino_02);
