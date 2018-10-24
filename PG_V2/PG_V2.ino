@@ -4,6 +4,7 @@
 #include <SD.h>
 #include <Wire.h>
 #include <EmonLib.h>
+#include <DS3231.h>
 
 //    MEDIDOR   //
 EnergyMonitor emon1;
@@ -12,11 +13,14 @@ EnergyMonitor emon1;
 const int SensorCorrente_1 = A0;
 const int SensorTensao_1 = A1;
 
-//    SD   //
+//    SD    //
 #define PIN_SD_CARD 4
 
+//    RTC    //
+DS3231 rtc;              
+RTCDateTime dataehora;   
+
 //    ENDEREÇO DISPOSITIVOS    //
-int RTC = 0x00;
 int arduino_01 = 0x01;
 int arduino_02 = 0x02;
 int arduino_03 = 0x03;
@@ -519,6 +523,8 @@ void setup() {
   //    BIBLIOTECAS   //
   Wire.begin();  
   Serial.begin(9600);
+  rtc.begin();
+  rtc.setDateTime(__DATE__, __TIME__);  //  COMENTAR APOS A PRIMEIRA COMPILAÇÃO
   iniciar_sd_card();
   iniciar_ethernet();
 
@@ -550,8 +556,23 @@ void loop() {
  
   //    AQUISIÇÃO DE DADOS    //
   
-  //data = recebe_escravo(RTC,???);
+  dataehora = rtc.getDateTime();
   
+  //    EXEMPLO DATA HORA    //
+  Serial.print(dataehora.year);     //Imprimindo o Ano   
+  Serial.print("-");
+  Serial.print(dataehora.month);    //Imprimindo o Mês
+  Serial.print("-");
+  Serial.print(dataehora.day);      //Imprimindo o Dia
+  Serial.print(" ");
+  Serial.print(dataehora.hour);     //Imprimindo a Hora
+  Serial.print(":");
+  Serial.print(dataehora.minute);   //Imprimindo o Minuto
+  Serial.print(":");
+  Serial.print(dataehora.second);   //Imprimindo o Segundo
+  Serial.println("");
+  //    FIM EXEMPLO    //
+
   recebe_tamanho(arduino_01);
   dados_arduino_0X01_01 = recebe_escravo_1(arduino_01);
   dados_arduino_0X01_02 = recebe_escravo_2(arduino_01);
