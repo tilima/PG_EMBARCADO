@@ -1,3 +1,5 @@
+//    LEMBRAR DE TROCAR O COMANDO DELAY POR MILLIS PARA EVITAR INTERRUPÇÃO NO CÓDIGO    //
+
 #include <Wire.h>
 #include <EmonLib.h>
 
@@ -90,6 +92,35 @@ const int SensorCorrente_2 = A2;
 const int SensorTensao_2 = A3;
 const int SensorCorrente_3 = A6;
 const int SensorTensao_3 = A7;
+
+//    MENSURAR AS GRANDEZAS    //
+void medir(){
+  //    MEDIDOR DE ENERGIA    //
+  emon1.calcVI(20,2000);
+  emon2.calcVI(20,2000);
+  emon3.calcVI(20,2000);
+
+  //    MEDIDOR 01    //
+  realPower1       = emon1.realPower;        
+  apparentPower1   = emon1.apparentPower;    
+  powerFActor1     = emon1.powerFactor;      
+  supplyVoltage1   = emon1.Vrms;             
+  Irms1            = emon1.Irms;             
+
+  //    MEDIDOR 02    //
+  realPower2       = emon2.realPower;        
+  apparentPower2   = emon2.apparentPower;    
+  powerFActor2     = emon2.powerFactor;     
+  supplyVoltage2   = emon2.Vrms;             
+  Irms2            = emon2.Irms;             
+
+  //    MEDIDOR 03    //
+  realPower3       = emon3.realPower;        
+  apparentPower3   = emon3.apparentPower;    
+  powerFActor3     = emon3.powerFactor;      
+  supplyVoltage3   = emon3.Vrms;             
+  Irms3            = emon3.Irms;             
+}
 
 //    ORGANIZA OS DADOS MEDIDOS    //
 void prepara_dado(){
@@ -227,34 +258,7 @@ void setup() {
 }
 
 void loop() {
-
-//    MEDIDOR DE ENERGIA    //
-  emon1.calcVI(20,2000);
-  emon2.calcVI(20,2000);
-  emon3.calcVI(20,2000);
-
-//    MEDIDOR 01    //
-  realPower1       = emon1.realPower;        
-  apparentPower1   = emon1.apparentPower;    
-  powerFActor1     = emon1.powerFactor;      
-  supplyVoltage1   = emon1.Vrms;             
-  Irms1            = emon1.Irms;             
-
-//    MEDIDOR 02    //
-  realPower2       = emon2.realPower;        
-  apparentPower2   = emon2.apparentPower;    
-  powerFActor2     = emon2.powerFactor;     
-  supplyVoltage2   = emon2.Vrms;             
-  Irms2            = emon2.Irms;             
-
-//    MEDIDOR 03    //
-  realPower3       = emon3.realPower;        
-  apparentPower3   = emon3.apparentPower;    
-  powerFActor3     = emon3.powerFactor;      
-  supplyVoltage3   = emon3.Vrms;             
-  Irms3            = emon3.Irms;             
-
+  medir();
   prepara_dado();
-  
   delay(1);
 }
