@@ -1,5 +1,5 @@
 //    LEMBRAR DE TROCAR O COMANDO DELAY POR MILLIS PARA EVITAR INTERRUPÇÃO NO CÓDIGO    //
-
+ 
 //    BIBLIOTECAS   //
 #include <SPI.h>
 #include <Ethernet.h>
