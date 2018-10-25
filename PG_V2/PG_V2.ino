@@ -1,3 +1,5 @@
+//    LEMBRAR DE TROCAR O COMANDO DELAY POR MILLIS PARA EVITAR INTERRUPÇÃO NO CÓDIGO    //
+
 //    BIBLIOTECAS   //
 #include <SPI.h>
 #include <Ethernet.h>
@@ -8,6 +10,11 @@
 
 //    MEDIDOR   //
 EnergyMonitor emon1;
+float realPower1;  
+float apparentPower1;    
+float powerFActor1;      
+float supplyVoltage1;             
+float Irms1;
 
 //    SENSORES   //
 const int SensorCorrente_1 = A0;
@@ -53,6 +60,7 @@ char sV1[8];
 char Ir1[8];
 char mensagem;
 String dados;
+String data_hora;
 String dados_arduino_0X00_01;
 String dados_arduino_0X01_01;
 String dados_arduino_0X01_02;
@@ -66,6 +74,84 @@ String dados_arduino_0X03_03;
 
 //   DATA HORA   //
 byte data;
+
+//    MENSURAR AS GRANDEZAS    //
+void medir(){
+  emon1.calcVI(20,2000);
+
+   //    MEDIDOR 01    //
+  realPower1       = emon1.realPower;        
+  apparentPower1   = emon1.apparentPower;    
+  powerFActor1     = emon1.powerFactor;      
+  supplyVoltage1   = emon1.Vrms;             
+  Irms1            = emon1.Irms;
+}
+
+//    RECEBE AS MENSAGENS    //
+void recebe_dados(){
+  
+  recebe_tamanho(arduino_01);
+  dados_arduino_0X01_01 = recebe_escravo_1(arduino_01);
+  dados_arduino_0X01_02 = recebe_escravo_2(arduino_01);
+  dados_arduino_0X01_03 = recebe_escravo_3(arduino_01);
+
+  recebe_tamanho(arduino_02);
+  dados_arduino_0X02_01 = recebe_escravo_1(arduino_02);
+  dados_arduino_0X02_02 = recebe_escravo_2(arduino_02);
+  dados_arduino_0X02_03 = recebe_escravo_3(arduino_02);
+
+  recebe_tamanho(arduino_03);
+  dados_arduino_0X03_01 = recebe_escravo_1(arduino_03);
+  dados_arduino_0X03_02 = recebe_escravo_2(arduino_03);
+  dados_arduino_0X03_03 = recebe_escravo_3(arduino_03);
+}
+
+//    ENVIAR OS DADOS    //
+void envia_dados(){  
+  banco_de_dados(data_hora);
+  banco_de_dados(dados_arduino_0X00_01);
+  banco_de_dados(dados_arduino_0X01_01);
+  banco_de_dados(dados_arduino_0X01_02);
+  banco_de_dados(dados_arduino_0X01_03);
+  banco_de_dados(dados_arduino_0X02_01);
+  banco_de_dados(dados_arduino_0X02_02);
+  banco_de_dados(dados_arduino_0X02_03);
+  banco_de_dados(dados_arduino_0X03_01);
+  banco_de_dados(dados_arduino_0X03_02);
+  banco_de_dados(dados_arduino_0X03_03);
+}
+
+//    LIMPAR MENSAGENS    //
+void limpar_string(){    
+  data_hora="";
+  dados_arduino_0X00_01 = "";
+  dados_arduino_0X01_01 = "";
+  dados_arduino_0X01_02 = "";
+  dados_arduino_0X01_03 = "";
+  dados_arduino_0X02_01 = "";
+  dados_arduino_0X02_02 = "";
+  dados_arduino_0X02_03 = "";
+  dados_arduino_0X03_01 = "";
+  dados_arduino_0X03_02 = "";
+  dados_arduino_0X03_03 = "";
+}
+
+//    RTC    //
+void relogio(){
+    dataehora = rtc.getDateTime();
+    data_hora += dataehora.year;
+    data_hora += "/";
+    data_hora += dataehora.month;
+    data_hora += "/";
+    data_hora += dataehora.day;
+    data_hora += " ";
+    data_hora += dataehora.hour;
+    data_hora += ":";
+    data_hora += dataehora.minute;
+    data_hora += ":";
+    data_hora += dataehora.second;
+  }
+  
 
 //    DATALOG SD  //
 void banco_de_dados(String dataString){
@@ -542,74 +628,19 @@ void loop() {
   //    SERVIDOR    //
   exec_ethernet();
 
-  //    MEDIDOR DE ENERGIA//
-  emon1.calcVI(20,2000);
+  //    MEDIDOR DE ENERGIA    //
+  medir();
 
-  //    MEDIDOR 01    //
-  float realPower1       = emon1.realPower;        
-  float apparentPower1   = emon1.apparentPower;    
-  float powerFActor1     = emon1.powerFactor;      
-  float supplyVoltage1   = emon1.Vrms;             
-  float Irms1            = emon1.Irms;
-
-  prepara_dado(realPower1,apparentPower1,powerFActor1,supplyVoltage1,Irms1);
- 
   //    AQUISIÇÃO DE DADOS    //
-  
-  dataehora = rtc.getDateTime();
-  
-  //    EXEMPLO DATA HORA    //
-  Serial.print(dataehora.year);     //Imprimindo o Ano   
-  Serial.print("-");
-  Serial.print(dataehora.month);    //Imprimindo o Mês
-  Serial.print("-");
-  Serial.print(dataehora.day);      //Imprimindo o Dia
-  Serial.print(" ");
-  Serial.print(dataehora.hour);     //Imprimindo a Hora
-  Serial.print(":");
-  Serial.print(dataehora.minute);   //Imprimindo o Minuto
-  Serial.print(":");
-  Serial.print(dataehora.second);   //Imprimindo o Segundo
-  Serial.println("");
-  //    FIM EXEMPLO    //
+  prepara_dado(realPower1,apparentPower1,powerFActor1,supplyVoltage1,Irms1);
+  relogio();
+  recebe_dados();
 
-  recebe_tamanho(arduino_01);
-  dados_arduino_0X01_01 = recebe_escravo_1(arduino_01);
-  dados_arduino_0X01_02 = recebe_escravo_2(arduino_01);
-  dados_arduino_0X01_03 = recebe_escravo_3(arduino_01);
+  //    BANCO DE DADOS    //
+  envia_dados();
 
-  recebe_tamanho(arduino_02);
-  dados_arduino_0X02_01 = recebe_escravo_1(arduino_02);
-  dados_arduino_0X02_02 = recebe_escravo_2(arduino_02);
-  dados_arduino_0X02_03 = recebe_escravo_3(arduino_02);
-
-  recebe_tamanho(arduino_03);
-  dados_arduino_0X03_01 = recebe_escravo_1(arduino_03);
-  dados_arduino_0X03_02 = recebe_escravo_2(arduino_03);
-  dados_arduino_0X03_03 = recebe_escravo_3(arduino_03);
-  
-  //   ENVIO DE DADOS   //
-  banco_de_dados(dados_arduino_0X00_01);
-  banco_de_dados(dados_arduino_0X01_01);
-  banco_de_dados(dados_arduino_0X01_02);
-  banco_de_dados(dados_arduino_0X01_03);
-  banco_de_dados(dados_arduino_0X02_01);
-  banco_de_dados(dados_arduino_0X02_02);
-  banco_de_dados(dados_arduino_0X02_03);
-  banco_de_dados(dados_arduino_0X03_01);
-  banco_de_dados(dados_arduino_0X03_02);
-  banco_de_dados(dados_arduino_0X03_03);
-
-  dados_arduino_0X00_01 = "";
-  dados_arduino_0X01_01 = "";
-  dados_arduino_0X01_02 = "";
-  dados_arduino_0X01_03 = "";
-  dados_arduino_0X02_01 = "";
-  dados_arduino_0X02_02 = "";
-  dados_arduino_0X02_03 = "";
-  dados_arduino_0X03_01 = "";
-  dados_arduino_0X03_02 = "";
-  dados_arduino_0X03_03 = "";
+  //    REINICIAR AS MENSAGENS    //
+  limpar_string();
 }
 
  
