@@ -28,8 +28,8 @@ document.addEventListener("DOMContentLoaded",function(event){
 // FUNÇÃO PARA O SELETOR
 function newGraph(){
     var x = document.getElementById("carga").value;
-    var y = document.getElementById("informacao")value;
-    document.getElementById("teste").innerHTML = "Você selecionou " + x + y;
+    var y = document.getElementById("informacao").value;
+    document.getElementById("teste").innerHTML = "Você selecionou " + x + " " + y;
     // LOGICA PARA MOSTRAR O GRÁFICO SELECIONADO
     if(x=="Total" && y=="C1"){
         var ctx = document.getElementById('myChart').getContext('2d');
@@ -298,7 +298,7 @@ function newGraph(){
     if(x=="Total" && y=="C2"){
         var ctx = document.getElementById('myChart').getContext('2d');
         var chart = new Chart(ctx, {
-        type: 'bar',
+        type: 'line',
         data: {
             labels: ['01:00', '02:00', '03:00', '04:00', '05:00', '06:00', '07:00', '08:00', '09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00', '20:00', '21:00', '22:00', '23:00', '00:00'
         ],
@@ -322,7 +322,7 @@ function newGraph(){
     if(x=="C1" && y=="C2"){
         var ctx = document.getElementById('myChart').getContext('2d');
         var chart = new Chart(ctx, {
-        type: 'bar',
+        type: 'line',
         data: {
             labels: ['01:00', '02:00', '03:00', '04:00', '05:00', '06:00', '07:00', '08:00', '09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00', '20:00', '21:00', '22:00', '23:00', '00:00'
         ],
@@ -346,7 +346,7 @@ function newGraph(){
     if(x=="C2" && y=="C2"){
         var ctx = document.getElementById('myChart').getContext('2d');
         var chart = new Chart(ctx, {
-        type: 'bar',
+        type: 'line',
         data: {
             labels: ['01:00', '02:00', '03:00', '04:00', '05:00', '06:00', '07:00', '08:00', '09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00', '20:00', '21:00', '22:00', '23:00', '00:00'
         ],
@@ -370,7 +370,7 @@ function newGraph(){
     if(x=="C3" && y=="C2"){
         var ctx = document.getElementById('myChart').getContext('2d');
         var chart = new Chart(ctx, {
-        type: 'bar',
+        type: 'line',
         data: {
             labels: ['01:00', '02:00', '03:00', '04:00', '05:00', '06:00', '07:00', '08:00', '09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00', '20:00', '21:00', '22:00', '23:00', '00:00'
         ],
@@ -394,7 +394,7 @@ function newGraph(){
     if(x=="C4" && y=="C2"){
         var ctx = document.getElementById('myChart').getContext('2d');
         var chart = new Chart(ctx, {
-        type: 'bar',
+        type: 'line',
         data: {
             labels: ['01:00', '02:00', '03:00', '04:00', '05:00', '06:00', '07:00', '08:00', '09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00', '20:00', '21:00', '22:00', '23:00', '00:00'
         ],
@@ -418,7 +418,7 @@ function newGraph(){
     if(x=="C5" && y=="C2"){
         var ctx = document.getElementById('myChart').getContext('2d');
         var chart = new Chart(ctx, {
-        type: 'bar',
+        type: 'line',
         data: {
             labels: ['01:00', '02:00', '03:00', '04:00', '05:00', '06:00', '07:00', '08:00', '09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00', '20:00', '21:00', '22:00', '23:00', '00:00'
         ],
@@ -442,7 +442,7 @@ function newGraph(){
     if(x=="C6" && y=="C2"){
         var ctx = document.getElementById('myChart').getContext('2d');
         var chart = new Chart(ctx, {
-        type: 'bar',
+        type: 'line',
         data: {
             labels: ['01:00', '02:00', '03:00', '04:00', '05:00', '06:00', '07:00', '08:00', '09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00', '20:00', '21:00', '22:00', '23:00', '00:00'
         ],
@@ -466,7 +466,7 @@ function newGraph(){
     if(x=="C7" && y=="C2"){
         var ctx = document.getElementById('myChart').getContext('2d');
         var chart = new Chart(ctx, {
-        type: 'bar',
+        type: 'line',
         data: {
             labels: ['01:00', '02:00', '03:00', '04:00', '05:00', '06:00', '07:00', '08:00', '09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00', '20:00', '21:00', '22:00', '23:00', '00:00'
         ],
@@ -490,7 +490,7 @@ function newGraph(){
     if(x=="C8" && y=="C2"){
         var ctx = document.getElementById('myChart').getContext('2d');
         var chart = new Chart(ctx, {
-        type: 'bar',
+        type: 'line',
         data: {
             labels: ['01:00', '02:00', '03:00', '04:00', '05:00', '06:00', '07:00', '08:00', '09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00', '20:00', '21:00', '22:00', '23:00', '00:00'
         ],
@@ -514,7 +514,7 @@ function newGraph(){
     if(x=="C9" && y=="C2"){
         var ctx = document.getElementById('myChart').getContext('2d');
         var chart = new Chart(ctx, {
-        type: 'bar',
+        type: 'line',
         data: {
             labels: ['01:00', '02:00', '03:00', '04:00', '05:00', '06:00', '07:00', '08:00', '09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00', '20:00', '21:00', '22:00', '23:00', '00:00'
         ],
@@ -538,7 +538,7 @@ function newGraph(){
     if(x=="C10" && y=="C2"){
         var ctx = document.getElementById('myChart').getContext('2d');
         var chart = new Chart(ctx, {
-        type: 'bar',
+        type: 'line',
         data: {
             labels: ['01:00', '02:00', '03:00', '04:00', '05:00', '06:00', '07:00', '08:00', '09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00', '20:00', '21:00', '22:00', '23:00', '00:00'
         ],
@@ -562,7 +562,7 @@ function newGraph(){
     if(x=="Total" && y=="C3"){
         var ctx = document.getElementById('myChart').getContext('2d');
         var chart = new Chart(ctx, {
-        type: 'bar',
+        type: 'line',
         data: {
             labels: ['01:00', '02:00', '03:00', '04:00', '05:00', '06:00', '07:00', '08:00', '09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00', '20:00', '21:00', '22:00', '23:00', '00:00'
         ],
@@ -586,7 +586,7 @@ function newGraph(){
     if(x=="C1" && y=="C3"){
         var ctx = document.getElementById('myChart').getContext('2d');
         var chart = new Chart(ctx, {
-        type: 'bar',
+        type: 'line',
         data: {
             labels: ['01:00', '02:00', '03:00', '04:00', '05:00', '06:00', '07:00', '08:00', '09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00', '20:00', '21:00', '22:00', '23:00', '00:00'
         ],
@@ -610,7 +610,7 @@ function newGraph(){
     if(x=="C2" && y=="C3"){
         var ctx = document.getElementById('myChart').getContext('2d');
         var chart = new Chart(ctx, {
-        type: 'bar',
+        type: 'line',
         data: {
             labels: ['01:00', '02:00', '03:00', '04:00', '05:00', '06:00', '07:00', '08:00', '09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00', '20:00', '21:00', '22:00', '23:00', '00:00'
         ],
@@ -634,7 +634,7 @@ function newGraph(){
     if(x=="C3" && y=="C3"){
         var ctx = document.getElementById('myChart').getContext('2d');
         var chart = new Chart(ctx, {
-        type: 'bar',
+        type: 'line',
         data: {
             labels: ['01:00', '02:00', '03:00', '04:00', '05:00', '06:00', '07:00', '08:00', '09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00', '20:00', '21:00', '22:00', '23:00', '00:00'
         ],
@@ -658,7 +658,7 @@ function newGraph(){
     if(x=="C4" && y=="C3"){
         var ctx = document.getElementById('myChart').getContext('2d');
         var chart = new Chart(ctx, {
-        type: 'bar',
+        type: 'line',
         data: {
             labels: ['01:00', '02:00', '03:00', '04:00', '05:00', '06:00', '07:00', '08:00', '09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00', '20:00', '21:00', '22:00', '23:00', '00:00'
         ],
@@ -682,7 +682,7 @@ function newGraph(){
     if(x=="C5" && y=="C3"){
         var ctx = document.getElementById('myChart').getContext('2d');
         var chart = new Chart(ctx, {
-        type: 'bar',
+        type: 'line',
         data: {
             labels: ['01:00', '02:00', '03:00', '04:00', '05:00', '06:00', '07:00', '08:00', '09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00', '20:00', '21:00', '22:00', '23:00', '00:00'
         ],
@@ -706,7 +706,7 @@ function newGraph(){
     if(x=="C6" && y=="C3"){
         var ctx = document.getElementById('myChart').getContext('2d');
         var chart = new Chart(ctx, {
-        type: 'bar',
+        type: 'line',
         data: {
             labels: ['01:00', '02:00', '03:00', '04:00', '05:00', '06:00', '07:00', '08:00', '09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00', '20:00', '21:00', '22:00', '23:00', '00:00'
         ],
@@ -730,7 +730,7 @@ function newGraph(){
     if(x=="C7" && y=="C3"){
         var ctx = document.getElementById('myChart').getContext('2d');
         var chart = new Chart(ctx, {
-        type: 'bar',
+        type: 'line',
         data: {
             labels: ['01:00', '02:00', '03:00', '04:00', '05:00', '06:00', '07:00', '08:00', '09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00', '20:00', '21:00', '22:00', '23:00', '00:00'
         ],
@@ -754,7 +754,7 @@ function newGraph(){
     if(x=="C8" && y=="C3"){
         var ctx = document.getElementById('myChart').getContext('2d');
         var chart = new Chart(ctx, {
-        type: 'bar',
+        type: 'line',
         data: {
             labels: ['01:00', '02:00', '03:00', '04:00', '05:00', '06:00', '07:00', '08:00', '09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00', '20:00', '21:00', '22:00', '23:00', '00:00'
         ],
@@ -778,7 +778,7 @@ function newGraph(){
     if(x=="C9" && y=="C3"){
         var ctx = document.getElementById('myChart').getContext('2d');
         var chart = new Chart(ctx, {
-        type: 'bar',
+        type: 'line',
         data: {
             labels: ['01:00', '02:00', '03:00', '04:00', '05:00', '06:00', '07:00', '08:00', '09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00', '20:00', '21:00', '22:00', '23:00', '00:00'
         ],
@@ -802,7 +802,7 @@ function newGraph(){
     if(x=="C10" && y=="C3"){
         var ctx = document.getElementById('myChart').getContext('2d');
         var chart = new Chart(ctx, {
-        type: 'bar',
+        type: 'line',
         data: {
             labels: ['01:00', '02:00', '03:00', '04:00', '05:00', '06:00', '07:00', '08:00', '09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00', '20:00', '21:00', '22:00', '23:00', '00:00'
         ],
