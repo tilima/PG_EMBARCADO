@@ -25,8 +25,28 @@ document.addEventListener("DOMContentLoaded",function(event){
         }
     });   
 })
+
+function readTextFile()
+{
+    var rawFile = new XMLHttpRequest();
+    rawFile.open("GET", "tx.txt", false);
+    rawFile.onreadystatechange = function ()
+    {
+        if(rawFile.readyState === 4)
+        {
+            if(rawFile.status === 200 || rawFile.status == 0)
+            {
+                var allText = rawFile.responseText;
+                document.getElementById("fp").innerHTML = "Fator de Potência = " + allText;
+            }
+        }
+    }
+    rawFile.send(null);
+}
+
 // FUNÇÃO PARA O SELETOR
 function newGraph(){
+    readTextFile();
     var x = document.getElementById("carga").value;
     var y = document.getElementById("informacao").value;
     document.getElementById("teste").innerHTML = "Você selecionou " + x + " " + y;
