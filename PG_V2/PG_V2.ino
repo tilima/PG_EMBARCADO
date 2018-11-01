@@ -108,17 +108,17 @@ void recebe_dados(){
 
 //    ENVIAR OS DADOS    //
 void envia_dados(){  
-  banco_de_dados(data_hora);
+//  banco_de_dados(data_hora);
   banco_de_dados(dados_arduino_0X00_01);
-  banco_de_dados(dados_arduino_0X01_01);
-  banco_de_dados(dados_arduino_0X01_02);
-  banco_de_dados(dados_arduino_0X01_03);
-  banco_de_dados(dados_arduino_0X02_01);
-  banco_de_dados(dados_arduino_0X02_02);
-  banco_de_dados(dados_arduino_0X02_03);
-  banco_de_dados(dados_arduino_0X03_01);
-  banco_de_dados(dados_arduino_0X03_02);
-  banco_de_dados(dados_arduino_0X03_03);
+  //banco_de_dados(dados_arduino_0X01_01);
+  //banco_de_dados(dados_arduino_0X01_02);
+  //banco_de_dados(dados_arduino_0X01_03);
+  //banco_de_dados(dados_arduino_0X02_01);
+  //banco_de_dados(dados_arduino_0X02_02);
+  //banco_de_dados(dados_arduino_0X02_03);
+  //banco_de_dados(dados_arduino_0X03_01);
+  //banco_de_dados(dados_arduino_0X03_02);
+  //banco_de_dados(dados_arduino_0X03_03);
 }
 
 //    LIMPAR MENSAGENS    //
@@ -427,6 +427,13 @@ void js_file(EthernetClient &client, char * filename){
                    "Connection: keep-alive\n")); 
   write_from_file(client, filename);
 }
+
+void chart_file(EthernetClient &client, char * filename){
+  client.println(F("HTTP/1.1 200 OK\n"
+                   "Content-Type: text/javascript\n"
+                   "Connection: keep-alive\n")); 
+  write_from_file(client, filename);
+}
  
 void css_file(EthernetClient &client, char * filename){
   client.println(F("HTTP/1.1 200 OK\n"
@@ -467,6 +474,8 @@ void exec_ethernet() {
     boolean logoff             = false;
     boolean indCss             = false;
     boolean indJs              = false;
+    boolean indChart           = false;
+    boolean indAjax            = false;
     boolean indPdfDataSheet    = false;
     boolean indJpgUno          = false;
     boolean indFavicon         = false; 
@@ -480,6 +489,10 @@ void exec_ethernet() {
           if (autenticado && !logoff ){
             if (indJs){
               js_file(client, "js.js");                          //js file
+            } else if(indChart){
+              chart_file(client, "chart.js");
+            } else if(indAjax){
+              chart_file(client, "ajax.js");
             } else if(indCss){
               css_file(client, "css.css");                       //css file  
             } else if(indPdfDataSheet){
@@ -502,6 +515,8 @@ void exec_ethernet() {
           if (strstr(linebuf, "Authorization: Basic")>0 ) { if ( validar_usuario(linebuf) )   {  autenticado = true;   } }  
           if (strstr(linebuf, "GET /css.css"        )>0 ) { indCss = true; }
           if (strstr(linebuf, "GET /js.js"          )>0 ) { indJs = true; }
+          if (strstr(linebuf, "GET /chart.js"       )>0 ) { indChart = true; }
+          if (strstr(linebuf, "GET /ajax.js"        )>0 ) { indAjax = true; }
           if (strstr(linebuf, "GET /atmel.pdf"      )>0 ) { indPdfDataSheet = true; }
           if (strstr(linebuf, "GET /uno.jpg"        )>0 ) { indJpgUno = true; }
           if (strstr(linebuf, "GET /favicon.ico"    )>0 ) { indFavicon = true; } 
@@ -609,8 +624,8 @@ void setup() {
   //    BIBLIOTECAS   //
   Wire.begin();  
   Serial.begin(9600);
-  rtc.begin();
-  rtc.setDateTime(__DATE__, __TIME__);  //  COMENTAR APOS A PRIMEIRA COMPILAÇÃO
+  //rtc.begin();
+  //rtc.setDateTime(__DATE__, __TIME__);  //  COMENTAR APOS A PRIMEIRA COMPILAÇÃO
   iniciar_sd_card();
   iniciar_ethernet();
 
@@ -627,7 +642,7 @@ void loop() {
 
   //    SERVIDOR    //
   exec_ethernet();
-
+/* COMENTADO PARA TESTE DO SERVIDOR
   //    MEDIDOR DE ENERGIA    //
   medir();
 
@@ -641,6 +656,6 @@ void loop() {
 
   //    REINICIAR AS MENSAGENS    //
   limpar_string();
-}
+*/}
 
  

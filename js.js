@@ -29,13 +29,14 @@ document.addEventListener("DOMContentLoaded",function(event){
 function readTextFile()
 {
     var rawFile = new XMLHttpRequest();
-    rawFile.open("GET", "tx.txt", false);
+    rawFile.open("GET", "file:///C:/Users/lucas/Desktop/CODIGO/tx.txt");
     rawFile.onreadystatechange = function ()
     {
         if(rawFile.readyState === 4)
         {
             if(rawFile.status === 200 || rawFile.status == 0)
             {
+                console.log("ESTOU LENDO");
                 var allText = rawFile.responseText;
                 document.getElementById("fp").innerHTML = "Fator de Potência = " + allText;
             }
@@ -44,12 +45,18 @@ function readTextFile()
     rawFile.send(null);
 }
 
+var disparo;
+
+function looping(){
+    console.log("ESTA NO LOOP");
+    disparo = setInterval(readTextFile,1000);
+}
+
 // FUNÇÃO PARA O SELETOR
 function newGraph(){
-    readTextFile();
     var x = document.getElementById("carga").value;
     var y = document.getElementById("informacao").value;
-    document.getElementById("teste").innerHTML = "Você selecionou " + x + " " + y;
+    //document.getElementById("teste").innerHTML = "Você selecionou " + x + " " + y;
     // LOGICA PARA MOSTRAR O GRÁFICO SELECIONADO
     if(x=="Total" && y=="C1"){
         var ctx = document.getElementById('myChart').getContext('2d');
