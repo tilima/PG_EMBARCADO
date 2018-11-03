@@ -222,7 +222,7 @@ function xml_arduino()
 function newGraph(){
     var x = document.getElementById("carga").value;
     var y = document.getElementById("informacao").value;
-    //document.getElementById("teste").innerHTML = "Você selecionou " + x + " " + y;
+    document.getElementById("teste").innerHTML = "Você selecionou " + x + " " + y;
     // LOGICA PARA MOSTRAR O GRÁFICO SELECIONADO
     if(x=="Total" && y=="C1"){
         var ctx = document.getElementById('myChart').getContext('2d');
@@ -1026,27 +1026,28 @@ function newGraph(){
         }
         });
     }      
-}
-if(x=="C10" && y=="C3"){
-    var ctx = document.getElementById('myChart').getContext('2d');
-    var chart = new Chart(ctx, {
-    type: 'line',
-    data: {
-        labels: dado_tempo,
-        datasets: [{
-            label: "kWh",
-            backgroundColor: 'rgb(255, 99, 132)',
-            borderColor: 'rgb(255, 99, 132)',
-            // data sera atrelhado à uma variável que recebe os dados do arduino
-            data: dado_tensao_0x0A,
-            fill: false
-        }]
-    },
-    options: {
-        title: {
-            display: true,
-            text: 'Tensão [V]'
+    if(x=="C10" && y=="C3"){
+        var ctx = document.getElementById('myChart').getContext('2d');
+        var chart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: dado_tempo,
+            datasets: [{
+                label: "kWh",
+                backgroundColor: 'rgb(255, 99, 132)',
+                borderColor: 'rgb(255, 99, 132)',
+                // data sera atrelhado à uma variável que recebe os dados do arduino
+                data: dado_tensao_0x0A,
+                fill: false
+            }]
+        },
+        options: {
+            title: {
+                display: true,
+                text: 'Tensão [V]'
+            }
         }
+        });
     }
-    });
 }
+
