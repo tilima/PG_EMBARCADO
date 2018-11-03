@@ -561,7 +561,7 @@ function newGraph(){
         options: {
             title: {
                 display: true,
-                text: 'Consumo de Energia Horário'
+                text: 'Corrente [mA]'
             }
         }
         });
@@ -584,7 +584,7 @@ function newGraph(){
         options: {
             title: {
                 display: true,
-                text: 'Consumo de Energia Horário'
+                text: 'Corrente [mA]'
             }
         }
         });
@@ -607,7 +607,7 @@ function newGraph(){
         options: {
             title: {
                 display: true,
-                text: 'Consumo de Energia Horário'
+                text: 'Corrente [mA]'
             }
         }
         });
@@ -630,7 +630,7 @@ function newGraph(){
         options: {
             title: {
                 display: true,
-                text: 'Consumo de Energia Horário'
+                text: 'Corrente [mA]'
             }
         }
         });
@@ -653,7 +653,7 @@ function newGraph(){
         options: {
             title: {
                 display: true,
-                text: 'Consumo de Energia Horário'
+                text: 'Corrente [mA]'
             }
         }
         });
@@ -676,7 +676,7 @@ function newGraph(){
         options: {
             title: {
                 display: true,
-                text: 'Consumo de Energia Horário'
+                text: 'Corrente [mA]'
             }
         }
         });
@@ -699,7 +699,7 @@ function newGraph(){
         options: {
             title: {
                 display: true,
-                text: 'Consumo de Energia Horário'
+                text: 'Corrente [mA]'
             }
         }
         });
@@ -722,7 +722,7 @@ function newGraph(){
         options: {
             title: {
                 display: true,
-                text: 'Consumo de Energia Horário'
+                text: 'Corrente [mA]'
             }
         }
         });
@@ -745,7 +745,7 @@ function newGraph(){
         options: {
             title: {
                 display: true,
-                text: 'Consumo de Energia Horário'
+                text: 'Corrente [mA]'
             }
         }
         });
@@ -768,7 +768,7 @@ function newGraph(){
         options: {
             title: {
                 display: true,
-                text: 'Consumo de Energia Horário'
+                text: 'Corrente [mA]'
             }
         }
         });
@@ -791,7 +791,7 @@ function newGraph(){
         options: {
             title: {
                 display: true,
-                text: 'Consumo de Energia Horário'
+                text: 'Corrente [mA]'
             }
         }
         });
@@ -814,7 +814,7 @@ function newGraph(){
         options: {
             title: {
                 display: true,
-                text: 'Consumo de Energia Horário'
+                text: 'Tensão [V]'
             }
         }
         });
@@ -837,7 +837,7 @@ function newGraph(){
         options: {
             title: {
                 display: true,
-                text: 'Consumo de Energia Horário'
+                text: 'Tensão [V]'
             }
         }
         });
@@ -860,7 +860,7 @@ function newGraph(){
         options: {
             title: {
                 display: true,
-                text: 'Consumo de Energia Horário'
+                text: 'Tensão [V]'
             }
         }
         });
@@ -883,7 +883,7 @@ function newGraph(){
         options: {
             title: {
                 display: true,
-                text: 'Consumo de Energia Horário'
+                text: 'Tensão [V]'
             }
         }
         });
@@ -906,7 +906,7 @@ function newGraph(){
         options: {
             title: {
                 display: true,
-                text: 'Consumo de Energia Horário'
+                text: 'Tensão [V]'
             }
         }
         });
@@ -929,7 +929,7 @@ function newGraph(){
         options: {
             title: {
                 display: true,
-                text: 'Consumo de Energia Horário'
+                text: 'Tensão [V]'
             }
         }
         });
@@ -952,7 +952,7 @@ function newGraph(){
         options: {
             title: {
                 display: true,
-                text: 'Consumo de Energia Horário'
+                text: 'Tensão [V]'
             }
         }
         });
@@ -975,7 +975,7 @@ function newGraph(){
         options: {
             title: {
                 display: true,
-                text: 'Consumo de Energia Horário'
+                text: 'Tensão [V]'
             }
         }
         });
@@ -998,7 +998,7 @@ function newGraph(){
         options: {
             title: {
                 display: true,
-                text: 'Consumo de Energia Horário'
+                text: 'Tensão [V]'
             }
         }
         });
@@ -1021,7 +1021,7 @@ function newGraph(){
         options: {
             title: {
                 display: true,
-                text: 'Consumo de Energia Horário'
+                text: 'Tensão [V]'
             }
         }
         });
@@ -1045,7 +1045,7 @@ if(x=="C10" && y=="C3"){
     options: {
         title: {
             display: true,
-            text: 'Consumo de Energia Horário'
+            text: 'Tensão [V]'
         }
     }
     });
