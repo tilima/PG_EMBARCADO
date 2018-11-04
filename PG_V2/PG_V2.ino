@@ -501,6 +501,13 @@ void exec_ethernet() {
               jpg_file(client, "uno.jpg");                       //jpg file
             } else if(indFavicon){
               jpg_file(client, "favicon.ico");                   //icone do browser
+            } else if(StrContains(linebuf, "ajax_inputs")){
+              // send rest of HTTP header
+              client.println("Content-Type: text/xml");
+              client.println("Connection: keep-alive");
+              client.println();
+              // send XML file containing input states
+              XML_response(client);
             } else {
               html_autenticado(client, "index.htm");             //página inicial
             }
@@ -531,7 +538,62 @@ void exec_ethernet() {
     client.stop();      
   }
 }
- 
+
+// send the XML file with switch statuses and analog value
+void XML_response(EthernetClient cl)
+{
+    int analog_val;
+    
+    cl.print("<?xml version = \"1.0\" ?>");
+    cl.print("<inputs>");
+    // read analog pin A2
+    analog_val = analogRead(2);
+    cl.print("<analog1>");
+    cl.print(analog_val);
+    cl.print(" 1");
+    cl.print(" 60");
+    cl.print("</analog1>");
+    cl.print("</inputs>");
+}
+
+// sets every element of str to 0 (clears array)
+void StrClear(char *str, char length)
+{
+    for (int i = 0; i < length; i++) {
+        str[i] = 0;
+    }
+}
+
+// searches for the string sfind in the string str
+// returns 1 if string found
+// returns 0 if string not found
+char StrContains(char *str, char *sfind)
+{
+    char found = 0;
+    char index = 0;
+    char len;
+
+    len = strlen(str);
+    
+    if (strlen(sfind) > len) {
+        return 0;
+    }
+    while (index < len) {
+        if (str[index] == sfind[found]) {
+            found++;
+            if (strlen(sfind) == found) {
+                return 1;
+            }
+        }
+        else {
+            found = 0;
+        }
+        index++;
+    }
+
+    return 0;
+}
+
 //    BASE 64 CODE/DECODE   //
 static const char b64all[] =
 "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdef"
@@ -642,7 +704,7 @@ void loop() {
 
   //    SERVIDOR    //
   exec_ethernet();
-/* COMENTADO PARA TESTE DO SERVIDOR
+
   //    MEDIDOR DE ENERGIA    //
   medir();
 
@@ -656,6 +718,6 @@ void loop() {
 
   //    REINICIAR AS MENSAGENS    //
   limpar_string();
-*/}
+}
 
  
