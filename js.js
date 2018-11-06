@@ -23,6 +23,7 @@ var potencia_aparente_0x07;
 var potencia_aparente_0x08;
 var potencia_aparente_0x09;
 var potencia_aparente_0x0A;
+var potencia_aparente_0x0B;
 var fator_de_potencia_0x01;
 var fator_de_potencia_0x02;
 var fator_de_potencia_0x03;
@@ -174,6 +175,7 @@ function xml_arduino()
                         potencia_aparente_0x08[tempo_hora] = this.responseXML.getElementsByTagName('s8')[0].childNodes[0].nodeValue;
                         potencia_aparente_0x09[tempo_hora] = this.responseXML.getElementsByTagName('s9')[0].childNodes[0].nodeValue;
                         potencia_aparente_0x0A[tempo_hora] = this.responseXML.getElementsByTagName('s10')[0].childNodes[0].nodeValue;
+                        potencia_aparente_0x0B[tempo_hora] = this.responseXML.getElementsByTagName('st')[0].childNodes[0].nodeValue;
                         fator_de_potencia_0x01             = this.responseXML.getElementsByTagName('fp1')[0].childNodes[0].nodeValue;
                         fator_de_potencia_0x02             = this.responseXML.getElementsByTagName('fp2')[0].childNodes[0].nodeValue;
                         fator_de_potencia_0x03             = this.responseXML.getElementsByTagName('fp3')[0].childNodes[0].nodeValue;
