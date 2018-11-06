@@ -1080,7 +1080,7 @@ void setup() {
   Serial.begin(9600);
   //rtc.begin();
   //rtc.setDateTime(__DATE__, __TIME__);  //  COMENTAR APOS A PRIMEIRA COMPILAÇÃO
-  iniciar_sd_card();
+  iniciar_sd_card(); 
   iniciar_ethernet();
 
   //    MEDIDORES   //
