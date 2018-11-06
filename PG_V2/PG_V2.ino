@@ -1088,7 +1088,7 @@ void setup() {
   emon1.voltage(SensorTensao_1,475,1.7); // (PINO,GANHO/CALIBRAÇÃO, PHASE SHIFT)
 }
 
-//LOOP//
+//LOOP// 
 void loop() {
 
   //    RELÉS   //
