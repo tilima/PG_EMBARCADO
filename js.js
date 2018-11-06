@@ -150,9 +150,9 @@ function xml_arduino()
                 if (this.status == 200) {
                     if (this.responseXML != null) {
                         // extract XML data from XML file
-                        data_completa                      = this.resposeXML.getElementById("dtc")[0].childNodes[0].nodeValue;
-                        horario                            = this.resposeXML.getElementById("dt")[0].childNodes[0].nodeValue; 
-                        tempo_hora                         = this.resposeXML.getElementById("h")[0].childNodes[0].nodeValue;
+                        data_completa                      = this.resposeXML.getElementsByTagName("dtc")[0].childNodes[0].nodeValue;
+                        horario                            = this.resposeXML.getElementsByTagName("dt")[0].childNodes[0].nodeValue; 
+                        tempo_hora                         = this.resposeXML.getElementsByTagName("h_")[0].childNodes[0].nodeValue;
                         potencia_ativa_0x01[tempo_hora]    = this.responseXML.getElementsByTagName('p1')[0].childNodes[0].nodeValue;
                         potencia_ativa_0x02[tempo_hora]    = this.responseXML.getElementsByTagName('p2')[0].childNodes[0].nodeValue;
                         potencia_ativa_0x03[tempo_hora]    = this.responseXML.getElementsByTagName('p3')[0].childNodes[0].nodeValue;

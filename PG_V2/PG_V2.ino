@@ -8,13 +8,84 @@
 #include <EmonLib.h>
 #include <DS3231.h>
 
-//    MEDIDOR   //
+//    MEDIDOR 1   //
 EnergyMonitor emon1;
+float antigo_realPower1;
 float realPower1;  
 float apparentPower1;    
 float powerFActor1;      
 float supplyVoltage1;             
 float Irms1;
+
+//    MEDIDOR 2   //
+float realPower2;  
+float apparentPower2;    
+float powerFActor2;      
+float supplyVoltage2;             
+float Irms2;
+
+//    MEDIDOR 3   //
+float realPower3;  
+float apparentPower3;    
+float powerFActor3;      
+float supplyVoltage3;             
+float Irms3;
+
+//    MEDIDOR 4   //
+float realPower4;  
+float apparentPower4;    
+float powerFActor4;      
+float supplyVoltage4;             
+float Irms4;
+
+//    MEDIDOR 5   //
+float realPower5;  
+float apparentPower5;    
+float powerFActor5;      
+float supplyVoltage5;             
+float Irms5;
+
+//    MEDIDOR 6   //
+float realPower6;  
+float apparentPower6;    
+float powerFActor6;      
+float supplyVoltage6;             
+float Irms6;
+
+//    MEDIDOR 7   //
+float realPower7;  
+float apparentPower7;    
+float powerFActor7;      
+float supplyVoltage7;             
+float Irms7;
+
+//    MEDIDOR 8   //
+float realPower8;  
+float apparentPower8;    
+float powerFActor8;      
+float supplyVoltage8;             
+float Irms8;
+
+//    MEDIDOR 9   //
+float realPower9;  
+float apparentPower9;    
+float powerFActor9;      
+float supplyVoltage9;             
+float Irms9;
+
+//    MEDIDOR 10   //
+float realPower10;  
+float apparentPower10;    
+float powerFActor10;      
+float supplyVoltage10;             
+float Irms10;
+
+//    TOTAIS    //
+float realPowert;  
+float apparentPowert;    
+float powerFActort;      
+float supplyVoltaget;             
+float Irmst;
 
 //    SENSORES   //
 const int SensorCorrente_1 = A0;
@@ -60,6 +131,8 @@ char sV1[8];
 char Ir1[8];
 char mensagem;
 String dados;
+String data_completa;
+String hora_completa;
 String data_hora;
 String dados_arduino_0X00_01;
 String dados_arduino_0X01_01;
@@ -77,6 +150,7 @@ byte data;
 
 //    MENSURAR AS GRANDEZAS    //
 void medir(){
+  antigo_realPower1 = realPower1;
   emon1.calcVI(20,2000);
 
    //    MEDIDOR 01    //
@@ -85,6 +159,149 @@ void medir(){
   powerFActor1     = emon1.powerFactor;      
   supplyVoltage1   = emon1.Vrms;             
   Irms1            = emon1.Irms;
+}
+
+//    CALCULOS PARA OS GRÁFICOS    //
+void totais(){
+  realPowert = (realPower1 + realPower2 + realPower3 + realPower4 + realPower5 + realPower6 + realPower7 + realPower8 + realPower9 + realPower10)/10;
+  apparentPowert = (apparentPower1 + apparentPower2 + apparentPower3 + apparentPower4 + apparentPower5 + apparentPower6 + apparentPower7 + apparentPower8 + apparentPower9 + apparentPower10)/10;
+  powerFActort = (powerFActor1 + powerFActor2 + powerFActor3 + powerFActor4 + powerFActor5 + powerFActor6 + powerFActor7 + powerFActor8 + powerFActor9 + powerFActor10)/10;
+  supplyVoltaget = (supplyVoltage1 + supplyVoltage2 + supplyVoltage3 + supplyVoltage4 + supplyVoltage5 + supplyVoltage6 + supplyVoltage7 + supplyVoltage8 + supplyVoltage9 + supplyVoltage10)/10;
+  Irmst = (Irms1 + Irms2 + Irms3 + Irms4 + Irms5 + Irms6 + Irms7 + Irms8 + Irms9 + Irms10);
+}
+
+//    PREPARA OS DADOS PARA O XML    //
+void subString_para_float(int alterna){
+  int ind1;
+  int ind2;
+  int ind3;
+  int ind4;
+  int ind5;
+  
+  switch (alterna){
+    case 1:
+      
+      realPower1 += antigo_realPower1;
+      realPower1 /= 2;
+
+      ind1 = dados_arduino_0X01_01.indexOf(",");
+      realPower2 += dados_arduino_0X01_01.substring(0, ind1).toFloat();
+      realPower2 /= 2;
+      ind2 = dados_arduino_0X01_01.indexOf(",", ind1 + 1);
+      apparentPower2 = dados_arduino_0X01_01.substring(ind1 + 1, ind2).toFloat();
+      ind3 = dados_arduino_0X01_01.indexOf(",", ind2 + 1);
+      powerFActor2 = dados_arduino_0X01_01.substring(ind2 + 1, ind3).toFloat();
+      ind4 = dados_arduino_0X01_01.indexOf(",", ind3 + 1);
+      supplyVoltage2 = dados_arduino_0X01_01.substring(ind3 + 1, ind4).toFloat();
+      ind5 = dados_arduino_0X01_01.indexOf(",", ind4 + 1);
+      Irms2 = dados_arduino_0X01_01.substring(ind4 + 1, ind5).toFloat();
+
+      ind1 = dados_arduino_0X01_02.indexOf(",");
+      realPower3 += dados_arduino_0X01_02.substring(0, ind1).toFloat();
+      realPower3 /= 2;
+      ind2 = dados_arduino_0X01_02.indexOf(",", ind1 + 1);
+      apparentPower3 = dados_arduino_0X01_02.substring(ind1 + 1, ind2).toFloat();
+      ind3 = dados_arduino_0X01_02.indexOf(",", ind2 + 1);
+      powerFActor3 = dados_arduino_0X01_02.substring(ind2 + 1, ind3).toFloat();
+      ind4 = dados_arduino_0X01_02.indexOf(",", ind3 + 1);
+      supplyVoltage3 = dados_arduino_0X01_02.substring(ind3 + 1, ind4).toFloat();
+      ind5 = dados_arduino_0X01_02.indexOf(",", ind4 + 1);
+      Irms3 = dados_arduino_0X01_02.substring(ind4 + 1, ind5).toFloat();
+
+      ind1 = dados_arduino_0X01_03.indexOf(",");
+      realPower4 += dados_arduino_0X01_03.substring(0, ind1).toFloat();
+      realPower4 /= 2;
+      ind2 = dados_arduino_0X01_03.indexOf(",", ind1 + 1);
+      apparentPower4 = dados_arduino_0X01_03.substring(ind1 + 1, ind2).toFloat();
+      ind3 = dados_arduino_0X01_03.indexOf(",", ind2 + 1);
+      powerFActor4 = dados_arduino_0X01_03.substring(ind2 + 1, ind3).toFloat();
+      ind4 = dados_arduino_0X01_03.indexOf(",", ind3 + 1);
+      supplyVoltage5 = dados_arduino_0X01_03.substring(ind3 + 1, ind4).toFloat();
+      ind5 = dados_arduino_0X01_03.indexOf(",", ind4 + 1);
+      Irms5 = dados_arduino_0X01_03.substring(ind4 + 1, ind5).toFloat();
+
+      break;
+    
+    case 2:
+
+      ind1 = dados_arduino_0X02_01.indexOf(",");
+      realPower5 += dados_arduino_0X02_01.substring(0, ind1).toFloat();
+      realPower5 /= 2;
+      ind2 = dados_arduino_0X02_01.indexOf(",", ind1 + 1);
+      apparentPower5 = dados_arduino_0X02_01.substring(ind1 + 1, ind2).toFloat();
+      ind3 = dados_arduino_0X02_01.indexOf(",", ind2 + 1);
+      powerFActor5 = dados_arduino_0X02_01.substring(ind2 + 1, ind3).toFloat();
+      ind4 = dados_arduino_0X02_01.indexOf(",", ind3 + 1);
+      supplyVoltage5 = dados_arduino_0X02_01.substring(ind3 + 1, ind4).toFloat();
+      ind5 = dados_arduino_0X02_01.indexOf(",", ind4 + 1);
+      Irms5 = dados_arduino_0X02_01.substring(ind4 + 1, ind5).toFloat();
+
+      ind1 = dados_arduino_0X02_02.indexOf(",");
+      realPower6 += dados_arduino_0X02_02.substring(0, ind1).toFloat();
+      realPower6 /= 2;
+      ind2 = dados_arduino_0X02_02.indexOf(",", ind1 + 1);
+      apparentPower6 = dados_arduino_0X02_02.substring(ind1 + 1, ind2).toFloat();
+      ind3 = dados_arduino_0X02_02.indexOf(",", ind2 + 1);
+      powerFActor6 = dados_arduino_0X02_02.substring(ind2 + 1, ind3).toFloat();
+      ind4 = dados_arduino_0X02_02.indexOf(",", ind3 + 1);
+      supplyVoltage6 = dados_arduino_0X02_02.substring(ind3 + 1, ind4).toFloat();
+      ind5 = dados_arduino_0X02_02.indexOf(",", ind4 + 1);
+      Irms6 = dados_arduino_0X02_02.substring(ind4 + 1, ind5).toFloat();
+
+      ind1 = dados_arduino_0X02_03.indexOf(",");
+      realPower7 += dados_arduino_0X02_03.substring(0, ind1).toFloat();
+      realPower7 /= 2;
+      ind2 = dados_arduino_0X02_03.indexOf(",", ind1 + 1);
+      apparentPower7 = dados_arduino_0X02_03.substring(ind1 + 1, ind2).toFloat();
+      ind3 = dados_arduino_0X02_03.indexOf(",", ind2 + 1);
+      powerFActor7 = dados_arduino_0X02_03.substring(ind2 + 1, ind3).toFloat();
+      ind4 = dados_arduino_0X02_03.indexOf(",", ind3 + 1);
+      supplyVoltage7 = dados_arduino_0X02_03.substring(ind3 + 1, ind4).toFloat();
+      ind5 = dados_arduino_0X02_03.indexOf(",", ind4 + 1);
+      Irms7 = dados_arduino_0X02_03.substring(ind4 + 1, ind5).toFloat();
+    
+      break;
+    
+    case 3:
+
+      ind1 = dados_arduino_0X03_01.indexOf(",");
+      realPower8 += dados_arduino_0X03_01.substring(0, ind1).toFloat();
+      realPower8 /= 2;
+      ind2 = dados_arduino_0X03_01.indexOf(",", ind1 + 1);
+      apparentPower8 = dados_arduino_0X03_01.substring(ind1 + 1, ind2).toFloat();
+      ind3 = dados_arduino_0X03_01.indexOf(",", ind2 + 1);
+      powerFActor8 = dados_arduino_0X03_01.substring(ind2 + 1, ind3).toFloat();
+      ind4 = dados_arduino_0X03_01.indexOf(",", ind3 + 1);
+      supplyVoltage8 = dados_arduino_0X03_01.substring(ind3 + 1, ind4).toFloat();
+      ind5 = dados_arduino_0X03_01.indexOf(",", ind4 + 1);
+      Irms8 = dados_arduino_0X03_01.substring(ind4 + 1, ind5).toFloat();
+
+      ind1 = dados_arduino_0X03_02.indexOf(",");
+      realPower9 += dados_arduino_0X03_02.substring(0, ind1).toFloat();
+      realPower9 /= 2;
+      ind2 = dados_arduino_0X03_02.indexOf(",", ind1 + 1);
+      apparentPower9 = dados_arduino_0X03_02.substring(ind1 + 1, ind2).toFloat();
+      ind3 = dados_arduino_0X03_02.indexOf(",", ind2 + 1);
+      powerFActor9 = dados_arduino_0X03_02.substring(ind2 + 1, ind3).toFloat();
+      ind4 = dados_arduino_0X03_02.indexOf(",", ind3 + 1);
+      supplyVoltage9 = dados_arduino_0X03_02.substring(ind3 + 1, ind4).toFloat();
+      ind5 = dados_arduino_0X03_02.indexOf(",", ind4 + 1);
+      Irms9 = dados_arduino_0X03_02.substring(ind4 + 1, ind5).toFloat();
+
+      ind1 = dados_arduino_0X03_03.indexOf(",");
+      realPower10 += dados_arduino_0X03_03.substring(0, ind1).toFloat();
+      realPower10 /= 2;
+      ind2 = dados_arduino_0X03_03.indexOf(",", ind1 + 1);
+      apparentPower10 = dados_arduino_0X03_03.substring(ind1 + 1, ind2).toFloat();
+      ind3 = dados_arduino_0X03_03.indexOf(",", ind2 + 1);
+      powerFActor10 = dados_arduino_0X03_03.substring(ind2 + 1, ind3).toFloat();
+      ind4 = dados_arduino_0X03_03.indexOf(",", ind3 + 1);
+      supplyVoltage10 = dados_arduino_0X03_03.substring(ind3 + 1, ind4).toFloat();
+      ind5 = dados_arduino_0X03_03.indexOf(",", ind4 + 1);
+      Irms10 = dados_arduino_0X03_03.substring(ind4 + 1, ind5).toFloat();
+
+      break;
+  }
 }
 
 //    RECEBE AS MENSAGENS    //
@@ -108,22 +325,22 @@ void recebe_dados(){
 
 //    ENVIAR OS DADOS    //
 void envia_dados(){  
-//  banco_de_dados(data_hora);
+  banco_de_dados(data_completa);
   banco_de_dados(dados_arduino_0X00_01);
-  //banco_de_dados(dados_arduino_0X01_01);
-  //banco_de_dados(dados_arduino_0X01_02);
-  //banco_de_dados(dados_arduino_0X01_03);
-  //banco_de_dados(dados_arduino_0X02_01);
-  //banco_de_dados(dados_arduino_0X02_02);
-  //banco_de_dados(dados_arduino_0X02_03);
-  //banco_de_dados(dados_arduino_0X03_01);
-  //banco_de_dados(dados_arduino_0X03_02);
-  //banco_de_dados(dados_arduino_0X03_03);
+  banco_de_dados(dados_arduino_0X01_01);
+  banco_de_dados(dados_arduino_0X01_02);
+  banco_de_dados(dados_arduino_0X01_03);
+  banco_de_dados(dados_arduino_0X02_01);
+  banco_de_dados(dados_arduino_0X02_02);
+  banco_de_dados(dados_arduino_0X02_03);
+  banco_de_dados(dados_arduino_0X03_01);
+  banco_de_dados(dados_arduino_0X03_02);
+  banco_de_dados(dados_arduino_0X03_03);
 }
 
 //    LIMPAR MENSAGENS    //
 void limpar_string(){    
-  data_hora="";
+  data_completa="";
   dados_arduino_0X00_01 = "";
   dados_arduino_0X01_01 = "";
   dados_arduino_0X01_02 = "";
@@ -139,17 +356,26 @@ void limpar_string(){
 //    RTC    //
 void relogio(){
     dataehora = rtc.getDateTime();
-    data_hora += dataehora.year;
-    data_hora += "/";
-    data_hora += dataehora.month;
-    data_hora += "/";
-    data_hora += dataehora.day;
-    data_hora += " ";
-    data_hora += dataehora.hour;
-    data_hora += ":";
-    data_hora += dataehora.minute;
-    data_hora += ":";
-    data_hora += dataehora.second;
+    
+    data_hora = dataehora.hour;
+
+    hora_completa += dataehora.hour;
+    hora_completa += ",";
+    hora_completa += dataehora.minute;
+    hora_completa += ",";
+    hora_completa += dataehora.second;
+
+    data_completa += dataehora.year;
+    data_completa += "/";
+    data_completa += dataehora.month;
+    data_completa += "/";
+    data_completa += dataehora.day;
+    data_completa += " ";
+    data_completa += dataehora.hour;
+    data_completa += ":";
+    data_completa += dataehora.minute;
+    data_completa += ":";
+    data_completa += dataehora.second;
   }
   
 
@@ -166,7 +392,7 @@ void banco_de_dados(String dataString){
 }
 
 //    ORGANIZA OS DADOS MEDIDOS    //
-void prepara_dado(float rP, float aP, float pF, float sV, float Ir){
+void float_para_String(float rP, float aP, float pF, float sV, float Ir){
 
   //   CONVERTE FLOAT PARA STRING   //
   dtostrf(rP, String(rP1).length(), 2, rP1);
@@ -184,7 +410,6 @@ void prepara_dado(float rP, float aP, float pF, float sV, float Ir){
   dados_arduino_0X00_01 += sV1;
   dados_arduino_0X00_01 += ", ";
   dados_arduino_0X00_01 += Ir1;
-  dados_arduino_0X00_01 += ", ";
 }
 
 //   VERIFICAR O TAMANHO DA MENSAGEM  //
@@ -540,20 +765,187 @@ void exec_ethernet() {
 }
 
 // send the XML file with switch statuses and analog value
-void XML_response(EthernetClient cl)
+void XML_response(EthernetClient &client)
 {
     int analog_val;
     
-    cl.print("<?xml version = \"1.0\" ?>");
-    cl.print("<inputs>");
-    // read analog pin A2
-    analog_val = analogRead(2);
-    cl.print("<analog1>");
-    cl.print(analog_val);
-    cl.print(" 1");
-    cl.print(" 60");
-    cl.print("</analog1>");
-    cl.print("</inputs>");
+    client.print("<?xml version = \"1.0\" ?>");
+    client.print("<inputs>");
+    client.print("<dtc>");
+    client.print(data_completa);
+    client.print("</dtc>");
+    client.print("<dt>");
+    client.print(hora_completa);
+    client.print("</dt>");
+    client.print("<h_>");
+    client.print(data_hora);
+    client.print("</h_>");
+    client.print("<p1>");
+    client.print(realPower1);
+    client.print("</p1>");
+    client.print("<p2>");
+    client.print(realPower2);
+    client.print("</p2>");
+    client.print("<p3>");
+    client.print(realPower3);
+    client.print("</p3>");
+    client.print("<p4>");
+    client.print(realPower4);
+    client.print("</p4>");
+    client.print("<p5>");
+    client.print(realPower5);
+    client.print("</p5>");
+    client.print("<p6>");
+    client.print(realPower6);
+    client.print("</p6>");
+    client.print("<p7>");
+    client.print(realPower7);
+    client.print("</p7>");
+    client.print("<p8>");
+    client.print(realPower8);
+    client.print("</p8>");
+    client.print("<p9>");
+    client.print(realPower9);
+    client.print("</p9>");
+    client.print("<p10>");
+    client.print(realPower10);
+    client.print("</p10>");
+    client.print("<pt>");
+    client.print(realPowert);
+    client.print("</pt>");
+    client.print("<s1>");
+    client.print(apparentPower1);
+    client.print("</s1>");
+    client.print("<s2>");
+    client.print(apparentPower2);
+    client.print("</s2>");
+    client.print("<s3>");
+    client.print(apparentPower3);
+    client.print("</s3>");
+    client.print("<s4>");
+    client.print(apparentPower4);
+    client.print("</s4>");
+    client.print("<s5>");
+    client.print(apparentPower5);
+    client.print("</s5>");
+    client.print("<s6>");
+    client.print(apparentPower6);
+    client.print("</s6>");
+    client.print("<s7>");
+    client.print(apparentPower7);
+    client.print("</s7>");
+    client.print("<s8>");
+    client.print(apparentPower8);
+    client.print("</s8>");
+    client.print("<s9>");
+    client.print(apparentPower9);
+    client.print("</s9>");
+    client.print("<s10>");
+    client.print(apparentPower10);
+    client.print("</s10>");
+    client.print("<st>");
+    client.print(apparentPowert);
+    client.print("</st>");
+    client.print("<fp1>");
+    client.print(powerFActor1);
+    client.print("</fp1>");
+    client.print("<fp2>");
+    client.print(powerFActor2);
+    client.print("</fp2>");
+    client.print("<fp3>");
+    client.print(powerFActor3);
+    client.print("</fp3>");
+    client.print("<fp4>");
+    client.print(powerFActor4);
+    client.print("</fp4>");
+    client.print("<fp5>");
+    client.print(powerFActor5);
+    client.print("</fp5>");
+    client.print("<fp6>");
+    client.print(powerFActor6);
+    client.print("</fp6>");
+    client.print("<fp7>");
+    client.print(powerFActor7);
+    client.print("</fp7>");
+    client.print("<fp8>");
+    client.print(powerFActor8);
+    client.print("</fp8>");
+    client.print("<fp9>");
+    client.print(powerFActor9);
+    client.print("</fp9>");
+    client.print("<fp10>");
+    client.print(powerFActor10);
+    client.print("</fp10>");
+    client.print("<fpt>");
+    client.print(powerFActort);
+    client.print("</fpt>");
+    client.print("<v1>");
+    client.print(supplyVoltage1);
+    client.print("</v1>");
+    client.print("<v2>");
+    client.print(supplyVoltage2);
+    client.print("</v2>");
+    client.print("<v3>");
+    client.print(supplyVoltage3);
+    client.print("</v3>");
+    client.print("<v4>");
+    client.print(supplyVoltage4);
+    client.print("</v4>");
+    client.print("<v5>");
+    client.print(supplyVoltage5);
+    client.print("</v5>");
+    client.print("<v6>");
+    client.print(supplyVoltage6);
+    client.print("</v6>");
+    client.print("<v7>");
+    client.print(supplyVoltage7);
+    client.print("</v7>");
+    client.print("<v8>");
+    client.print(supplyVoltage8);
+    client.print("</v8>");
+    client.print("<v9>");
+    client.print(supplyVoltage9);
+    client.print("</v9>");
+    client.print("<v10>");
+    client.print(supplyVoltage10);
+    client.print("</v10>");
+    client.print("<vt>");
+    client.print(supplyVoltaget);
+    client.print("</vt>");
+    client.print("<a1>");
+    client.print(Irms1);
+    client.print("</a1>");
+    client.print("<a2>");
+    client.print(Irms2);
+    client.print("</a2>");
+    client.print("<a3>");
+    client.print(Irms3);
+    client.print("</a3>");
+    client.print("<a4>");
+    client.print(Irms4);
+    client.print("</a4>");
+    client.print("<a5>");
+    client.print(Irms5);
+    client.print("</a5>");
+    client.print("<a6>");
+    client.print(Irms6);
+    client.print("</a6>");
+    client.print("<a7>");
+    client.print(Irms7);
+    client.print("</a7>");
+    client.print("<a8>");
+    client.print(Irms8);
+    client.print("</a8>");
+    client.print("<a9>");
+    client.print(Irms9);
+    client.print("</a9>");
+    client.print("<a10>");
+    client.print(Irms10);
+    client.print("</a10>");
+    client.print("<at>");
+    client.print(Irmst);
+    client.print("</at>");
+    client.print("</inputs>");
 }
 
 // sets every element of str to 0 (clears array)
@@ -709,9 +1101,15 @@ void loop() {
   medir();
 
   //    AQUISIÇÃO DE DADOS    //
-  prepara_dado(realPower1,apparentPower1,powerFActor1,supplyVoltage1,Irms1);
+  float_para_String(realPower1,apparentPower1,powerFActor1,supplyVoltage1,Irms1);
   relogio();
   recebe_dados();
+
+  //    EXTRAI OS DADOS DAS STRINGS    //
+  subString_para_float(1);
+  subString_para_float(2);
+  subString_para_float(3);
+  totais();
 
   //    BANCO DE DADOS    //
   envia_dados();
