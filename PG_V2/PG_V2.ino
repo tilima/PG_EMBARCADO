@@ -10,7 +10,7 @@
 
 //    MEDIDOR 1   //
 EnergyMonitor emon1;
-float antigo_realPower1;
+float antigo_realPower1 = 0;
 float realPower1;  
 float apparentPower1;    
 float powerFActor1;      
@@ -18,6 +18,7 @@ float supplyVoltage1;
 float Irms1;
 
 //    MEDIDOR 2   //
+float antigo_realPower2 = 0;
 float realPower2;  
 float apparentPower2;    
 float powerFActor2;      
@@ -25,6 +26,7 @@ float supplyVoltage2;
 float Irms2;
 
 //    MEDIDOR 3   //
+float antigo_realPower3 = 0;
 float realPower3;  
 float apparentPower3;    
 float powerFActor3;      
@@ -32,6 +34,7 @@ float supplyVoltage3;
 float Irms3;
 
 //    MEDIDOR 4   //
+float antigo_realPower4 = 0;
 float realPower4;  
 float apparentPower4;    
 float powerFActor4;      
@@ -39,6 +42,7 @@ float supplyVoltage4;
 float Irms4;
 
 //    MEDIDOR 5   //
+float antigo_realPower5 = 0;
 float realPower5;  
 float apparentPower5;    
 float powerFActor5;      
@@ -46,6 +50,7 @@ float supplyVoltage5;
 float Irms5;
 
 //    MEDIDOR 6   //
+float antigo_realPower6 = 0;
 float realPower6;  
 float apparentPower6;    
 float powerFActor6;      
@@ -53,6 +58,7 @@ float supplyVoltage6;
 float Irms6;
 
 //    MEDIDOR 7   //
+float antigo_realPower7 = 0;
 float realPower7;  
 float apparentPower7;    
 float powerFActor7;      
@@ -60,6 +66,7 @@ float supplyVoltage7;
 float Irms7;
 
 //    MEDIDOR 8   //
+float antigo_realPower8 = 0;
 float realPower8;  
 float apparentPower8;    
 float powerFActor8;      
@@ -67,6 +74,7 @@ float supplyVoltage8;
 float Irms8;
 
 //    MEDIDOR 9   //
+float antigo_realPower9 = 0;
 float realPower9;  
 float apparentPower9;    
 float powerFActor9;      
@@ -74,6 +82,7 @@ float supplyVoltage9;
 float Irms9;
 
 //    MEDIDOR 10   //
+float antigo_realPower10 = 0;
 float realPower10;  
 float apparentPower10;    
 float powerFActor10;      
@@ -150,7 +159,6 @@ byte data;
 
 //    MENSURAR AS GRANDEZAS    //
 void medir(){
-  antigo_realPower1 = realPower1;
   emon1.calcVI(20,2000);
 
    //    MEDIDOR 01    //
@@ -180,13 +188,35 @@ void subString_para_float(int alterna){
   
   switch (alterna){
     case 1:
-      
-      realPower1 += antigo_realPower1;
-      realPower1 /= 2;
+    //  Serial.print("NOVO: ");
+    //  Serial.println(realPower1);
+      if(antigo_realPower1 == 0){
+        antigo_realPower1 = realPower1;
+      } else {
+        realPower1 += antigo_realPower1;
+        realPower1 /= 2;
+    //    Serial.print("ANTIGO: ");
+    //    Serial.println(antigo_realPower1);
+        antigo_realPower1 = realPower1;
+      }
+    //  Serial.print("MEDIA: ");
+    //  Serial.println(realPower1);
 
       ind1 = dados_arduino_0X01_01.indexOf(",");
-      realPower2 += dados_arduino_0X01_01.substring(0, ind1).toFloat();
-      realPower2 /= 2;
+      realPower2 = dados_arduino_0X01_01.substring(0, ind1).toFloat();
+    //  Serial.print("NOVO: ");
+    //  Serial.println(realPower2);
+      if(antigo_realPower2 == 0){
+        antigo_realPower2 = realPower2;
+      } else {
+        realPower2 += antigo_realPower2;
+        realPower2 /= 2;
+    //    Serial.print("ANTIGO: ");
+    //    Serial.println(antigo_realPower2);
+        antigo_realPower2 = realPower2;
+      }
+    //  Serial.print("MEDIA: ");
+    //  Serial.println(realPower2);
       ind2 = dados_arduino_0X01_01.indexOf(",", ind1 + 1);
       apparentPower2 = dados_arduino_0X01_01.substring(ind1 + 1, ind2).toFloat();
       ind3 = dados_arduino_0X01_01.indexOf(",", ind2 + 1);
@@ -198,7 +228,14 @@ void subString_para_float(int alterna){
 
       ind1 = dados_arduino_0X01_02.indexOf(",");
       realPower3 += dados_arduino_0X01_02.substring(0, ind1).toFloat();
-      realPower3 /= 2;
+      
+      if(antigo_realPower3 == 0){
+        antigo_realPower3 = realPower3;
+      } else {
+        realPower3 += antigo_realPower3;
+        realPower3 /= 3;
+        antigo_realPower3 = realPower3;
+      }
       ind2 = dados_arduino_0X01_02.indexOf(",", ind1 + 1);
       apparentPower3 = dados_arduino_0X01_02.substring(ind1 + 1, ind2).toFloat();
       ind3 = dados_arduino_0X01_02.indexOf(",", ind2 + 1);
@@ -210,7 +247,13 @@ void subString_para_float(int alterna){
 
       ind1 = dados_arduino_0X01_03.indexOf(",");
       realPower4 += dados_arduino_0X01_03.substring(0, ind1).toFloat();
-      realPower4 /= 2;
+      if(antigo_realPower4 == 0){
+        antigo_realPower4 = realPower4;
+      } else {
+        realPower4 += antigo_realPower4;
+        realPower4 /= 4;
+        antigo_realPower4 = realPower4;
+      }
       ind2 = dados_arduino_0X01_03.indexOf(",", ind1 + 1);
       apparentPower4 = dados_arduino_0X01_03.substring(ind1 + 1, ind2).toFloat();
       ind3 = dados_arduino_0X01_03.indexOf(",", ind2 + 1);
@@ -226,7 +269,13 @@ void subString_para_float(int alterna){
 
       ind1 = dados_arduino_0X02_01.indexOf(",");
       realPower5 += dados_arduino_0X02_01.substring(0, ind1).toFloat();
-      realPower5 /= 2;
+      if(antigo_realPower5 == 0){
+        antigo_realPower5 = realPower5;
+      } else {
+        realPower5 += antigo_realPower5;
+        realPower5 /= 5;
+        antigo_realPower5 = realPower5;
+      }
       ind2 = dados_arduino_0X02_01.indexOf(",", ind1 + 1);
       apparentPower5 = dados_arduino_0X02_01.substring(ind1 + 1, ind2).toFloat();
       ind3 = dados_arduino_0X02_01.indexOf(",", ind2 + 1);
@@ -238,7 +287,13 @@ void subString_para_float(int alterna){
 
       ind1 = dados_arduino_0X02_02.indexOf(",");
       realPower6 += dados_arduino_0X02_02.substring(0, ind1).toFloat();
-      realPower6 /= 2;
+      if(antigo_realPower6 == 0){
+        antigo_realPower6 = realPower6;
+      } else {
+        realPower6 += antigo_realPower6;
+        realPower6 /= 6;
+        antigo_realPower6 = realPower6;
+      }
       ind2 = dados_arduino_0X02_02.indexOf(",", ind1 + 1);
       apparentPower6 = dados_arduino_0X02_02.substring(ind1 + 1, ind2).toFloat();
       ind3 = dados_arduino_0X02_02.indexOf(",", ind2 + 1);
@@ -250,7 +305,13 @@ void subString_para_float(int alterna){
 
       ind1 = dados_arduino_0X02_03.indexOf(",");
       realPower7 += dados_arduino_0X02_03.substring(0, ind1).toFloat();
-      realPower7 /= 2;
+      if(antigo_realPower7 == 0){
+        antigo_realPower7 = realPower7;
+      } else {
+        realPower7 += antigo_realPower7;
+        realPower7 /= 7;
+        antigo_realPower7 = realPower7;
+      }
       ind2 = dados_arduino_0X02_03.indexOf(",", ind1 + 1);
       apparentPower7 = dados_arduino_0X02_03.substring(ind1 + 1, ind2).toFloat();
       ind3 = dados_arduino_0X02_03.indexOf(",", ind2 + 1);
@@ -266,7 +327,13 @@ void subString_para_float(int alterna){
 
       ind1 = dados_arduino_0X03_01.indexOf(",");
       realPower8 += dados_arduino_0X03_01.substring(0, ind1).toFloat();
-      realPower8 /= 2;
+      if(antigo_realPower8 == 0){
+        antigo_realPower8 = realPower8;
+      } else {
+        realPower8 += antigo_realPower8;
+        realPower8 /= 8;
+        antigo_realPower8 = realPower8;
+      }
       ind2 = dados_arduino_0X03_01.indexOf(",", ind1 + 1);
       apparentPower8 = dados_arduino_0X03_01.substring(ind1 + 1, ind2).toFloat();
       ind3 = dados_arduino_0X03_01.indexOf(",", ind2 + 1);
@@ -278,7 +345,13 @@ void subString_para_float(int alterna){
 
       ind1 = dados_arduino_0X03_02.indexOf(",");
       realPower9 += dados_arduino_0X03_02.substring(0, ind1).toFloat();
-      realPower9 /= 2;
+      if(antigo_realPower9 == 0){
+        antigo_realPower9 = realPower9;
+      } else {
+        realPower9 += antigo_realPower9;
+        realPower9 /= 9;
+        antigo_realPower9 = realPower9;
+      }
       ind2 = dados_arduino_0X03_02.indexOf(",", ind1 + 1);
       apparentPower9 = dados_arduino_0X03_02.substring(ind1 + 1, ind2).toFloat();
       ind3 = dados_arduino_0X03_02.indexOf(",", ind2 + 1);
@@ -290,7 +363,13 @@ void subString_para_float(int alterna){
 
       ind1 = dados_arduino_0X03_03.indexOf(",");
       realPower10 += dados_arduino_0X03_03.substring(0, ind1).toFloat();
-      realPower10 /= 2;
+      if(antigo_realPower10 == 0){
+        antigo_realPower10 = realPower10;
+      } else {
+        realPower10 += antigo_realPower10;
+        realPower10 /= 10;
+        antigo_realPower10 = realPower10;
+      }
       ind2 = dados_arduino_0X03_03.indexOf(",", ind1 + 1);
       apparentPower10 = dados_arduino_0X03_03.substring(ind1 + 1, ind2).toFloat();
       ind3 = dados_arduino_0X03_03.indexOf(",", ind2 + 1);
@@ -309,18 +388,28 @@ void recebe_dados(){
   
   recebe_tamanho(arduino_01);
   dados_arduino_0X01_01 = recebe_escravo_1(arduino_01);
+  dados = "";
   dados_arduino_0X01_02 = recebe_escravo_2(arduino_01);
+  dados = "";
   dados_arduino_0X01_03 = recebe_escravo_3(arduino_01);
+  dados = "";
 
   recebe_tamanho(arduino_02);
   dados_arduino_0X02_01 = recebe_escravo_1(arduino_02);
+  dados = "";
   dados_arduino_0X02_02 = recebe_escravo_2(arduino_02);
+  dados = "";
   dados_arduino_0X02_03 = recebe_escravo_3(arduino_02);
+  dados = "";
 
   recebe_tamanho(arduino_03);
   dados_arduino_0X03_01 = recebe_escravo_1(arduino_03);
+  dados = "";
   dados_arduino_0X03_02 = recebe_escravo_2(arduino_03);
+  dados = "";
   dados_arduino_0X03_03 = recebe_escravo_3(arduino_03);
+  dados = "";
+  
 }
 
 //    ENVIAR OS DADOS    //
@@ -339,8 +428,10 @@ void envia_dados(){
 }
 
 //    LIMPAR MENSAGENS    //
-void limpar_string(){    
-  data_completa="";
+void limpar_string(){
+  data_hora = "";
+  hora_completa = "";    
+  data_completa = "";
   dados_arduino_0X00_01 = "";
   dados_arduino_0X01_01 = "";
   dados_arduino_0X01_02 = "";
@@ -385,7 +476,7 @@ void banco_de_dados(String dataString){
   if (dataFile) {
     dataFile.println(dataString);
     dataFile.close();
-    Serial.println(dataString);
+//    Serial.println(dataString);
   } else {
       Serial.println("error opening datalog.txt");
     }
@@ -488,7 +579,6 @@ String recebe_escravo_1(int endereco){
 String recebe_escravo_2(int endereco){ 
   Wire.requestFrom(endereco,total_size_2);    // (ENDEREÇO,QUANTIDADE DE BYTES)
   while (Wire.available()){
-    dados += ", "; 
     for(int i = 0; i < size_6; i++){
       mensagem = Wire.read(); 
       dados += mensagem;
@@ -513,7 +603,6 @@ String recebe_escravo_2(int endereco){
       mensagem = Wire.read(); 
       dados += mensagem;
     }
-    dados += ", ";
   }
   return dados;
 }
@@ -545,8 +634,7 @@ String recebe_escravo_3(int endereco){
     for(int i = 0; i < size_15; i++){
       mensagem = Wire.read(); 
       dados += mensagem;
-    }
-    dados += ", ";        
+    }       
   }
   return dados;  
 }
@@ -1078,7 +1166,7 @@ void setup() {
   //    BIBLIOTECAS   //
   Wire.begin();  
   Serial.begin(9600);
-  //rtc.begin();
+  //rtc.begin();  // RELOGIO AINDA NÃO TESTADO
   //rtc.setDateTime(__DATE__, __TIME__);  //  COMENTAR APOS A PRIMEIRA COMPILAÇÃO
   iniciar_sd_card(); 
   iniciar_ethernet();
@@ -1102,18 +1190,19 @@ void loop() {
 
   //    AQUISIÇÃO DE DADOS    //
   float_para_String(realPower1,apparentPower1,powerFActor1,supplyVoltage1,Irms1);
-  relogio();
+  
+  //relogio();
   recebe_dados();
-
+  
   //    EXTRAI OS DADOS DAS STRINGS    //
   subString_para_float(1);
   subString_para_float(2);
   subString_para_float(3);
   totais();
-
+  
   //    BANCO DE DADOS    //
   envia_dados();
-
+  
   //    REINICIAR AS MENSAGENS    //
   limpar_string();
 }
