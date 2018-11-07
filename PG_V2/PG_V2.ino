@@ -1166,8 +1166,8 @@ void setup() {
   //    BIBLIOTECAS   //
   Wire.begin();  
   Serial.begin(9600);
-  //rtc.begin();  // RELOGIO AINDA NÃO TESTADO
-  //rtc.setDateTime(__DATE__, __TIME__);  //  COMENTAR APOS A PRIMEIRA COMPILAÇÃO
+  rtc.begin();
+//  rtc.setDateTime(__DATE__, __TIME__);  //  COMENTAR APOS A PRIMEIRA COMPILAÇÃO
   iniciar_sd_card(); 
   iniciar_ethernet();
 
@@ -1191,7 +1191,8 @@ void loop() {
   //    AQUISIÇÃO DE DADOS    //
   float_para_String(realPower1,apparentPower1,powerFActor1,supplyVoltage1,Irms1);
   
-  //relogio();
+  relogio();
+  Serial.println(data_completa);
   recebe_dados();
   
   //    EXTRAI OS DADOS DAS STRINGS    //
