@@ -5,11 +5,66 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>Painel de Controle</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" type="text/css" media="screen" href="/css.css" />
-    <script src="/js.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script>      
+        var potencia_ativa_0x01 = [0,0,0,0,0,0,0,0];
+            
+        // AJAX PARA REQUISIÇÃO ?XML
+        function xml_arduino()
+        {
+            nocache = "&nocache=" + Math.random() * 1000000;
+            var request = new XMLHttpRequest();
+            request.onreadystatechange = function()
+                {
+                    if (this.readyState == 4) {
+                        if (this.status == 200) {
+                            if (this.responseXML != null) {
+                                // extract XML data from XML file
+                                document.getElementById("teste").innerHTML =
+                                this.responseXML.getElementsByTagName('dtc')[0].childNodes[0].nodeValue;
+                                potencia_ativa_0x01[4]    =
+                                this.responseXML.getElementsByTagName('p1')[0].childNodes[0].nodeValue;
+                                console.log(potencia_ativa_0x01[4]);
+                                newGraph();
+                            }
+                        }
+                    }
+                }
+                request.open("GET", "ajax_inputs" + nocache, true);
+                request.send(null);
+                setTimeout('xml_arduino()', 5000);
+        }
     
+        // FUNÇÃO PARA O SELETOR
+        function newGraph(){
+            var x = document.getElementById("carga").value;
+            var y = document.getElementById("informacao").value;
+            //document.getElementById("teste").innerHTML = "Você selecionou " + x + " " + y;
+            // LOGICA PARA MOSTRAR O GRÁFICO SELECIONADO
+                var ctx = document.getElementById('myChart').getContext('2d');
+                var chart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['01:00', '02:00', '03:00', '04:00', '05:00', '06:00', '07:00', '08:00', '09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00', '20:00', '21:00', '22:00', '23:00', '00:00'
+                ],
+                    datasets: [{
+                        label: "kWh",
+                        backgroundColor: 'rgb(255, 99, 132)',
+                        borderColor: 'rgb(255, 99, 132)',
+                        // data sera atrelhado à uma variável que recebe os dados do arduino
+                        data: [ 0,  0,  0,  0,  0, potencia_ativa_0x01[4], 0,  0,  0,  0,  0, 0,  0,  0,  0,  0, 0,  0,  0,  0,  0, 0,  0,  0],
+                        fill: false
+                    }]
+                },
+                options: {
+                    title: {
+                        display: true,
+                        text: 'Consumo de Energia Horário'
+                    }
+                }
+                });
+    }
+        </script>    
 </head>
 <body onload="xml_arduino()">
     <div class="chart-container" style="width: 80%">
@@ -30,7 +85,7 @@
                 <option value="C9">Carga 9</option>
                 <option value="C10">Carga 10</option>
                 </select></td>
-            <td><select id="informacao" onchange="newGraph()">
+            <td><select id="informacao">
                 <option value="C1">Consumo</option>
                 <option value="C2">Tensão</option>
                 <option value="C2">Corrente</option>
@@ -40,6 +95,6 @@
             <td><p id="corrente"></p></td>
         </tr>
     </table>
-    <p id="teste"></p>
+    <p>VALOR: </p> <span id="teste"></span></p>
 </body>
 </html>

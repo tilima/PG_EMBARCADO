@@ -152,31 +152,25 @@ void loop()
 // send the XML file with switch statuses and analog value
 void XML_response(EthernetClient cl)
 {
-    int analog_val;
+    int analog_val_1;
+    int analog_val_2;
+    int analog_val_3;
     
     cl.print("<?xml version = \"1.0\" ?>");
     cl.print("<inputs>");
-    cl.print("<button1>");
-    if (digitalRead(7)) {
-        cl.print("ON");
-    }
-    else {
-        cl.print("OFF");
-    }
-    cl.print("</button1>");
-    cl.print("<button2>");
-    if (digitalRead(8)) {
-        cl.print("ON");
-    }
-    else {
-        cl.print("OFF");
-    }
-    cl.print("</button2>");
-    // read analog pin A2
-    analog_val = analogRead(2);
+    // read analog pin A1 A2 A3
+    analog_val_1 = analogRead(1);
+    analog_val_2 = analogRead(2);
+    analog_val_3 = analogRead(3);
     cl.print("<analog1>");
-    cl.print(analog_val);
+    cl.print(analog_val_1);
     cl.print("</analog1>");
+    cl.print("<analog2>");
+    cl.print(analog_val_2);
+    cl.print("</analog2>");
+    cl.print("<analog3>");
+    cl.print(analog_val_3);
+    cl.print("</analog3>");
     cl.print("</inputs>");
 }
 
