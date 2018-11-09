@@ -10,7 +10,7 @@
         var data_completa;
         var tempo_tempo;
         var tempo_hora;
-        var dado_tempo;
+        var dado_tempo = [];
         var potencia_ativa_0x01 = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
         var potencia_ativa_0x02 = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
         var potencia_ativa_0x03 = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
@@ -66,28 +66,28 @@
         var corrente_0x09;
         var corrente_0x0A;
         var corrente_0x0B;
-        var dado_tensao_0x01;
-        var dado_tensao_0x02;
-        var dado_tensao_0x03;
-        var dado_tensao_0x04;
-        var dado_tensao_0x05;
-        var dado_tensao_0x06;
-        var dado_tensao_0x07;
-        var dado_tensao_0x08;
-        var dado_tensao_0x09;
-        var dado_tensao_0x0A;
-        var dado_tensao_0x0B;
-        var dado_corrente_0x01;
-        var dado_corrente_0x02;
-        var dado_corrente_0x03;
-        var dado_corrente_0x04;
-        var dado_corrente_0x05;
-        var dado_corrente_0x06;
-        var dado_corrente_0x07;
-        var dado_corrente_0x08;
-        var dado_corrente_0x09;
-        var dado_corrente_0x0A;
-        var dado_corrente_0x0B;
+        var dado_tensao_0x01 = [];
+        var dado_tensao_0x02 = [];
+        var dado_tensao_0x03 = [];
+        var dado_tensao_0x04 = [];
+        var dado_tensao_0x05 = [];
+        var dado_tensao_0x06 = [];
+        var dado_tensao_0x07 = [];
+        var dado_tensao_0x08 = [];
+        var dado_tensao_0x09 = [];
+        var dado_tensao_0x0A = [];
+        var dado_tensao_0x0B = [];
+        var dado_corrente_0x01 = [];
+        var dado_corrente_0x02 = [];
+        var dado_corrente_0x03 = [];
+        var dado_corrente_0x04 = [];
+        var dado_corrente_0x05 = [];
+        var dado_corrente_0x06 = [];
+        var dado_corrente_0x07 = [];
+        var dado_corrente_0x08 = [];
+        var dado_corrente_0x09 = [];
+        var dado_corrente_0x0A = [];
+        var dado_corrente_0x0B = [];
 
         // AJAX PARA REQUISIÇÃO ?XML
         function xml_arduino()
@@ -111,13 +111,15 @@
                         tensao_0x01 =
                         this.responseXML.getElementsByTagName('v1')[0].childNodes[0].nodeValue;
                         
-                        console.log(tempo_tempo);
+                       /* console.log(tempo_tempo);
                         console.log(tempo_hora);
                         console.log(potencia_ativa_0x01);
                         console.log(potencia_ativa_0x02);
                         console.log(potencia_ativa_0x03);
-                        console.log(tensao_0x01);
+                        console.log(tensao_0x01);*/
                         atualiza_grafico();
+                        console.log(dado_tensao_0x01);
+                        console.log(dado_tempo);
                         newGraph();  
                     }
             }
@@ -953,7 +955,7 @@
             <td><select id="informacao">
                 <option value="C1">Consumo</option>
                 <option value="C2">Corrente</option>
-                <option value="C2">Tensão</option>
+                <option value="C3">Tensão</option>
                 </select></td>
             <td><p id="fp"></p></td>
             <td><p id="tensao"></p></td>
