@@ -11,28 +11,28 @@
         var tempo_tempo;
         var tempo_hora;
         var dado_tempo = [];
-        var potencia_ativa_0x01 = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
-        var potencia_ativa_0x02 = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
-        var potencia_ativa_0x03 = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
-        var potencia_ativa_0x04 = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
-        var potencia_ativa_0x05 = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
-        var potencia_ativa_0x06 = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
-        var potencia_ativa_0x07 = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
-        var potencia_ativa_0x08 = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
-        var potencia_ativa_0x09 = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
-        var potencia_ativa_0x0A = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
-        var potencia_ativa_0x0B = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
-        var potencia_aparente_0x01;
-        var potencia_aparente_0x02; 
-        var potencia_aparente_0x03;
-        var potencia_aparente_0x04;
-        var potencia_aparente_0x05;
-        var potencia_aparente_0x06;
-        var potencia_aparente_0x07;
-        var potencia_aparente_0x08;
-        var potencia_aparente_0x09;
-        var potencia_aparente_0x0A;
-        var potencia_aparente_0x0B;
+        var potencia_ativa_0x01 = []//[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
+        var potencia_ativa_0x02 = []//[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
+        var potencia_ativa_0x03 = []//[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
+        var potencia_ativa_0x04 = []//[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
+        var potencia_ativa_0x05 = []//[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
+        var potencia_ativa_0x06 = []//[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
+        var potencia_ativa_0x07 = []//[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
+        var potencia_ativa_0x08 = []//[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
+        var potencia_ativa_0x09 = []//[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
+        var potencia_ativa_0x0A = []//[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
+        var potencia_ativa_0x0B = []//[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
+        var potencia_aparente_0x01 = [];
+        var potencia_aparente_0x02 = []; 
+        var potencia_aparente_0x03 = [];
+        var potencia_aparente_0x04 = [];
+        var potencia_aparente_0x05 = [];
+        var potencia_aparente_0x06 = [];
+        var potencia_aparente_0x07 = [];
+        var potencia_aparente_0x08 = [];
+        var potencia_aparente_0x09 = [];
+        var potencia_aparente_0x0A = [];
+        var potencia_aparente_0x0B = [];
         var fator_de_potencia_0x01;
         var fator_de_potencia_0x02;
         var fator_de_potencia_0x03;
@@ -98,8 +98,10 @@
             {
                     if (this.readyState == 4 && this.status == 200 && this.responseXML != null) {
                         // extract XML data from XML file
+                        data_completa =
+                        this.responseXML.getElementsByTagName('dtc')[0].childNodes[0].nodeValue;
                         tempo_tempo =
-                        this.responseXML.getElementsByTagName('dt')[0].childNodes[0].nodeValue;
+                        this.responseXML.getElementsByTagName('dt')[0].childNodes[0].nodeValue; 
                         tempo_hora =
                         this.responseXML.getElementsByTagName('h_')[0].childNodes[0].nodeValue;
                         potencia_ativa_0x01[tempo_hora] =
@@ -108,18 +110,112 @@
                         this.responseXML.getElementsByTagName('p2')[0].childNodes[0].nodeValue;
                         potencia_ativa_0x03[tempo_hora] =
                         this.responseXML.getElementsByTagName('p3')[0].childNodes[0].nodeValue;
+                        potencia_ativa_0x04[tempo_hora] =
+                        this.responseXML.getElementsByTagName('p4')[0].childNodes[0].nodeValue;
+                        potencia_ativa_0x05[tempo_hora] =
+                        this.responseXML.getElementsByTagName('p5')[0].childNodes[0].nodeValue;
+                        potencia_ativa_0x06[tempo_hora] =
+                        this.responseXML.getElementsByTagName('p6')[0].childNodes[0].nodeValue;
+                        potencia_ativa_0x07[tempo_hora] =
+                        this.responseXML.getElementsByTagName('p7')[0].childNodes[0].nodeValue;
+                        potencia_ativa_0x08[tempo_hora] =
+                        this.responseXML.getElementsByTagName('p8')[0].childNodes[0].nodeValue;
+                        potencia_ativa_0x09[tempo_hora] =
+                        this.responseXML.getElementsByTagName('p9')[0].childNodes[0].nodeValue;
+                        potencia_ativa_0x0A[tempo_hora] =
+                        this.responseXML.getElementsByTagName('p10')[0].childNodes[0].nodeValue;
+                        potencia_ativa_0x0B[tempo_hora] =
+                        this.responseXML.getElementsByTagName('pt')[0].childNodes[0].nodeValue;
+                        potencia_aparente_0x01[tempo_hora] =
+                        this.responseXML.getElementsByTagName('s1')[0].childNodes[0].nodeValue;
+                        potencia_aparente_0x02[tempo_hora] =
+                        this.responseXML.getElementsByTagName('s2')[0].childNodes[0].nodeValue;
+                        potencia_aparente_0x03[tempo_hora] =
+                        this.responseXML.getElementsByTagName('s3')[0].childNodes[0].nodeValue;
+                        potencia_aparente_0x04[tempo_hora] =
+                        this.responseXML.getElementsByTagName('s4')[0].childNodes[0].nodeValue;
+                        potencia_aparente_0x05[tempo_hora] =
+                        this.responseXML.getElementsByTagName('s5')[0].childNodes[0].nodeValue;
+                        potencia_aparente_0x06[tempo_hora] =
+                        this.responseXML.getElementsByTagName('s6')[0].childNodes[0].nodeValue;
+                        potencia_aparente_0x07[tempo_hora] =
+                        this.responseXML.getElementsByTagName('s7')[0].childNodes[0].nodeValue;
+                        potencia_aparente_0x08[tempo_hora] =
+                        this.responseXML.getElementsByTagName('s8')[0].childNodes[0].nodeValue;
+                        potencia_aparente_0x09[tempo_hora] =
+                        this.responseXML.getElementsByTagName('s9')[0].childNodes[0].nodeValue;
+                        potencia_aparente_0x0A[tempo_hora] =
+                        this.responseXML.getElementsByTagName('s10')[0].childNodes[0].nodeValue;
+                        potencia_aparente_0x0B[tempo_hora] =
+                        this.responseXML.getElementsByTagName('st')[0].childNodes[0].nodeValue;
+                        fator_de_potencia_0x01 =
+                        this.responseXML.getElementsByTagName('fp1')[0].childNodes[0].nodeValue;
+                        fator_de_potencia_0x02 =
+                        this.responseXML.getElementsByTagName('fp2')[0].childNodes[0].nodeValue;
+                        fator_de_potencia_0x03 =
+                        this.responseXML.getElementsByTagName('fp3')[0].childNodes[0].nodeValue;
+                        fator_de_potencia_0x04 =
+                        this.responseXML.getElementsByTagName('fp4')[0].childNodes[0].nodeValue;
+                        fator_de_potencia_0x05 =
+                        this.responseXML.getElementsByTagName('fp5')[0].childNodes[0].nodeValue;
+                        fator_de_potencia_0x06 =
+                        this.responseXML.getElementsByTagName('fp6')[0].childNodes[0].nodeValue;
+                        fator_de_potencia_0x07 =
+                        this.responseXML.getElementsByTagName('fp7')[0].childNodes[0].nodeValue;
+                        fator_de_potencia_0x08 =
+                        this.responseXML.getElementsByTagName('fp8')[0].childNodes[0].nodeValue;
+                        fator_de_potencia_0x09 =
+                        this.responseXML.getElementsByTagName('fp9')[0].childNodes[0].nodeValue;
+                        fator_de_potencia_0x0A =
+                        this.responseXML.getElementsByTagName('fp10')[0].childNodes[0].nodeValue;
+                        fator_de_potencia_0x0B =
+                        this.responseXML.getElementsByTagName('fpt')[0].childNodes[0].nodeValue;
                         tensao_0x01 =
                         this.responseXML.getElementsByTagName('v1')[0].childNodes[0].nodeValue;
-                        
-                       /* console.log(tempo_tempo);
-                        console.log(tempo_hora);
-                        console.log(potencia_ativa_0x01);
-                        console.log(potencia_ativa_0x02);
-                        console.log(potencia_ativa_0x03);
-                        console.log(tensao_0x01);*/
+                        tensao_0x02 =
+                        this.responseXML.getElementsByTagName('v2')[0].childNodes[0].nodeValue;
+                        tensao_0x03 =
+                        this.responseXML.getElementsByTagName('v3')[0].childNodes[0].nodeValue;
+                        tensao_0x04 =
+                        this.responseXML.getElementsByTagName('v4')[0].childNodes[0].nodeValue;
+                        tensao_0x05 =
+                        this.responseXML.getElementsByTagName('v5')[0].childNodes[0].nodeValue;
+                        tensao_0x06 =
+                        this.responseXML.getElementsByTagName('v6')[0].childNodes[0].nodeValue;
+                        tensao_0x07 =
+                        this.responseXML.getElementsByTagName('v7')[0].childNodes[0].nodeValue;
+                        tensao_0x08 =
+                        this.responseXML.getElementsByTagName('v8')[0].childNodes[0].nodeValue;
+                        tensao_0x09 =
+                        this.responseXML.getElementsByTagName('v9')[0].childNodes[0].nodeValue;
+                        tensao_0x0A =
+                        this.responseXML.getElementsByTagName('v10')[0].childNodes[0].nodeValue;
+                        tensao_0x0B =
+                        this.responseXML.getElementsByTagName('vt')[0].childNodes[0].nodeValue;
+                        corrente_0x01 =
+                        this.responseXML.getElementsByTagName('a1')[0].childNodes[0].nodeValue;
+                        corrente_0x02 =
+                        this.responseXML.getElementsByTagName('a2')[0].childNodes[0].nodeValue;
+                        corrente_0x03 =
+                        this.responseXML.getElementsByTagName('a3')[0].childNodes[0].nodeValue;
+                        corrente_0x04 =
+                        this.responseXML.getElementsByTagName('a4')[0].childNodes[0].nodeValue;
+                        corrente_0x05 =
+                        this.responseXML.getElementsByTagName('a5')[0].childNodes[0].nodeValue;
+                        corrente_0x06 =
+                        this.responseXML.getElementsByTagName('a6')[0].childNodes[0].nodeValue;
+                        corrente_0x07 =
+                        this.responseXML.getElementsByTagName('a7')[0].childNodes[0].nodeValue;
+                        corrente_0x08 =
+                        this.responseXML.getElementsByTagName('a8')[0].childNodes[0].nodeValue;
+                        corrente_0x09 =
+                        this.responseXML.getElementsByTagName('a9')[0].childNodes[0].nodeValue;
+                        corrente_0x0A =
+                        this.responseXML.getElementsByTagName('a10')[0].childNodes[0].nodeValue;
+                        corrente_0x0B =
+                        this.responseXML.getElementsByTagName('at')[0].childNodes[0].nodeValue;
+
                         atualiza_grafico();
-                        console.log(dado_tensao_0x01);
-                        console.log(dado_tempo);
                         newGraph();  
                     }
             }
@@ -131,7 +227,7 @@
         function atualiza_grafico(){
             dado_tempo.push(tempo_tempo);
             dado_tensao_0x01.push(tensao_0x01);
-            /*dado_tensao_0x02.push(tensao_0x02);
+            dado_tensao_0x02.push(tensao_0x02);
             dado_tensao_0x03.push(tensao_0x03);
             dado_tensao_0x04.push(tensao_0x04);
             dado_tensao_0x05.push(tensao_0x05);
@@ -151,7 +247,7 @@
             dado_corrente_0x08.push(corrente_0x08);
             dado_corrente_0x09.push(corrente_0x09);
             dado_corrente_0x0A.push(corrente_0x0A);
-            dado_corrente_0x0B.push(corrente_0x0B);*/
+            dado_corrente_0x0B.push(corrente_0x0B);
         }
     
                 // FUNÇÃO PARA O SELETOR
@@ -952,7 +1048,7 @@
                 <option value="C9">Carga 9</option>
                 <option value="C10">Carga 10</option>
                 </select></td>
-            <td><select id="informacao">
+            <td><select id="informacao" onchange="newGraph()">
                 <option value="C1">Consumo</option>
                 <option value="C2">Corrente</option>
                 <option value="C3">Tensão</option>
