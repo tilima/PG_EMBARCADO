@@ -758,7 +758,7 @@ void exec_ethernet(){
                         client.println();
                         // send XML file containing input states
                         logFile = SD.open("logGrafico.txt");        // open web page file
-                        if (logFile) {
+                        if (logFile) { 
                             while(logFile.available()) {
                                 datalog += logFile.read(); // send web page to client
                             }

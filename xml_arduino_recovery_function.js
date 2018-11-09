@@ -2,7 +2,7 @@ function xml_arduino_recovery()
         {
             nocache = "&nocache=" + Math.random() * 1000000;
             var request = new XMLHttpRequest();
-            request.onreadystatechange = function()
+            request.onreadystatechange = function() 
             {
                     if (this.readyState == 4 && this.status == 200 && this.responseXML != null) {
                         // extract XML data from XML file
