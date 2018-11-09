@@ -1,0 +1,967 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Painel de Controle</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
+    <script>      
+        var data_completa;
+        var tempo_tempo;
+        var tempo_hora;
+        var dado_tempo = [];
+        var potencia_ativa_0x01 = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
+        var potencia_ativa_0x02 = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
+        var potencia_ativa_0x03 = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
+        var potencia_ativa_0x04 = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
+        var potencia_ativa_0x05 = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
+        var potencia_ativa_0x06 = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
+        var potencia_ativa_0x07 = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
+        var potencia_ativa_0x08 = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
+        var potencia_ativa_0x09 = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
+        var potencia_ativa_0x0A = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
+        var potencia_ativa_0x0B = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
+        var potencia_aparente_0x01;
+        var potencia_aparente_0x02; 
+        var potencia_aparente_0x03;
+        var potencia_aparente_0x04;
+        var potencia_aparente_0x05;
+        var potencia_aparente_0x06;
+        var potencia_aparente_0x07;
+        var potencia_aparente_0x08;
+        var potencia_aparente_0x09;
+        var potencia_aparente_0x0A;
+        var potencia_aparente_0x0B;
+        var fator_de_potencia_0x01;
+        var fator_de_potencia_0x02;
+        var fator_de_potencia_0x03;
+        var fator_de_potencia_0x04;
+        var fator_de_potencia_0x05;
+        var fator_de_potencia_0x06;
+        var fator_de_potencia_0x07;
+        var fator_de_potencia_0x08;
+        var fator_de_potencia_0x09;
+        var fator_de_potencia_0x0A;
+        var fator_de_potencia_0x0B;
+        var tensao_0x01;
+        var tensao_0x02;
+        var tensao_0x03;
+        var tensao_0x04;
+        var tensao_0x05;
+        var tensao_0x06;
+        var tensao_0x07;
+        var tensao_0x08;
+        var tensao_0x09;
+        var tensao_0x0A;
+        var tensao_0x0B;
+        var corrente_0x01;
+        var corrente_0x02;
+        var corrente_0x03;
+        var corrente_0x04;
+        var corrente_0x05;
+        var corrente_0x06;
+        var corrente_0x07;
+        var corrente_0x08;
+        var corrente_0x09;
+        var corrente_0x0A;
+        var corrente_0x0B;
+        var dado_tensao_0x01 = [];
+        var dado_tensao_0x02 = [];
+        var dado_tensao_0x03 = [];
+        var dado_tensao_0x04 = [];
+        var dado_tensao_0x05 = [];
+        var dado_tensao_0x06 = [];
+        var dado_tensao_0x07 = [];
+        var dado_tensao_0x08 = [];
+        var dado_tensao_0x09 = [];
+        var dado_tensao_0x0A = [];
+        var dado_tensao_0x0B = [];
+        var dado_corrente_0x01 = [];
+        var dado_corrente_0x02 = [];
+        var dado_corrente_0x03 = [];
+        var dado_corrente_0x04 = [];
+        var dado_corrente_0x05 = [];
+        var dado_corrente_0x06 = [];
+        var dado_corrente_0x07 = [];
+        var dado_corrente_0x08 = [];
+        var dado_corrente_0x09 = [];
+        var dado_corrente_0x0A = [];
+        var dado_corrente_0x0B = [];
+
+        // AJAX PARA REQUISIÇÃO ?XML
+        function xml_arduino()
+        {
+            nocache = "&nocache=" + Math.random() * 1000000;
+            var request = new XMLHttpRequest();
+            request.onreadystatechange = function()
+            {
+                    if (this.readyState == 4 && this.status == 200 && this.responseXML != null) {
+                        // extract XML data from XML file
+                        tempo_tempo =
+                        this.responseXML.getElementsByTagName('dt')[0].childNodes[0].nodeValue;
+                        tempo_hora =
+                        this.responseXML.getElementsByTagName('h_')[0].childNodes[0].nodeValue;
+                        potencia_ativa_0x01[tempo_hora] =
+                        this.responseXML.getElementsByTagName('p1')[0].childNodes[0].nodeValue;
+                        potencia_ativa_0x02[tempo_hora] =
+                        this.responseXML.getElementsByTagName('p2')[0].childNodes[0].nodeValue;
+                        potencia_ativa_0x03[tempo_hora] =
+                        this.responseXML.getElementsByTagName('p3')[0].childNodes[0].nodeValue;
+                        tensao_0x01 =
+                        this.responseXML.getElementsByTagName('v1')[0].childNodes[0].nodeValue;
+                        
+                       /* console.log(tempo_tempo);
+                        console.log(tempo_hora);
+                        console.log(potencia_ativa_0x01);
+                        console.log(potencia_ativa_0x02);
+                        console.log(potencia_ativa_0x03);
+                        console.log(tensao_0x01);*/
+                        atualiza_grafico();
+                        console.log(dado_tensao_0x01);
+                        console.log(dado_tempo);
+                        newGraph();  
+                    }
+            }
+            request.open("GET", "ajax_inputs" + nocache, true);
+            request.send(null);
+            setTimeout('xml_arduino()', 10000);
+        }
+
+        function atualiza_grafico(){
+            dado_tempo.push(tempo_tempo);
+            dado_tensao_0x01.push(tensao_0x01);
+            /*dado_tensao_0x02.push(tensao_0x02);
+            dado_tensao_0x03.push(tensao_0x03);
+            dado_tensao_0x04.push(tensao_0x04);
+            dado_tensao_0x05.push(tensao_0x05);
+            dado_tensao_0x06.push(tensao_0x06);
+            dado_tensao_0x07.push(tensao_0x07);
+            dado_tensao_0x08.push(tensao_0x08);
+            dado_tensao_0x09.push(tensao_0x09);
+            dado_tensao_0x0A.push(tensao_0x0A);
+            dado_tensao_0x0B.push(tensao_0x0B);
+            dado_corrente_0x01.push(corrente_0x01);
+            dado_corrente_0x02.push(corrente_0x02);
+            dado_corrente_0x03.push(corrente_0x03);
+            dado_corrente_0x04.push(corrente_0x04);
+            dado_corrente_0x05.push(corrente_0x05);
+            dado_corrente_0x06.push(corrente_0x06);
+            dado_corrente_0x07.push(corrente_0x07);
+            dado_corrente_0x08.push(corrente_0x08);
+            dado_corrente_0x09.push(corrente_0x09);
+            dado_corrente_0x0A.push(corrente_0x0A);
+            dado_corrente_0x0B.push(corrente_0x0B);*/
+        }
+    
+                // FUNÇÃO PARA O SELETOR
+        function newGraph(){
+            var x = document.getElementById("carga").value;
+            var y = document.getElementById("informacao").value;
+            document.getElementById("teste").innerHTML = "Você selecionou " + x + " " + y;
+            // LOGICA PARA MOSTRAR O GRÁFICO SELECIONADO
+            if(x=="Total" && y=="C1"){
+                var ctx = document.getElementById('myChart').getContext('2d');
+                var chart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['01:00', '02:00', '03:00', '04:00', '05:00', '06:00', '07:00', '08:00', '09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00', '20:00', '21:00', '22:00', '23:00', '00:00'
+                ],
+                    datasets: [{
+                        label: "kWh",
+                        backgroundColor: 'rgb(255, 99, 132)',
+                        borderColor: 'rgb(255, 99, 132)',
+                        // data sera atrelhado à uma variável que recebe os dados do arduino
+                        data: potencia_ativa_0x0B,
+                        fill: false
+                    }]
+                },
+                options: {
+                    title: {
+                        display: true,
+                        text: 'Consumo de Energia Horário'
+                    }
+                }
+                });
+            }
+            if(x=="C1" && y=="C1"){
+                var ctx = document.getElementById('myChart').getContext('2d');
+                var chart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['01:00', '02:00', '03:00', '04:00', '05:00', '06:00', '07:00', '08:00', '09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00', '20:00', '21:00', '22:00', '23:00', '00:00'
+                ],
+                    datasets: [{
+                        label: "kWh",
+                        backgroundColor: 'rgb(255, 99, 132)',
+                        borderColor: 'rgb(255, 99, 132)',
+                        // data sera atrelhado à uma variável que recebe os dados do arduino
+                        data: potencia_ativa_0x01,
+                        fill: false
+                    }]
+                },
+                options: {
+                    title: {
+                        display: true,
+                        text: 'Consumo de Energia Horário'
+                    }
+                }
+                });
+            }
+            if(x=="C2" && y=="C1"){
+                var ctx = document.getElementById('myChart').getContext('2d');
+                var chart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['01:00', '02:00', '03:00', '04:00', '05:00', '06:00', '07:00', '08:00', '09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00', '20:00', '21:00', '22:00', '23:00', '00:00'
+                ],
+                    datasets: [{
+                        label: "kWh",
+                        backgroundColor: 'rgb(255, 99, 132)',
+                        borderColor: 'rgb(255, 99, 132)',
+                        // data sera atrelhado à uma variável que recebe os dados do arduino
+                        data: potencia_ativa_0x02,
+                        fill: false
+                    }]
+                },
+                options: {
+                    title: {
+                        display: true,
+                        text: 'Consumo de Energia Horário'
+                    }
+                }
+                });
+            }
+            if(x=="C3" && y=="C1"){
+                var ctx = document.getElementById('myChart').getContext('2d');
+                var chart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['01:00', '02:00', '03:00', '04:00', '05:00', '06:00', '07:00', '08:00', '09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00', '20:00', '21:00', '22:00', '23:00', '00:00'
+                ],
+                    datasets: [{
+                        label: "kWh",
+                        backgroundColor: 'rgb(255, 99, 132)',
+                        borderColor: 'rgb(255, 99, 132)',
+                        // data sera atrelhado à uma variável que recebe os dados do arduino
+                        data: potencia_ativa_0x03,
+                        fill: false
+                    }]
+                },
+                options: {
+                    title: {
+                        display: true,
+                        text: 'Consumo de Energia Horário'
+                    }
+                }
+                });
+            }
+            if(x=="C4" && y=="C1"){
+                var ctx = document.getElementById('myChart').getContext('2d');
+                var chart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['01:00', '02:00', '03:00', '04:00', '05:00', '06:00', '07:00', '08:00', '09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00', '20:00', '21:00', '22:00', '23:00', '00:00'
+                ],
+                    datasets: [{
+                        label: "kWh",
+                        backgroundColor: 'rgb(255, 99, 132)',
+                        borderColor: 'rgb(255, 99, 132)',
+                        // data sera atrelhado à uma variável que recebe os dados do arduino
+                        data: potencia_ativa_0x04,
+                        fill: false
+                    }]
+                },
+                options: {
+                    title: {
+                        display: true,
+                        text: 'Consumo de Energia Horário'
+                    }
+                }
+                });
+            }
+            if(x=="C5" && y=="C1"){
+                var ctx = document.getElementById('myChart').getContext('2d');
+                var chart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['01:00', '02:00', '03:00', '04:00', '05:00', '06:00', '07:00', '08:00', '09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00', '20:00', '21:00', '22:00', '23:00', '00:00'
+                ],
+                    datasets: [{
+                        label: "kWh",
+                        backgroundColor: 'rgb(255, 99, 132)',
+                        borderColor: 'rgb(255, 99, 132)',
+                        // data sera atrelhado à uma variável que recebe os dados do arduino
+                        data: potencia_ativa_0x05,
+                        fill: false
+                    }]
+                },
+                options: {
+                    title: {
+                        display: true,
+                        text: 'Consumo de Energia Horário'
+                    }
+                }
+                });
+            }
+            if(x=="C6" && y=="C1"){
+                var ctx = document.getElementById('myChart').getContext('2d');
+                var chart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['01:00', '02:00', '03:00', '04:00', '05:00', '06:00', '07:00', '08:00', '09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00', '20:00', '21:00', '22:00', '23:00', '00:00'
+                ],
+                    datasets: [{
+                        label: "kWh",
+                        backgroundColor: 'rgb(255, 99, 132)',
+                        borderColor: 'rgb(255, 99, 132)',
+                        // data sera atrelhado à uma variável que recebe os dados do arduino
+                        data: potencia_ativa_0x06,
+                        fill: false
+                    }]
+                },
+                options: {
+                    title: {
+                        display: true,
+                        text: 'Consumo de Energia Horário'
+                    }
+                }
+                });
+            }
+            if(x=="C7" && y=="C1"){
+                var ctx = document.getElementById('myChart').getContext('2d');
+                var chart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['01:00', '02:00', '03:00', '04:00', '05:00', '06:00', '07:00', '08:00', '09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00', '20:00', '21:00', '22:00', '23:00', '00:00'
+                ],
+                    datasets: [{
+                        label: "kWh",
+                        backgroundColor: 'rgb(255, 99, 132)',
+                        borderColor: 'rgb(255, 99, 132)',
+                        // data sera atrelhado à uma variável que recebe os dados do arduino
+                        data: potencia_ativa_0x07,
+                        fill: false
+                    }]
+                },
+                options: {
+                    title: {
+                        display: true,
+                        text: 'Consumo de Energia Horário'
+                    }
+                }
+                });
+            }
+            if(x=="C8" && y=="C1"){
+                var ctx = document.getElementById('myChart').getContext('2d');
+                var chart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['01:00', '02:00', '03:00', '04:00', '05:00', '06:00', '07:00', '08:00', '09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00', '20:00', '21:00', '22:00', '23:00', '00:00'
+                ],
+                    datasets: [{
+                        label: "kWh",
+                        backgroundColor: 'rgb(255, 99, 132)',
+                        borderColor: 'rgb(255, 99, 132)',
+                        // data sera atrelhado à uma variável que recebe os dados do arduino
+                        data: potencia_ativa_0x08,
+                        fill: false
+                    }]
+                },
+                options: {
+                    title: {
+                        display: true,
+                        text: 'Consumo de Energia Horário'
+                    }
+                }
+                });
+            }
+            if(x=="C9" && y=="C1"){
+                var ctx = document.getElementById('myChart').getContext('2d');
+                var chart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['01:00', '02:00', '03:00', '04:00', '05:00', '06:00', '07:00', '08:00', '09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00', '20:00', '21:00', '22:00', '23:00', '00:00'
+                ],
+                    datasets: [{
+                        label: "kWh",
+                        backgroundColor: 'rgb(255, 99, 132)',
+                        borderColor: 'rgb(255, 99, 132)',
+                        // data sera atrelhado à uma variável que recebe os dados do arduino
+                        data: potencia_ativa_0x09,
+                        fill: false
+                    }]
+                },
+                options: {
+                    title: {
+                        display: true,
+                        text: 'Consumo de Energia Horário'
+                    }
+                }
+                });
+            }
+            if(x=="C10" && y=="C1"){
+                var ctx = document.getElementById('myChart').getContext('2d');
+                var chart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['01:00', '02:00', '03:00', '04:00', '05:00', '06:00', '07:00', '08:00', '09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00', '20:00', '21:00', '22:00', '23:00', '00:00'
+                ],
+                    datasets: [{
+                        label: "kWh",
+                        backgroundColor: 'rgb(255, 99, 132)',
+                        borderColor: 'rgb(255, 99, 132)',
+                        // data sera atrelhado à uma variável que recebe os dados do arduino
+                        data: potencia_ativa_0x0A,
+                        fill: false
+                    }]
+                },
+                options: {
+                    title: {
+                        display: true,
+                        text: 'Consumo de Energia Horário'
+                    }
+                }
+                });
+            }
+            if(x=="Total" && y=="C2"){
+                var ctx = document.getElementById('myChart').getContext('2d');
+                var chart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: dado_tempo,
+                    datasets: [{
+                        label: "kWh",
+                        backgroundColor: 'rgb(255, 99, 132)',
+                        borderColor: 'rgb(255, 99, 132)',
+                        // data sera atrelhado à uma variável que recebe os dados do arduino
+                        data: dado_corrente_0x0B,
+                        fill: false
+                    }]
+                },
+                options: {
+                    title: {
+                        display: true,
+                        text: 'Corrente [mA]'
+                    }
+                }
+                });
+            }
+            if(x=="C1" && y=="C2"){
+                var ctx = document.getElementById('myChart').getContext('2d');
+                var chart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: dado_tempo,
+                    datasets: [{
+                        label: "kWh",
+                        backgroundColor: 'rgb(255, 99, 132)',
+                        borderColor: 'rgb(255, 99, 132)',
+                        // data sera atrelhado à uma variável que recebe os dados do arduino
+                        data: dado_corrente_0x01,
+                        fill: false
+                    }]
+                },
+                options: {
+                    title: {
+                        display: true,
+                        text: 'Corrente [mA]'
+                    }
+                }
+                });
+            }
+            if(x=="C2" && y=="C2"){
+                var ctx = document.getElementById('myChart').getContext('2d');
+                var chart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: dado_tempo,
+                    datasets: [{
+                        label: "kWh",
+                        backgroundColor: 'rgb(255, 99, 132)',
+                        borderColor: 'rgb(255, 99, 132)',
+                        // data sera atrelhado à uma variável que recebe os dados do arduino
+                        data: dado_corrente_0x02,
+                        fill: false
+                    }]
+                },
+                options: {
+                    title: {
+                        display: true,
+                        text: 'Corrente [mA]'
+                    }
+                }
+                });
+            }
+            if(x=="C3" && y=="C2"){
+                var ctx = document.getElementById('myChart').getContext('2d');
+                var chart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: dado_tempo,
+                    datasets: [{
+                        label: "kWh",
+                        backgroundColor: 'rgb(255, 99, 132)',
+                        borderColor: 'rgb(255, 99, 132)',
+                        // data sera atrelhado à uma variável que recebe os dados do arduino
+                        data: dado_corrente_0x03,      
+                        fill: false
+                    }]
+                },
+                options: {
+                    title: {
+                        display: true,
+                        text: 'Corrente [mA]'
+                    }
+                }
+                });
+            }
+            if(x=="C4" && y=="C2"){
+                var ctx = document.getElementById('myChart').getContext('2d');
+                var chart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: dado_tempo,
+                    datasets: [{
+                        label: "kWh",
+                        backgroundColor: 'rgb(255, 99, 132)',
+                        borderColor: 'rgb(255, 99, 132)',
+                        // data sera atrelhado à uma variável que recebe os dados do arduino
+                        data: dado_corrente_0x04,
+                        fill: false
+                    }]
+                },
+                options: {
+                    title: {
+                        display: true,
+                        text: 'Corrente [mA]'
+                    }
+                }
+                });
+            }
+            if(x=="C5" && y=="C2"){
+                var ctx = document.getElementById('myChart').getContext('2d');
+                var chart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: dado_tempo,
+                    datasets: [{
+                        label: "kWh",
+                        backgroundColor: 'rgb(255, 99, 132)',
+                        borderColor: 'rgb(255, 99, 132)',
+                        // data sera atrelhado à uma variável que recebe os dados do arduino
+                        data: dado_corrente_0x05,
+                        fill: false
+                    }]
+                },
+                options: {
+                    title: {
+                        display: true,
+                        text: 'Corrente [mA]'
+                    }
+                }
+                });
+            }
+            if(x=="C6" && y=="C2"){
+                var ctx = document.getElementById('myChart').getContext('2d');
+                var chart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: dado_tempo,
+                    datasets: [{
+                        label: "kWh",
+                        backgroundColor: 'rgb(255, 99, 132)',
+                        borderColor: 'rgb(255, 99, 132)',
+                        // data sera atrelhado à uma variável que recebe os dados do arduino
+                        data: dado_corrente_0x06,
+                        fill: false
+                    }]
+                },
+                options: {
+                    title: {
+                        display: true,
+                        text: 'Corrente [mA]'
+                    }
+                }
+                });
+            }
+            if(x=="C7" && y=="C2"){
+                var ctx = document.getElementById('myChart').getContext('2d');
+                var chart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: dado_tempo,
+                    datasets: [{
+                        label: "kWh",
+                        backgroundColor: 'rgb(255, 99, 132)',
+                        borderColor: 'rgb(255, 99, 132)',
+                        // data sera atrelhado à uma variável que recebe os dados do arduino
+                        data: dado_corrente_0x07,
+                        fill: false
+                    }]
+                },
+                options: {
+                    title: {
+                        display: true,
+                        text: 'Corrente [mA]'
+                    }
+                }
+                });
+            }
+            if(x=="C8" && y=="C2"){
+                var ctx = document.getElementById('myChart').getContext('2d');
+                var chart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: dado_tempo,
+                    datasets: [{
+                        label: "kWh",
+                        backgroundColor: 'rgb(255, 99, 132)',
+                        borderColor: 'rgb(255, 99, 132)',
+                        // data sera atrelhado à uma variável que recebe os dados do arduino
+                        data: dado_corrente_0x08,
+                        fill: false
+                    }]
+                },
+                options: {
+                    title: {
+                        display: true,
+                        text: 'Corrente [mA]'
+                    }
+                }
+                });
+            }
+            if(x=="C9" && y=="C2"){
+                var ctx = document.getElementById('myChart').getContext('2d');
+                var chart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: dado_tempo,
+                    datasets: [{
+                        label: "kWh",
+                        backgroundColor: 'rgb(255, 99, 132)',
+                        borderColor: 'rgb(255, 99, 132)',
+                        // data sera atrelhado à uma variável que recebe os dados do arduino
+                        data: dado_corrente_0x09,
+                        fill: false
+                    }]
+                },
+                options: {
+                    title: {
+                        display: true,
+                        text: 'Corrente [mA]'
+                    }
+                }
+                });
+            }
+            if(x=="C10" && y=="C2"){
+                var ctx = document.getElementById('myChart').getContext('2d');
+                var chart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: dado_tempo,
+                    datasets: [{
+                        label: "kWh",
+                        backgroundColor: 'rgb(255, 99, 132)',
+                        borderColor: 'rgb(255, 99, 132)',
+                        // data sera atrelhado à uma variável que recebe os dados do arduino
+                        data: dado_corrente_0x0A,
+                        fill: false
+                    }]
+                },
+                options: {
+                    title: {
+                        display: true,
+                        text: 'Corrente [mA]'
+                    }
+                }
+                });
+            }
+            if(x=="Total" && y=="C3"){
+                var ctx = document.getElementById('myChart').getContext('2d');
+                var chart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: dado_tempo,
+                    datasets: [{
+                        label: "kWh",
+                        backgroundColor: 'rgb(255, 99, 132)',
+                        borderColor: 'rgb(255, 99, 132)',
+                        // data sera atrelhado à uma variável que recebe os dados do arduino
+                        data: dado_tensao_0x0B,
+                        fill: false
+                    }]
+                },
+                options: {
+                    title: {
+                        display: true,
+                        text: 'Tensão [V]'
+                    }
+                }
+                });
+            }
+            if(x=="C1" && y=="C3"){
+                var ctx = document.getElementById('myChart').getContext('2d');
+                var chart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: dado_tempo,
+                    datasets: [{
+                        label: "kWh",
+                        backgroundColor: 'rgb(255, 99, 132)',
+                        borderColor: 'rgb(255, 99, 132)',
+                        // data sera atrelhado à uma variável que recebe os dados do arduino
+                        data: dado_tensao_0x01,
+                        fill: false
+                    }]
+                },
+                options: {
+                    title: {
+                        display: true,
+                        text: 'Tensão [V]'
+                    }
+                }
+                });
+            }
+            if(x=="C2" && y=="C3"){
+                var ctx = document.getElementById('myChart').getContext('2d');
+                var chart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: dado_tempo,
+                    datasets: [{
+                        label: "kWh",
+                        backgroundColor: 'rgb(255, 99, 132)',
+                        borderColor: 'rgb(255, 99, 132)',
+                        // data sera atrelhado à uma variável que recebe os dados do arduino
+                        data: dado_tensao_0x02,
+                        fill: false
+                    }]
+                },
+                options: {
+                    title: {
+                        display: true,
+                        text: 'Tensão [V]'
+                    }
+                }
+                });
+            }
+            if(x=="C3" && y=="C3"){
+                var ctx = document.getElementById('myChart').getContext('2d');
+                var chart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: dado_tempo,
+                    datasets: [{
+                        label: "kWh",
+                        backgroundColor: 'rgb(255, 99, 132)',
+                        borderColor: 'rgb(255, 99, 132)',
+                        // data sera atrelhado à uma variável que recebe os dados do arduino
+                        data: dado_tensao_0x03,
+                        fill: false
+                    }]
+                },
+                options: {
+                    title: {
+                        display: true,
+                        text: 'Tensão [V]'
+                    }
+                }
+                });
+            }
+            if(x=="C4" && y=="C3"){
+                var ctx = document.getElementById('myChart').getContext('2d');
+                var chart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: dado_tempo,
+                    datasets: [{
+                        label: "kWh",
+                        backgroundColor: 'rgb(255, 99, 132)',
+                        borderColor: 'rgb(255, 99, 132)',
+                        // data sera atrelhado à uma variável que recebe os dados do arduino
+                        data: dado_tensao_0x04,
+                        fill: false
+                    }]
+                },
+                options: {
+                    title: {
+                        display: true,
+                        text: 'Tensão [V]'
+                    }
+                }
+                });
+            }
+            if(x=="C5" && y=="C3"){
+                var ctx = document.getElementById('myChart').getContext('2d');
+                var chart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: dado_tempo,
+                    datasets: [{
+                        label: "kWh",
+                        backgroundColor: 'rgb(255, 99, 132)',
+                        borderColor: 'rgb(255, 99, 132)',
+                        // data sera atrelhado à uma variável que recebe os dados do arduino
+                        data: dado_tensao_0x05,
+                        fill: false
+                    }]
+                },
+                options: {
+                    title: {
+                        display: true,
+                        text: 'Tensão [V]'
+                    }
+                }
+                });
+            }
+            if(x=="C6" && y=="C3"){
+                var ctx = document.getElementById('myChart').getContext('2d');
+                var chart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: dado_tempo,
+                    datasets: [{
+                        label: "kWh",
+                        backgroundColor: 'rgb(255, 99, 132)',
+                        borderColor: 'rgb(255, 99, 132)',
+                        // data sera atrelhado à uma variável que recebe os dados do arduino
+                        data: dado_tensao_0x06,
+                        fill: false
+                    }]
+                },
+                options: {
+                    title: {
+                        display: true,
+                        text: 'Tensão [V]'
+                    }
+                }
+                });
+            }
+            if(x=="C7" && y=="C3"){
+                var ctx = document.getElementById('myChart').getContext('2d');
+                var chart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: dado_tempo,
+                    datasets: [{
+                        label: "kWh",
+                        backgroundColor: 'rgb(255, 99, 132)',
+                        borderColor: 'rgb(255, 99, 132)',
+                        // data sera atrelhado à uma variável que recebe os dados do arduino
+                        data: dado_tensao_0x07,
+                        fill: false
+                    }]
+                },
+                options: {
+                    title: {
+                        display: true,
+                        text: 'Tensão [V]'
+                    }
+                }
+                });
+            }
+            if(x=="C8" && y=="C3"){
+                var ctx = document.getElementById('myChart').getContext('2d');
+                var chart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: dado_tempo,
+                    datasets: [{
+                        label: "kWh",
+                        backgroundColor: 'rgb(255, 99, 132)',
+                        borderColor: 'rgb(255, 99, 132)',
+                        // data sera atrelhado à uma variável que recebe os dados do arduino
+                        data: dado_tensao_0x08,
+                        fill: false
+                    }]
+                },
+                options: {
+                    title: {
+                        display: true,
+                        text: 'Tensão [V]'
+                    }
+                }
+                });
+            }
+            if(x=="C9" && y=="C3"){
+                var ctx = document.getElementById('myChart').getContext('2d');
+                var chart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: dado_tempo,
+                    datasets: [{
+                        label: "kWh",
+                        backgroundColor: 'rgb(255, 99, 132)',
+                        borderColor: 'rgb(255, 99, 132)',
+                        // data sera atrelhado à uma variável que recebe os dados do arduino
+                        data: dado_tensao_0x09,
+                        fill: false
+                    }]
+                },
+                options: {
+                    title: {
+                        display: true,
+                        text: 'Tensão [V]'
+                    }
+                }
+                });
+            }      
+            if(x=="C10" && y=="C3"){
+                var ctx = document.getElementById('myChart').getContext('2d');
+                var chart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: dado_tempo,
+                    datasets: [{
+                        label: "kWh",
+                        backgroundColor: 'rgb(255, 99, 132)',
+                        borderColor: 'rgb(255, 99, 132)',
+                        // data sera atrelhado à uma variável que recebe os dados do arduino
+                        data: dado_tensao_0x0A,
+                        fill: false
+                    }]
+                },
+                options: {
+                    title: {
+                        display: true,
+                        text: 'Tensão [V]'
+                    }
+                }
+                });
+            }
+        }
+    </script>    
+</head>
+<body onload="xml_arduino()">
+    <div class="chart-container" style="width: 80%">
+        <canvas id="myChart"></canvas>
+    </div>
+    <table>
+        <tr>
+            <td><select id="carga" onchange="newGraph()">
+                <option value="Total">Total</option>
+                <option value="C1">Carga 1</option>
+                <option value="C2">Carga 2</option>
+                <option value="C3">Carga 3</option>
+                <option value="C4">Carga 4</option>
+                <option value="C5">Carga 5</option>
+                <option value="C6">Carga 6</option>
+                <option value="C7">Carga 7</option>
+                <option value="C8">Carga 8</option>
+                <option value="C9">Carga 9</option>
+                <option value="C10">Carga 10</option>
+                </select></td>
+            <td><select id="informacao">
+                <option value="C1">Consumo</option>
+                <option value="C2">Corrente</option>
+                <option value="C3">Tensão</option>
+                </select></td>
+            <td><p id="fp"></p></td>
+            <td><p id="tensao"></p></td>
+            <td><p id="corrente"></p></td>
+        </tr>
+    </table>
+    <p><span id="teste"></span></p>
+</body>
+</html>
