@@ -8,9 +8,12 @@
 #include <EmonLib.h>
 #include <DS3231.h>
 
+<<<<<<< HEAD
 // size of buffer used to capture HTTP requests
 #define REQ_BUF_SZ   50
 
+=======
+>>>>>>> 8c575131bce73c09f8a945a389e11b61ac8fd1e7
 //    MEDIDOR 1   //
 EnergyMonitor emon1;
 float antigo_realPower1 = 0;
@@ -146,9 +149,12 @@ String dados;
 String data_completa;
 String hora_completa;
 String data_hora;
+<<<<<<< HEAD
 String aux_data_completa;
 String aux_hora_completa;
 String aux_data_hora;
+=======
+>>>>>>> 8c575131bce73c09f8a945a389e11b61ac8fd1e7
 String dados_arduino_0X00_01;
 String dados_arduino_0X01_01;
 String dados_arduino_0X01_02;
@@ -455,6 +461,7 @@ void relogio(){
     dataehora = rtc.getDateTime();
     
     data_hora = dataehora.hour;
+<<<<<<< HEAD
     aux_data_hora = data_hora;
 
     hora_completa += dataehora.hour;
@@ -464,6 +471,15 @@ void relogio(){
     hora_completa += dataehora.second;
     aux_hora_completa = hora_completa;
     
+=======
+
+    hora_completa += dataehora.hour;
+    hora_completa += ",";
+    hora_completa += dataehora.minute;
+    hora_completa += ",";
+    hora_completa += dataehora.second;
+
+>>>>>>> 8c575131bce73c09f8a945a389e11b61ac8fd1e7
     data_completa += dataehora.year;
     data_completa += "/";
     data_completa += dataehora.month;
@@ -475,7 +491,10 @@ void relogio(){
     data_completa += dataehora.minute;
     data_completa += ":";
     data_completa += dataehora.second;
+<<<<<<< HEAD
     aux_data_completa = data_completa;
+=======
+>>>>>>> 8c575131bce73c09f8a945a389e11b61ac8fd1e7
   }
   
 
@@ -648,7 +667,21 @@ String recebe_escravo_3(int endereco){
   return dados;  
 }
 
+<<<<<<< HEAD
 
+=======
+//    USUARIO E SENHA   // 
+boolean validar_usuario(char * linebuf){
+  char usuario_senha[] = "admin:admin"; //"usuario:senha";
+  byte t = strlen(usuario_senha);
+  int tamanhoEnc = (((t-1) / 3) + 1) * 4; //tamanho da string codificada
+  char *out = base64_encode(usuario_senha, t);
+  char out2[tamanhoEnc];
+  for (t=0; t<(tamanhoEnc); t++) { out2[t] = linebuf[21+t]; }
+  return (strstr(out2, out)>0);
+}
+ 
+>>>>>>> 8c575131bce73c09f8a945a389e11b61ac8fd1e7
 //    SD CARD   //   
 boolean iniciar_sd_card() {
   pinMode(10, OUTPUT);
@@ -657,6 +690,7 @@ boolean iniciar_sd_card() {
   return true;
 }
 
+<<<<<<< HEAD
 // MAC address from Ethernet shield sticker under board
 byte mac[] = { 0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED };
 IPAddress ip(192, 168, 15, 115); // IP address, may need to change depending on network
@@ -913,6 +947,384 @@ void XML_response(EthernetClient cl)
     cl.print(Irmst);
     cl.print("</at>");
     cl.print("</inputs>");
+=======
+//    WEBSERVER    //
+EthernetServer * server;
+ 
+void write_from_file(EthernetClient &client, char * filename){
+  File webFile = SD.open(filename);
+  if (webFile) {
+    while(webFile.available()) { client.write(webFile.read()); }
+    webFile.close();
+  } 
+  else {
+    Serial.print("Erro SD CARD: ");
+    Serial.println(filename);
+  }
+}
+ 
+void iniciar_ethernet(){
+  byte ip[4]      = {192,168,0,40};                    
+  byte gateway[4] = {192,168,0,1};
+  byte subnet[4]  = {255,255,255,0};
+  byte mac[6]     = {0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED};
+  int  porta      = 80;
+  server = new EthernetServer(porta);
+  Ethernet.begin(mac, ip, gateway, subnet);
+  server->begin();
+}
+ 
+void html_cab_200_ok(EthernetClient &client){   
+  client.println(F("HTTP/1.1 200 OK\n"
+                   "Content-Type: text/html\n"
+                   "Connection: keep-alive\n\n"));
+}
+ 
+void html_logoff(EthernetClient &client){
+    client.print(F(
+                 "HTTP/1.1 401 Authorization Required\n"  
+                 "Content-Type: text/html\n"  
+                 "Connnection: close\n\n"  
+                 "<!DOCTYPE HTML>\n"  
+                 "<html><head><title>Logoff</title>\n"  
+                 "<script>document.execCommand('ClearAuthenticationCache', 'false');</script>"  //IE logoff
+                 "<script>try {"                                                                //mozila logoff
+                 "   var agt=navigator.userAgent.toLowerCase();"
+                 "   if (agt.indexOf(\"msie\") != -1) { document.execCommand(\"ClearAuthenticationCache\"); }"
+                 "   else {"
+                 "     var xmlhttp = createXMLObject();"
+                 "      xmlhttp.open(\"GET\",\"URL\",true,\"logout\",\"logout\");"
+                 "     xmlhttp.send(\"\");"
+                 "     xmlhttp.abort();"
+                 "   }"
+                 " } catch(e) {"
+                 "   alert(\"erro ao fazer logoff\");"
+                 " }"
+                 "function createXMLObject() {"
+                 "  try {if (window.XMLHttpRequest) {xmlhttp = new XMLHttpRequest();} else if (window.ActiveXObject) {xmlhttp=new ActiveXObject(\"Microsoft.XMLHTTP\");}} catch (e) {xmlhttp=false;}"
+                 "  return xmlhttp;"
+                 "}</script>"
+                 "</head><body><h1>Voce nao esta mais conectado</h1></body></html>\n"));
+}
+ 
+void html_autenticar(EthernetClient &client) {
+  client.print(F("HTTP/1.1 401 Authorization Required\n"  
+               "WWW-Authenticate: Basic realm=\"Area Restrita\"\n"  
+               "Content-Type: text/html\n"  
+               "Connnection: close\n\n"  
+               "<!DOCTYPE HTML>\n"  
+               "<html><head><title>Error</title>\n"  
+               "</head><body><h1>401 Acesso nao autorizado</h1></body></html>\n"));
+}
+ 
+void html_autenticado(EthernetClient &client, char * filename){
+  client.println(F("HTTP/1.1 200 OK\n"
+                   "Content-Type: text/html\n"
+                   "Connection: keep-alive\n")); 
+  write_from_file(client, filename);
+}
+ 
+void js_file(EthernetClient &client, char * filename){
+  client.println(F("HTTP/1.1 200 OK\n"
+                   "Content-Type: text/javascript\n"
+                   "Connection: keep-alive\n")); 
+  write_from_file(client, filename);
+}
+
+void chart_file(EthernetClient &client, char * filename){
+  client.println(F("HTTP/1.1 200 OK\n"
+                   "Content-Type: text/javascript\n"
+                   "Connection: keep-alive\n")); 
+  write_from_file(client, filename);
+}
+ 
+void css_file(EthernetClient &client, char * filename){
+  client.println(F("HTTP/1.1 200 OK\n"
+                   "Content-Type: text/css\n"
+                   "Connection: keep-alive\n"));
+  write_from_file(client, filename);
+}
+ 
+void favicon_file(EthernetClient &client, char * filename){
+  client.println(F("HTTP/1.1 200 OK\n"
+                   "Content-Type: image/x-icon\n"
+                   "Connection: keep-alive\n"));
+  write_from_file(client, filename);
+}
+  
+void pdf_file_download(EthernetClient &client, char * filename){
+  client.println(F("HTTP/1.1 200 OK\n"
+                   "Content-Type: application/download\n"
+                   "Connection: close\n"));    
+  write_from_file(client, filename);
+}
+ 
+void jpg_file(EthernetClient &client, char * filename){
+  client.println(F("HTTP/1.1 200 OK\n"
+                   "Content-Type: file/jpg\n"
+                   "Connection: close\n"));    
+  write_from_file(client, filename);
+}
+  
+void exec_ethernet() {
+  EthernetClient client = server->available();
+  if (client) {
+    char linebuf[80];
+    memset(linebuf, 0, sizeof(linebuf));  
+    int     charCount          = 0;
+    boolean autenticado        = false;
+    boolean currentLineIsBlank = true;
+    boolean logoff             = false;
+    boolean indCss             = false;
+    boolean indJs              = false;
+    boolean indChart           = false;
+    boolean indAjax            = false;
+    boolean indPdfDataSheet    = false;
+    boolean indJpgUno          = false;
+    boolean indFavicon         = false; 
+    while (client.connected()){
+      if (client.available()){
+        char c = client.read(); 
+        linebuf[charCount] = c;
+        if (charCount<sizeof(linebuf)-1){ charCount++; }
+        Serial.write(c); 
+        if (c == '\n' && currentLineIsBlank){
+          if (autenticado && !logoff ){
+            if (indJs){
+              js_file(client, "js.js");                          //js file
+            } else if(indChart){
+              chart_file(client, "chart.js");
+            } else if(indAjax){
+              chart_file(client, "ajax.js");
+            } else if(indCss){
+              css_file(client, "css.css");                       //css file  
+            } else if(indPdfDataSheet){
+              pdf_file_download(client, "atmel.pdf");        //datasheet download
+            } else if(indJpgUno){
+              jpg_file(client, "uno.jpg");                       //jpg file
+            } else if(indFavicon){
+              jpg_file(client, "favicon.ico");                   //icone do browser
+            } else if(StrContains(linebuf, "ajax_inputs")){
+              // send rest of HTTP header
+              client.println("Content-Type: text/xml");
+              client.println("Connection: keep-alive");
+              client.println();
+              // send XML file containing input states
+              XML_response(client);
+            } else {
+              html_autenticado(client, "index.htm");             //página inicial
+            }
+          } else {
+            logoff ? html_logoff(client) : html_autenticar(client);
+          }
+          break;
+        }
+        if (c == '\n') { 
+          currentLineIsBlank = true;               
+          if (strstr(linebuf, "GET /logoff"         )>0 ) { logoff = true; }
+          if (strstr(linebuf, "Authorization: Basic")>0 ) { if ( validar_usuario(linebuf) )   {  autenticado = true;   } }  
+          if (strstr(linebuf, "GET /css.css"        )>0 ) { indCss = true; }
+          if (strstr(linebuf, "GET /js.js"          )>0 ) { indJs = true; }
+          if (strstr(linebuf, "GET /chart.js"       )>0 ) { indChart = true; }
+          if (strstr(linebuf, "GET /ajax.js"        )>0 ) { indAjax = true; }
+          if (strstr(linebuf, "GET /atmel.pdf"      )>0 ) { indPdfDataSheet = true; }
+          if (strstr(linebuf, "GET /uno.jpg"        )>0 ) { indJpgUno = true; }
+          if (strstr(linebuf, "GET /favicon.ico"    )>0 ) { indFavicon = true; } 
+          memset(linebuf, 0, sizeof(linebuf));
+          charCount = 0;
+        } else if (c != '\r') {
+          currentLineIsBlank = false;
+        }
+      }
+    }
+    delay(1);           
+    client.stop();      
+  }
+}
+
+// send the XML file with switch statuses and analog value
+void XML_response(EthernetClient &client)
+{
+    int analog_val;
+    
+    client.print("<?xml version = \"1.0\" ?>");
+    client.print("<inputs>");
+    client.print("<dtc>");
+    client.print(data_completa);
+    client.print("</dtc>");
+    client.print("<dt>");
+    client.print(hora_completa);
+    client.print("</dt>");
+    client.print("<h_>");
+    client.print(data_hora);
+    client.print("</h_>");
+    client.print("<p1>");
+    client.print(realPower1);
+    client.print("</p1>");
+    client.print("<p2>");
+    client.print(realPower2);
+    client.print("</p2>");
+    client.print("<p3>");
+    client.print(realPower3);
+    client.print("</p3>");
+    client.print("<p4>");
+    client.print(realPower4);
+    client.print("</p4>");
+    client.print("<p5>");
+    client.print(realPower5);
+    client.print("</p5>");
+    client.print("<p6>");
+    client.print(realPower6);
+    client.print("</p6>");
+    client.print("<p7>");
+    client.print(realPower7);
+    client.print("</p7>");
+    client.print("<p8>");
+    client.print(realPower8);
+    client.print("</p8>");
+    client.print("<p9>");
+    client.print(realPower9);
+    client.print("</p9>");
+    client.print("<p10>");
+    client.print(realPower10);
+    client.print("</p10>");
+    client.print("<pt>");
+    client.print(realPowert);
+    client.print("</pt>");
+    client.print("<s1>");
+    client.print(apparentPower1);
+    client.print("</s1>");
+    client.print("<s2>");
+    client.print(apparentPower2);
+    client.print("</s2>");
+    client.print("<s3>");
+    client.print(apparentPower3);
+    client.print("</s3>");
+    client.print("<s4>");
+    client.print(apparentPower4);
+    client.print("</s4>");
+    client.print("<s5>");
+    client.print(apparentPower5);
+    client.print("</s5>");
+    client.print("<s6>");
+    client.print(apparentPower6);
+    client.print("</s6>");
+    client.print("<s7>");
+    client.print(apparentPower7);
+    client.print("</s7>");
+    client.print("<s8>");
+    client.print(apparentPower8);
+    client.print("</s8>");
+    client.print("<s9>");
+    client.print(apparentPower9);
+    client.print("</s9>");
+    client.print("<s10>");
+    client.print(apparentPower10);
+    client.print("</s10>");
+    client.print("<st>");
+    client.print(apparentPowert);
+    client.print("</st>");
+    client.print("<fp1>");
+    client.print(powerFActor1);
+    client.print("</fp1>");
+    client.print("<fp2>");
+    client.print(powerFActor2);
+    client.print("</fp2>");
+    client.print("<fp3>");
+    client.print(powerFActor3);
+    client.print("</fp3>");
+    client.print("<fp4>");
+    client.print(powerFActor4);
+    client.print("</fp4>");
+    client.print("<fp5>");
+    client.print(powerFActor5);
+    client.print("</fp5>");
+    client.print("<fp6>");
+    client.print(powerFActor6);
+    client.print("</fp6>");
+    client.print("<fp7>");
+    client.print(powerFActor7);
+    client.print("</fp7>");
+    client.print("<fp8>");
+    client.print(powerFActor8);
+    client.print("</fp8>");
+    client.print("<fp9>");
+    client.print(powerFActor9);
+    client.print("</fp9>");
+    client.print("<fp10>");
+    client.print(powerFActor10);
+    client.print("</fp10>");
+    client.print("<fpt>");
+    client.print(powerFActort);
+    client.print("</fpt>");
+    client.print("<v1>");
+    client.print(supplyVoltage1);
+    client.print("</v1>");
+    client.print("<v2>");
+    client.print(supplyVoltage2);
+    client.print("</v2>");
+    client.print("<v3>");
+    client.print(supplyVoltage3);
+    client.print("</v3>");
+    client.print("<v4>");
+    client.print(supplyVoltage4);
+    client.print("</v4>");
+    client.print("<v5>");
+    client.print(supplyVoltage5);
+    client.print("</v5>");
+    client.print("<v6>");
+    client.print(supplyVoltage6);
+    client.print("</v6>");
+    client.print("<v7>");
+    client.print(supplyVoltage7);
+    client.print("</v7>");
+    client.print("<v8>");
+    client.print(supplyVoltage8);
+    client.print("</v8>");
+    client.print("<v9>");
+    client.print(supplyVoltage9);
+    client.print("</v9>");
+    client.print("<v10>");
+    client.print(supplyVoltage10);
+    client.print("</v10>");
+    client.print("<vt>");
+    client.print(supplyVoltaget);
+    client.print("</vt>");
+    client.print("<a1>");
+    client.print(Irms1);
+    client.print("</a1>");
+    client.print("<a2>");
+    client.print(Irms2);
+    client.print("</a2>");
+    client.print("<a3>");
+    client.print(Irms3);
+    client.print("</a3>");
+    client.print("<a4>");
+    client.print(Irms4);
+    client.print("</a4>");
+    client.print("<a5>");
+    client.print(Irms5);
+    client.print("</a5>");
+    client.print("<a6>");
+    client.print(Irms6);
+    client.print("</a6>");
+    client.print("<a7>");
+    client.print(Irms7);
+    client.print("</a7>");
+    client.print("<a8>");
+    client.print(Irms8);
+    client.print("</a8>");
+    client.print("<a9>");
+    client.print(Irms9);
+    client.print("</a9>");
+    client.print("<a10>");
+    client.print(Irms10);
+    client.print("</a10>");
+    client.print("<at>");
+    client.print(Irmst);
+    client.print("</at>");
+    client.print("</inputs>");
+>>>>>>> 8c575131bce73c09f8a945a389e11b61ac8fd1e7
 }
 
 // sets every element of str to 0 (clears array)
@@ -953,6 +1365,91 @@ char StrContains(char *str, char *sfind)
     return 0;
 }
 
+<<<<<<< HEAD
+=======
+//    BASE 64 CODE/DECODE   //
+static const char b64all[] =
+"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdef"
+"ghijklmnopqrstuvwxyz0123456789+/";
+
+const char *base64_encode(const char *original, int length) {
+  if (length == 0)
+  length = strlen(original);
+  
+  // Inteiro com o tamanho do código a ser gerado
+  int b64length = ((length + 2) / 3) * 4 + 1;
+  
+  // Contadores para percorrer as strings
+  int i=0, j=0;
+  
+  // Alocando memória para o código
+  char *b64 = (char *) malloc(sizeof(char) * b64length);
+  memset(b64, 0, b64length);
+  
+  while (i < length) {
+  // Codifica um grupo de três bytes...
+  _encode(
+  (uint8_t *) b64 + j,
+  (const uint8_t *) original + i,
+  (length - i)
+  );
+  
+  // E segue para o próximo grupo
+  i += 3;
+  j += 4;
+  }
+  
+  // Retorna o código
+  return (const char *) b64;
+}
+
+void _encode(uint8_t *dest, const uint8_t *src, int len) {
+// Menor que 1, nada a fazer
+if (len < 1)
+return;
+
+// Dados a serem retornados
+int aux[] = { 0, 0, 0, 0 };
+
+// Primeiro elemento: os 6 bits mais significativos do primeiro
+// byte
+aux[0] = src[0] >> 2;
+
+// Segundo elemento: os 2 bits menos significativos do primeiro e
+// os quatro bits mais significativos do segundo byte
+aux[1] = (src[0] & 0x03) << 4;
+
+if (len > 1) {
+// SE houver um segundo...
+aux [1] |= (src[1] & 0xf0) >> 4;
+
+// Terceiro elemento: os quatro bits menos significativos do
+// segundo e os dois mais significativos do terceiro byte
+aux [2] = (src[1] & 0x0f) << 2;
+
+if (len > 2) {
+// Se houver um terceiro...
+aux[2] |= src[2] >> 6;
+
+// Quarto elemento: os seis bits menos significatos do
+// terceiro byte
+aux[3] = src[2] & 0x3f;
+}
+}
+
+// Codifica agora os valores numéricos para string
+dest[0] = b64all[aux[0]];
+dest[1] = b64all[aux[1]];
+dest[2] = '=';
+dest[3] = '=';
+if (len > 1) {
+dest[2] = b64all[aux[2]];
+if (len > 2)
+dest[3] = b64all[aux[3]];
+}
+}
+
+>>>>>>> 8c575131bce73c09f8a945a389e11b61ac8fd1e7
 //INCIALIZAÇÃO// 
 void setup() {
   
@@ -966,8 +1463,12 @@ void setup() {
   rtc.begin();
 //  rtc.setDateTime(__DATE__, __TIME__);  //  COMENTAR APOS A PRIMEIRA COMPILAÇÃO
   iniciar_sd_card(); 
+<<<<<<< HEAD
   Ethernet.begin(mac, ip);  // initialize Ethernet device
   server.begin();           // start to listen for clients
+=======
+  iniciar_ethernet();
+>>>>>>> 8c575131bce73c09f8a945a389e11b61ac8fd1e7
 
   //    MEDIDORES   //
   emon1.current(SensorCorrente_1,0.98); // (PINO,GANHO/CALIBRAÇÃO)
@@ -990,7 +1491,11 @@ void loop() {
   float_para_String(realPower1,apparentPower1,powerFActor1,supplyVoltage1,Irms1);
   
   relogio();
+<<<<<<< HEAD
   //Serial.println(data_completa);
+=======
+  Serial.println(data_completa);
+>>>>>>> 8c575131bce73c09f8a945a389e11b61ac8fd1e7
   recebe_dados();
   
   //    EXTRAI OS DADOS DAS STRINGS    //

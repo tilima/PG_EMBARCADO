@@ -5,6 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>Painel de Controle</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
+<<<<<<< HEAD
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
     <script>      
         var data_completa;
@@ -932,6 +933,13 @@
             }
         }
     </script>    
+=======
+    <link rel="stylesheet" type="text/css" media="screen" href="/css.css" />
+    <script src="/js.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    
+>>>>>>> 8c575131bce73c09f8a945a389e11b61ac8fd1e7
 </head>
 <body onload="xml_arduino()">
     <div class="chart-container" style="width: 80%">
@@ -952,16 +960,27 @@
                 <option value="C9">Carga 9</option>
                 <option value="C10">Carga 10</option>
                 </select></td>
+<<<<<<< HEAD
             <td><select id="informacao">
                 <option value="C1">Consumo</option>
                 <option value="C2">Corrente</option>
                 <option value="C3">Tensão</option>
+=======
+            <td><select id="informacao" onchange="newGraph()">
+                <option value="C1">Consumo</option>
+                <option value="C2">Tensão</option>
+                <option value="C2">Corrente</option>
+>>>>>>> 8c575131bce73c09f8a945a389e11b61ac8fd1e7
                 </select></td>
             <td><p id="fp"></p></td>
             <td><p id="tensao"></p></td>
             <td><p id="corrente"></p></td>
         </tr>
     </table>
+<<<<<<< HEAD
     <p><span id="teste"></span></p>
+=======
+    <p id="teste"></p>
+>>>>>>> 8c575131bce73c09f8a945a389e11b61ac8fd1e7
 </body>
 </html>
