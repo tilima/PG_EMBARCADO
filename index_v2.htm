@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Painel de Controle</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script>
+        // AGUARDA 1 MINUTO ANTES DE COMEÇAR OS REQUESTS //
+        function disparo(){ setTimeout(xml_arduino,10000); }
+
+        // AJAX PARA REQUISIÇÃO ?XML
+        function xml_arduino()
+        {
+            nocache = "&nocache=" + Math.random() * 1000000;
+            var request = new XMLHttpRequest();
+            request.onreadystatechange = function()
+            {
+                    if (this.readyState == 4 && this.status == 200 && this.responseXML != null) {
+                        // extract XML data from XML file
+                        document.getElementById('dtc').innerHTML =
+                        this.responseXML.getElementsByTagName('dtc')[0].childNodes[0].nodeValue;
+                        document.getElementById('dt').innerHTML =
+                        this.responseXML.getElementsByTagName('dt')[0].childNodes[0].nodeValue; 
+                        document.getElementById('h_').innerHTML =
+                        this.responseXML.getElementsByTagName('h_')[0].childNodes[0].nodeValue;
+                        document.getElementById('p1').innerHTML =
+                        this.responseXML.getElementsByTagName('p1')[0].childNodes[0].nodeValue;
+                        document.getElementById('p2').innerHTML =
+                        this.responseXML.getElementsByTagName('p2')[0].childNodes[0].nodeValue;
+                        document.getElementById('p3').innerHTML =
+                        this.responseXML.getElementsByTagName('p3')[0].childNodes[0].nodeValue;
+                        document.getElementById('p4').innerHTML =
+                        this.responseXML.getElementsByTagName('p4')[0].childNodes[0].nodeValue;
+                        document.getElementById('p5').innerHTML =
+                        this.responseXML.getElementsByTagName('p5')[0].childNodes[0].nodeValue;
+                        document.getElementById('p6').innerHTML =
+                        this.responseXML.getElementsByTagName('p6')[0].childNodes[0].nodeValue;
+                        document.getElementById('p7').innerHTML =
+                        this.responseXML.getElementsByTagName('p7')[0].childNodes[0].nodeValue;
+                        document.getElementById('p8').innerHTML =
+                        this.responseXML.getElementsByTagName('p8')[0].childNodes[0].nodeValue;
+                        document.getElementById('p9').innerHTML =
+                        this.responseXML.getElementsByTagName('p9')[0].childNodes[0].nodeValue;
+                        document.getElementById('p10').innerHTML =
+                        this.responseXML.getElementsByTagName('p10')[0].childNodes[0].nodeValue;
+                        document.getElementById('pt').innerHTML =
+                        this.responseXML.getElementsByTagName('pt')[0].childNodes[0].nodeValue;
+                        document.getElementById('s1').innerHTML =
+                        this.responseXML.getElementsByTagName('s1')[0].childNodes[0].nodeValue;
+                        document.getElementById('s2').innerHTML =
+                        this.responseXML.getElementsByTagName('s2')[0].childNodes[0].nodeValue;
+                        document.getElementById('s3').innerHTML =
+                        this.responseXML.getElementsByTagName('s3')[0].childNodes[0].nodeValue;
+                        document.getElementById('s4').innerHTML =
+                        this.responseXML.getElementsByTagName('s4')[0].childNodes[0].nodeValue;
+                        document.getElementById('s5').innerHTML =
+                        this.responseXML.getElementsByTagName('s5')[0].childNodes[0].nodeValue;
+                        document.getElementById('s6').innerHTML =
+                        this.responseXML.getElementsByTagName('s6')[0].childNodes[0].nodeValue;
+                        document.getElementById('s7').innerHTML =
+                        this.responseXML.getElementsByTagName('s7')[0].childNodes[0].nodeValue;
+                        document.getElementById('s8').innerHTML =
+                        this.responseXML.getElementsByTagName('s8')[0].childNodes[0].nodeValue;
+                        document.getElementById('s9').innerHTML =
+                        this.responseXML.getElementsByTagName('s9')[0].childNodes[0].nodeValue;
+                        document.getElementById('s10').innerHTML =
+                        this.responseXML.getElementsByTagName('s10')[0].childNodes[0].nodeValue;
+                        document.getElementById('st').innerHTML =
+                        this.responseXML.getElementsByTagName('st')[0].childNodes[0].nodeValue;
+                        document.getElementById('fp1').innerHTML =
+                        this.responseXML.getElementsByTagName('fp1')[0].childNodes[0].nodeValue;
+                        document.getElementById('fp2').innerHTML =
+                        this.responseXML.getElementsByTagName('fp2')[0].childNodes[0].nodeValue;
+                        document.getElementById('fp3').innerHTML =
+                        this.responseXML.getElementsByTagName('fp3')[0].childNodes[0].nodeValue;
+                        document.getElementById('fp4').innerHTML =
+                        this.responseXML.getElementsByTagName('fp4')[0].childNodes[0].nodeValue;
+                        document.getElementById('fp5').innerHTML =
+                        this.responseXML.getElementsByTagName('fp5')[0].childNodes[0].nodeValue;
+                        document.getElementById('fp6').innerHTML =
+                        this.responseXML.getElementsByTagName('fp6')[0].childNodes[0].nodeValue;
+                        document.getElementById('fp7').innerHTML =
+                        this.responseXML.getElementsByTagName('fp7')[0].childNodes[0].nodeValue;
+                        document.getElementById('fp8').innerHTML =
+                        this.responseXML.getElementsByTagName('fp8')[0].childNodes[0].nodeValue;
+                        document.getElementById('fp9').innerHTML =
+                        this.responseXML.getElementsByTagName('fp9')[0].childNodes[0].nodeValue;
+                        document.getElementById('fp10').innerHTML =
+                        this.responseXML.getElementsByTagName('fp10')[0].childNodes[0].nodeValue;
+                        document.getElementById('fpt').innerHTML =
+                        this.responseXML.getElementsByTagName('fpt')[0].childNodes[0].nodeValue;
+                        document.getElementById('v1').innerHTML =
+                        this.responseXML.getElementsByTagName('v1')[0].childNodes[0].nodeValue;
+                        document.getElementById('v2').innerHTML =
+                        this.responseXML.getElementsByTagName('v2')[0].childNodes[0].nodeValue;
+                        document.getElementById('v3').innerHTML =
+                        this.responseXML.getElementsByTagName('v3')[0].childNodes[0].nodeValue;
+                        document.getElementById('v4').innerHTML =
+                        this.responseXML.getElementsByTagName('v4')[0].childNodes[0].nodeValue;
+                        document.getElementById('v5').innerHTML =
+                        this.responseXML.getElementsByTagName('v5')[0].childNodes[0].nodeValue;
+                        document.getElementById('v6').innerHTML =
+                        this.responseXML.getElementsByTagName('v6')[0].childNodes[0].nodeValue;
+                        document.getElementById('v7').innerHTML =
+                        this.responseXML.getElementsByTagName('v7')[0].childNodes[0].nodeValue;
+                        document.getElementById('v8').innerHTML =
+                        this.responseXML.getElementsByTagName('v8')[0].childNodes[0].nodeValue;
+                        document.getElementById('v9').innerHTML =
+                        this.responseXML.getElementsByTagName('v9')[0].childNodes[0].nodeValue;
+                        document.getElementById('v10').innerHTML =
+                        this.responseXML.getElementsByTagName('v10')[0].childNodes[0].nodeValue;
+                        document.getElementById('vt').innerHTML =
+                        this.responseXML.getElementsByTagName('vt')[0].childNodes[0].nodeValue;
+                        document.getElementById('a1').innerHTML =
+                        this.responseXML.getElementsByTagName('a1')[0].childNodes[0].nodeValue;
+                        document.getElementById('a2').innerHTML =
+                        this.responseXML.getElementsByTagName('a2')[0].childNodes[0].nodeValue;
+                        document.getElementById('a3').innerHTML =
+                        this.responseXML.getElementsByTagName('a3')[0].childNodes[0].nodeValue;
+                        document.getElementById('a4').innerHTML =
+                        this.responseXML.getElementsByTagName('a4')[0].childNodes[0].nodeValue;
+                        document.getElementById('a5').innerHTML =
+                        this.responseXML.getElementsByTagName('a5')[0].childNodes[0].nodeValue;
+                        document.getElementById('a6').innerHTML =
+                        this.responseXML.getElementsByTagName('a6')[0].childNodes[0].nodeValue;
+                        document.getElementById('a7').innerHTML =
+                        this.responseXML.getElementsByTagName('a7')[0].childNodes[0].nodeValue;
+                        document.getElementById('a8').innerHTML =
+                        this.responseXML.getElementsByTagName('a8')[0].childNodes[0].nodeValue;
+                        document.getElementById('a9').innerHTML =
+                        this.responseXML.getElementsByTagName('a9')[0].childNodes[0].nodeValue;
+                        document.getElementById('a10').innerHTML =
+                        this.responseXML.getElementsByTagName('a10')[0].childNodes[0].nodeValue;
+                        document.getElementById('at').innerHTML =
+                        this.responseXML.getElementsByTagName('at')[0].childNodes[0].nodeValue;
+                    }
+            }
+            request.open("GET", "ajax_inputs" + nocache, true);
+            request.send(null);
+            setTimeout(xml_arduino, 1000);
+        }
+    </script>    
+</head>
+<body onload="disparo()">
+    <p>data: <span id='dtc'></span></p>
+    <p>horario: <span id='dt'></span></p>
+    <p>hora: <span id='h_'></span></p>
+    <p>(C1) Potência Ativa: <span id='p1'></span></p>
+    <p>(C1) Potência Aparente: <span id='s1'></span></p>
+    <p>(C1) Fator de Potência: <span id='fp1'></span></p>
+    <p>(C1) Tensão: <span id='v1'></span></p>
+    <p>(C1) Corrente: <span id='a1'></span></p>
+    <p>(C2) Potência Ativa: <span id='p2'></span></p>
+    <p>(C2) Potência Aparente: <span id='s2'></span></p>
+    <p>(C2) Fator de Potência: <span id='fp2'></span></p>
+    <p>(C2) Tensão: <span id='v2'></span></p>
+    <p>(C2) Corrente: <span id='a2'></span></p>
+    <p>(C3) Potência Ativa: <span id='p3'></span></p>
+    <p>(C3) Potência Aparente: <span id='s3'></span></p>
+    <p>(C3) Fator de Potência: <span id='fp3'></span></p>
+    <p>(C3) Tensão: <span id='v3'></span></p>
+    <p>(C3) Corrente: <span id='a3'></span></p>
+    <p>(C4) Potência Ativa: <span id='p4'></span></p>
+    <p>(C4) Potência Aparente: <span id='s4'></span></p>
+    <p>(C4) Fator de Potência: <span id='fp4'></span></p>
+    <p>(C4) Tensão: <span id='v4'></span></p>
+    <p>(C4) Corrente: <span id='a4'></span></p>
+    <p>(C5) Potência Ativa: <span id='p5'></span></p>
+    <p>(C5) Potência Aparente: <span id='s5'></span></p>
+    <p>(C5) Fator de Potência: <span id='fp5'></span></p>
+    <p>(C5) Tensão: <span id='v5'></span></p>
+    <p>(C5) Corrente: <span id='a5'></span></p>
+    <p>(C6) Potência Ativa: <span id='p6'></span></p>
+    <p>(C6) Potência Aparente: <span id='s6'></span></p>
+    <p>(C6) Fator de Potência: <span id='fp6'></span></p>
+    <p>(C6) Tensão: <span id='v6'></span></p>
+    <p>(C6) Corrente: <span id='a6'></span></p>
+    <p>(C7) Potência Ativa: <span id='p7'></span></p>
+    <p>(C7) Potência Aparente: <span id='s7'></span></p>
+    <p>(C7) Fator de Potência: <span id='fp7'></span></p>
+    <p>(C7) Tensão: <span id='v7'></span></p>
+    <p>(C7) Corrente: <span id='a7'></span></p>
+    <p>(C8) Potência Ativa: <span id='p8'></span></p>
+    <p>(C8) Potência Aparente: <span id='s8'></span></p>
+    <p>(C8) Fator de Potência: <span id='fp8'></span></p>
+    <p>(C8) Tensão: <span id='v8'></span></p>
+    <p>(C8) Corrente: <span id='a8'></span></p>
+    <p>(C9) Potência Ativa: <span id='p9'></span></p>
+    <p>(C9) Potência Aparente: <span id='s9'></span></p>
+    <p>(C9) Fator de Potência: <span id='fp9'></span></p>
+    <p>(C9) Tensão: <span id='v9'></span></p>
+    <p>(C9) Corrente: <span id='a9'></span></p>
+    <p>(C10) Potência Ativa: <span id='p10'></span></p>
+    <p>(C10) Potência Aparente: <span id='s10'></span></p>
+    <p>(C10) Fator de Potência: <span id='fp10'></span></p>
+    <p>(C10) Tensão: <span id='v10'></span></p>
+    <p>(C10) Corrente: <span id='a10'></span></p>
+    <p>(Ct) Potência Ativa: <span id='pt'></span></p>
+    <p>(Ct) Potência Aparente: <span id='st'></span></p>
+    <p>(Ct) Fator de Potência: <span id='fpt'></span></p>
+    <p>(Ct) Tensão: <span id='vt'></span></p>
+    <p>(Ct) Corrente: <span id='at'></span></p>
+</body>
+</html>

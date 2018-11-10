@@ -136,11 +136,16 @@ int total_size_2;
 int total_size_3;
 
 //   MENSAGEM  //
+String datalog;
+String logD;
 char rP1[8];
 char aP1[8];
 char pF1[8];
 char sV1[8];
 char Ir1[8];
+char lrP1[8];
+char lsV1[8];
+char lIr1[8];
 char mensagem;
 String dados;
 String data_completa;
@@ -431,6 +436,7 @@ void envia_dados(){
   banco_de_dados(dados_arduino_0X03_01);
   banco_de_dados(dados_arduino_0X03_02);
   banco_de_dados(dados_arduino_0X03_03);
+  banco_de_dados_grafico(logD);
 }
 
 //    LIMPAR MENSAGENS    //
@@ -448,6 +454,7 @@ void limpar_string(){
   dados_arduino_0X03_01 = "";
   dados_arduino_0X03_02 = "";
   dados_arduino_0X03_03 = "";
+  logD = "";
 }
 
 //    RTC    //
@@ -491,6 +498,18 @@ void banco_de_dados(String dataString){
     }
 }
 
+//    DATALOG SD GRAFICO  //
+void banco_de_dados_grafico(String dataString){
+  File dataFile = SD.open("logGraf.txt", FILE_WRITE);
+  if (dataFile) {
+    dataFile.println(dataString);
+    dataFile.close();
+//    Serial.println(dataString);
+  } else {
+      Serial.println("error opening logGraf.txt");
+    }
+}
+
 //    ORGANIZA OS DADOS MEDIDOS    //
 void float_para_String(float rP, float aP, float pF, float sV, float Ir){
 
@@ -510,6 +529,45 @@ void float_para_String(float rP, float aP, float pF, float sV, float Ir){
   dados_arduino_0X00_01 += sV1;
   dados_arduino_0X00_01 += ", ";
   dados_arduino_0X00_01 += Ir1;
+}
+
+//    PREPARA OS DADOS    //
+void prepara_dados_processados(){
+
+  logD += aux_data_completa;
+  logD += ", ";
+  logD += aux_data_hora;
+  logD += ", ";
+  logD += aux_hora_completa;
+
+  float_para_String_log(realPower1,supplyVoltage1,Irms1);
+  float_para_String_log(realPower2,supplyVoltage2,Irms2);
+  float_para_String_log(realPower3,supplyVoltage3,Irms3);
+  float_para_String_log(realPower4,supplyVoltage4,Irms4);
+  float_para_String_log(realPower5,supplyVoltage5,Irms5);
+  float_para_String_log(realPower6,supplyVoltage6,Irms6);
+  float_para_String_log(realPower7,supplyVoltage7,Irms7);
+  float_para_String_log(realPower8,supplyVoltage8,Irms8);
+  float_para_String_log(realPower9,supplyVoltage9,Irms9);
+  float_para_String_log(realPower10,supplyVoltage10,Irms10);
+  float_para_String_log(realPowert,supplyVoltaget,Irmst);
+}
+  
+//    ORGANIZA OS DADOS MEDIDOS    //
+void float_para_String_log(float rP, float sV, float Ir){
+
+  //   CONVERTE FLOAT PARA STRING   //
+  dtostrf(rP, String(lrP1).length(), 2, lrP1);
+  dtostrf(sV, String(lsV1).length(), 2, lsV1);
+  dtostrf(Ir, String(lIr1).length(), 2, lIr1);
+  
+  logD += ", ";
+  logD += lrP1;
+  logD += ", ";
+  logD += lsV1;
+  logD += ", ";
+  logD += lIr1;
+  //Serial.println(logD);
 }
 
 //   VERIFICAR O TAMANHO DA MENSAGEM  //
@@ -662,6 +720,7 @@ byte mac[] = { 0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED };
 IPAddress ip(192, 168, 42, 115); // IP address, may need to change depending on network
 EthernetServer server(80);  // create a server at port 80
 File webFile;               // the web page file on the SD card
+File logFile;
 char HTTP_req[REQ_BUF_SZ] = {0}; // buffered HTTP request stored as null terminated string
 char req_index = 0;              // index into HTTP_req buffer
 
@@ -694,6 +753,22 @@ void exec_ethernet(){
                         client.println();
                         // send XML file containing input states
                         XML_response(client);
+                    } else if (StrContains(HTTP_req, "ajax_recovery")) {
+                        // send rest of HTTP header
+                        client.println("Content-Type: text/xml");
+                        client.println("Connection: keep-alive");
+                        client.println();
+                        // send XML file containing input states
+                        logFile = SD.open("logGraf.txt");        // open web page file
+                        if (logFile) { 
+                            while(logFile.available()) {
+                                datalog += (char)logFile.read(); // send web page to client
+                                //Serial.println(datalog);
+                            }
+                            //Serial.println(datalog);
+                            logFile.close();
+                        }
+                        XML_recovery(client);
                     }
                     else {  // web page request
                         // send rest of HTTP header
@@ -731,6 +806,16 @@ void exec_ethernet(){
         delay(1);      // give the web browser time to receive the data
         client.stop(); // close the connection
     } // end if (client)
+}
+
+void XML_recovery(EthernetClient cl)
+{
+  cl.print("<?xml version = \"1.0\" ?>");
+    cl.print("<inputs>");
+    cl.print("<datalog>");
+    cl.print(datalog);
+    cl.print("</datalog>");
+    cl.print("</inputs>");
 }
 
 // send the XML file with switch statuses and analog value
@@ -999,8 +1084,10 @@ void loop() {
   subString_para_float(3);
   totais();
   
+  //prepara_dados_processados();
+
   //    BANCO DE DADOS    //
-  envia_dados();
+  //envia_dados();
   
   //    REINICIAR AS MENSAGENS    //
   limpar_string();
