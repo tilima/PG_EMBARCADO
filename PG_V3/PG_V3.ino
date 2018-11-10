@@ -642,7 +642,7 @@ void exec_ethernet(){
                         client.println("Connection: keep-alive");
                         client.println();
                         // send web page
-                        webFile = SD.open("index.htm");        // open web page file
+                        webFile = SD.open("index_v2.htm");        // open web page file
                         if (webFile) {
                             while(webFile.available()) {
                                 client.write(webFile.read()); // send web page to client
