@@ -3,13 +3,8 @@
 //    BIBLIOTECAS   //
 #include <SPI.h>
 #include <Ethernet.h>
-#include <SD.h>
 #include <Wire.h>
 #include <EmonLib.h>
-#include <DS3231.h>
-
-// size of buffer used to capture HTTP requests
-#define REQ_BUF_SZ   50
 
 //    MEDIDOR 1   //
 EnergyMonitor emon1;
@@ -103,13 +98,6 @@ float Irmst;
 const int SensorCorrente_1 = A0;
 const int SensorTensao_1 = A1;
 
-//    SD    //
-#define PIN_SD_CARD 4
-
-//    RTC    //
-DS3231 rtc;              
-RTCDateTime dataehora;   
-
 //    ENDEREÇO DISPOSITIVOS    //
 int arduino_01 = 0x01;
 int arduino_02 = 0x02;
@@ -138,12 +126,6 @@ int total_size_3;
 //   MENSAGEM  //
 char mensagem;
 String dados;
-String data_completa;
-String hora_completa;
-String data_hora;
-String aux_data_completa;
-String aux_hora_completa;
-String aux_data_hora;
 String dados_arduino_0X00_01;
 String dados_arduino_0X01_01;
 String dados_arduino_0X01_02;
@@ -167,15 +149,6 @@ void medir(){
   Irms1            = emon1.Irms;
 }
 
-//    CALCULOS PARA OS GRÁFICOS    //
-void totais(){
-  realPowert = (realPower1 + realPower2 + realPower3 + realPower4 + realPower5 + realPower6 + realPower7 + realPower8 + realPower9 + realPower10)/10;
-  apparentPowert = (apparentPower1 + apparentPower2 + apparentPower3 + apparentPower4 + apparentPower5 + apparentPower6 + apparentPower7 + apparentPower8 + apparentPower9 + apparentPower10)/10;
-  powerFActort = (powerFActor1 + powerFActor2 + powerFActor3 + powerFActor4 + powerFActor5 + powerFActor6 + powerFActor7 + powerFActor8 + powerFActor9 + powerFActor10)/10;
-  supplyVoltaget = (supplyVoltage1 + supplyVoltage2 + supplyVoltage3 + supplyVoltage4 + supplyVoltage5 + supplyVoltage6 + supplyVoltage7 + supplyVoltage8 + supplyVoltage9 + supplyVoltage10)/10;
-  Irmst = (Irms1 + Irms2 + Irms3 + Irms4 + Irms5 + Irms6 + Irms7 + Irms8 + Irms9 + Irms10);
-}
-
 //    PREPARA OS DADOS PARA O XML    //
 void subString_para_float(int alterna){
   int ind1;
@@ -186,35 +159,23 @@ void subString_para_float(int alterna){
   
   switch (alterna){
     case 1:
-    //  Serial.print("NOVO: ");
-    //  Serial.println(realPower1);
       if(antigo_realPower1 == 0){
         antigo_realPower1 = realPower1;
       } else {
         realPower1 += antigo_realPower1;
         realPower1 /= 2;
-    //    Serial.print("ANTIGO: ");
-    //    Serial.println(antigo_realPower1);
         antigo_realPower1 = realPower1;
       }
-    //  Serial.print("MEDIA: ");
-    //  Serial.println(realPower1);
 
       ind1 = dados_arduino_0X01_01.indexOf(",");
       realPower2 = dados_arduino_0X01_01.substring(0, ind1).toFloat();
-    //  Serial.print("NOVO: ");
-    //  Serial.println(realPower2);
       if(antigo_realPower2 == 0){
         antigo_realPower2 = realPower2;
       } else {
         realPower2 += antigo_realPower2;
         realPower2 /= 2;
-    //    Serial.print("ANTIGO: ");
-    //    Serial.println(antigo_realPower2);
         antigo_realPower2 = realPower2;
       }
-    //  Serial.print("MEDIA: ");
-    //  Serial.println(realPower2);
       ind2 = dados_arduino_0X01_01.indexOf(",", ind1 + 1);
       apparentPower2 = dados_arduino_0X01_01.substring(ind1 + 1, ind2).toFloat();
       ind3 = dados_arduino_0X01_01.indexOf(",", ind2 + 1);
@@ -412,9 +373,6 @@ void recebe_dados(){
 
 //    LIMPAR MENSAGENS    //
 void limpar_string(){
-  data_hora = "";
-  hora_completa = "";    
-  data_completa = "";
   dados_arduino_0X00_01 = "";
   dados_arduino_0X01_01 = "";
   dados_arduino_0X01_02 = "";
@@ -425,34 +383,6 @@ void limpar_string(){
   dados_arduino_0X03_01 = "";
   dados_arduino_0X03_02 = "";
   dados_arduino_0X03_03 = "";
-}
-
-//    RTC    //
-void relogio(){
-    dataehora = rtc.getDateTime();
-    
-    data_hora = dataehora.hour;
-    aux_data_hora = data_hora;
-
-    hora_completa += dataehora.hour;
-    hora_completa += ":";
-    hora_completa += dataehora.minute;
-    hora_completa += ":";
-    hora_completa += dataehora.second;
-    aux_hora_completa = hora_completa;
-    
-    data_completa += dataehora.year;
-    data_completa += "/";
-    data_completa += dataehora.month;
-    data_completa += "/";
-    data_completa += dataehora.day;
-    data_completa += " ";
-    data_completa += dataehora.hour;
-    data_completa += ":";
-    data_completa += dataehora.minute;
-    data_completa += ":";
-    data_completa += dataehora.second;
-    aux_data_completa = data_completa;
 }
 
 //   VERIFICAR O TAMANHO DA MENSAGEM  //
@@ -591,308 +521,144 @@ String recebe_escravo_3(int endereco){
   return dados;  
 }
 
-//    SD CARD   //   
-boolean iniciar_sd_card() {
-  pinMode(10, OUTPUT);
-  digitalWrite(10, HIGH); 
-  if (!SD.begin(PIN_SD_CARD)){ return false; }  
-  return true;
-}
-
 // MAC address from Ethernet shield sticker under board
 byte mac[] = { 0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED };
-IPAddress ip(192, 168, 42, 115); // IP address, may need to change depending on network
+IPAddress ip(192, 168, 0, 115); // IP address, may need to change depending on network
 EthernetServer server(80);  // create a server at port 80
-File webFile;
-char HTTP_req[REQ_BUF_SZ] = {0}; // buffered HTTP request stored as null terminated string
-char req_index = 0;              // index into HTTP_req buffer
 
 void exec_ethernet(){
-  EthernetClient client = server.available();  // try to get client
+  EthernetClient client = server.available();
+  if(client)
+  {
+    boolean continua = true;
+    String linha = "";
 
-    if (client) {  // got client?
-        boolean currentLineIsBlank = true;
-        while (client.connected()) {
-            if (client.available()) {   // client data available to read
-                char c = client.read(); // read 1 byte (character) from client
-                // buffer first part of HTTP request in HTTP_req array (string)
-                // leave last element in array as 0 to null terminate string (REQ_BUF_SZ - 1)
-                if (req_index < (REQ_BUF_SZ - 1)) {
-                    HTTP_req[req_index] = c;          // save HTTP request character
-                    req_index++;
-                }
-                // last line of client request is blank and ends with \n
-                // respond to client only after last line received
-                if (c == '\n' && currentLineIsBlank) {
-                    // send a standard http response header
-                    client.println("HTTP/1.1 200 OK");
-                    // remainder of header follows below, depending on if
-                    // web page or XML page is requested
-                    // Ajax request - send XML file
-                    if (StrContains(HTTP_req, "ajax_inputs")) {
-                        // send rest of HTTP header
-                        client.println("Content-Type: text/xml");
-                        client.println("Connection: keep-alive");
-                        client.println();
-                        // send XML file containing input states
-                        XML_response(client);
-                    } else {  // web page request
-                        // send rest of HTTP header
-                        client.println("Content-Type: text/html");
-                        client.println("Connection: keep-alive");
-                        client.println();
-                        // send web page
-                        webFile = SD.open("index_v2.htm");        // open web page file
-                        if (webFile) {
-                            while(webFile.available()) {
-                                client.write(webFile.read()); // send web page to client
-                            }
-                            webFile.close();
-                        }
-                    }
-                    // display received HTTP request on serial port
-                    Serial.print(HTTP_req);
-                    // reset buffer index and all buffer elements to 0
-                    req_index = 0;
-                    StrClear(HTTP_req, REQ_BUF_SZ);
-                    break;
-                }
-                // every line of text received from the client ends with \r\n
-                if (c == '\n') {
-                    // last character on line of received text
-                    // starting new line with next character read
-                    currentLineIsBlank = true;
-                } 
-                else if (c != '\r') {
-                    // a text character was received from client
-                    currentLineIsBlank = false;
-                }
-            } // end if (client.available())
-        } // end while (client.connected())
-        delay(1);      // give the web browser time to receive the data
-        client.stop(); // close the connection
-    } // end if (client)
-}
+    while(client.connected())
+    {
+      if(client.available()){
+        char c = client.read();
+        linha.concat(c);
+  
+        if(c == '\n' && continua)
+        {
+          client.println("HTTP/1.1 200 OK");
+          // IMPORTANTE, ISSO FAZ O ARDUINO RECEBER REQUISIÇÃO AJAX DE OUTRO SERVIDOR E NÃO APENAS LOCAL.
+          client.println("Content-Type: text/javascript");
+          client.println("Access-Control-Allow-Origin: *");
+          client.println();          
 
-// send the XML file with switch statuses and analog value
-void XML_response(EthernetClient cl)
-{
-  cl.print("<?xml version = \"1.0\" ?>");
-    cl.print("<inputs>");
-    cl.print("<dtc>");
-    cl.print(aux_data_completa);
-    cl.print("</dtc>");
-    cl.print("<dt>");
-    cl.print(aux_hora_completa);
-    cl.print("</dt>");
-    cl.print("<h_>");
-    cl.print(aux_data_hora);
-    cl.print("</h_>");
-    cl.print("<p1>");
-    cl.print(realPower1);
-    cl.print("</p1>");
-    cl.print("<p2>");
-    cl.print(realPower2);
-    cl.print("</p2>");
-    cl.print("<p3>");
-    cl.print(realPower3);
-    cl.print("</p3>");
-    cl.print("<p4>");
-    cl.print(realPower4);
-    cl.print("</p4>");
-    cl.print("<p5>");
-    cl.print(realPower5);
-    cl.print("</p5>");
-    cl.print("<p6>");
-    cl.print(realPower6);
-    cl.print("</p6>");
-    cl.print("<p7>");
-    cl.print(realPower7);
-    cl.print("</p7>");
-    cl.print("<p8>");
-    cl.print(realPower8);
-    cl.print("</p8>");
-    cl.print("<p9>");
-    cl.print(realPower9);
-    cl.print("</p9>");
-    cl.print("<p10>");
-    cl.print(realPower10);
-    cl.print("</p10>");
-    cl.print("<pt>");
-    cl.print(realPowert);
-    cl.print("</pt>");
-    cl.print("<s1>");
-    cl.print(apparentPower1);
-    cl.print("</s1>");
-    cl.print("<s2>");
-    cl.print(apparentPower2);
-    cl.print("</s2>");
-    cl.print("<s3>");
-    cl.print(apparentPower3);
-    cl.print("</s3>");
-    cl.print("<s4>");
-    cl.print(apparentPower4);
-    cl.print("</s4>");
-    cl.print("<s5>");
-    cl.print(apparentPower5);
-    cl.print("</s5>");
-    cl.print("<s6>");
-    cl.print(apparentPower6);
-    cl.print("</s6>");
-    cl.print("<s7>");
-    cl.print(apparentPower7);
-    cl.print("</s7>");
-    cl.print("<s8>");
-    cl.print(apparentPower8);
-    cl.print("</s8>");
-    cl.print("<s9>");
-    cl.print(apparentPower9);
-    cl.print("</s9>");
-    cl.print("<s10>");
-    cl.print(apparentPower10);
-    cl.print("</s10>");
-    cl.print("<st>");
-    cl.print(apparentPowert);
-    cl.print("</st>");
-    cl.print("<fp1>");
-    cl.print(powerFActor1);
-    cl.print("</fp1>");
-    cl.print("<fp2>");
-    cl.print(powerFActor2);
-    cl.print("</fp2>");
-    cl.print("<fp3>");
-    cl.print(powerFActor3);
-    cl.print("</fp3>");
-    cl.print("<fp4>");
-    cl.print(powerFActor4);
-    cl.print("</fp4>");
-    cl.print("<fp5>");
-    cl.print(powerFActor5);
-    cl.print("</fp5>");
-    cl.print("<fp6>");
-    cl.print(powerFActor6);
-    cl.print("</fp6>");
-    cl.print("<fp7>");
-    cl.print(powerFActor7);
-    cl.print("</fp7>");
-    cl.print("<fp8>");
-    cl.print(powerFActor8);
-    cl.print("</fp8>");
-    cl.print("<fp9>");
-    cl.print(powerFActor9);
-    cl.print("</fp9>");
-    cl.print("<fp10>");
-    cl.print(powerFActor10);
-    cl.print("</fp10>");
-    cl.print("<fpt>");
-    cl.print(powerFActort);
-    cl.print("</fpt>");
-    cl.print("<v1>");
-    cl.print(supplyVoltage1);
-    cl.print("</v1>");
-    cl.print("<v2>");
-    cl.print(supplyVoltage2);
-    cl.print("</v2>");
-    cl.print("<v3>");
-    cl.print(supplyVoltage3);
-    cl.print("</v3>");
-    cl.print("<v4>");
-    cl.print(supplyVoltage4);
-    cl.print("</v4>");
-    cl.print("<v5>");
-    cl.print(supplyVoltage5);
-    cl.print("</v5>");
-    cl.print("<v6>");
-    cl.print(supplyVoltage6);
-    cl.print("</v6>");
-    cl.print("<v7>");
-    cl.print(supplyVoltage7);
-    cl.print("</v7>");
-    cl.print("<v8>");
-    cl.print(supplyVoltage8);
-    cl.print("</v8>");
-    cl.print("<v9>");
-    cl.print(supplyVoltage9);
-    cl.print("</v9>");
-    cl.print("<v10>");
-    cl.print(supplyVoltage10);
-    cl.print("</v10>");
-    cl.print("<vt>");
-    cl.print(supplyVoltaget);
-    cl.print("</vt>");
-    cl.print("<a1>");
-    cl.print(Irms1);
-    cl.print("</a1>");
-    cl.print("<a2>");
-    cl.print(Irms2);
-    cl.print("</a2>");
-    cl.print("<a3>");
-    cl.print(Irms3);
-    cl.print("</a3>");
-    cl.print("<a4>");
-    cl.print(Irms4);
-    cl.print("</a4>");
-    cl.print("<a5>");
-    cl.print(Irms5);
-    cl.print("</a5>");
-    cl.print("<a6>");
-    cl.print(Irms6);
-    cl.print("</a6>");
-    cl.print("<a7>");
-    cl.print(Irms7);
-    cl.print("</a7>");
-    cl.print("<a8>");
-    cl.print(Irms8);
-    cl.print("</a8>");
-    cl.print("<a9>");
-    cl.print(Irms9);
-    cl.print("</a9>");
-    cl.print("<a10>");
-    cl.print(Irms10);
-    cl.print("</a10>");
-    cl.print("<at>");
-    cl.print(Irmst);
-    cl.print("</at>");
-    cl.print("</inputs>");
-}
-
-// sets every element of str to 0 (clears array)
-void StrClear(char *str, char length)
-{
-    for (int i = 0; i < length; i++) {
-        str[i] = 0;
-    }
-}
-
-// searches for the string sfind in the string str
-// returns 1 if string found
-// returns 0 if string not found
-char StrContains(char *str, char *sfind)
-{
-    char found = 0;
-    char index = 0;
-    char len;
-
-    len = strlen(str);
-    
-    if (strlen(sfind) > len) {
-        return 0;
-    }
-    while (index < len) {
-        if (str[index] == sfind[found]) {
-            found++;
-            if (strlen(sfind) == found) {
-                return 1;
-            }
+          client.print("dados({medidor_1 : { Potencia_Ativa : ");
+          client.print(realPower1);
+          client.print(", Potencia_Aparente : ");
+          client.print(apparentPower1);
+          client.print(", Fator_de_potencia : ");
+          client.print(powerFActor1);
+          client.print(", Tensao : ");
+          client.print(supplyVoltage1);
+          client.print(", Corrente :");
+          client.print(Irms1);
+          client.print("}, medidor_2 : { Potencia_Ativa : ");
+          client.print(realPower2);
+          client.print(", Potencia_Aparente : ");
+          client.print(apparentPower2);
+          client.print(", Fator_de_potencia : ");
+          client.print(powerFActor2);
+          client.print(", Tensao : ");
+          client.print(supplyVoltage2);
+          client.print(", Corrente :");
+          client.print(Irms2);
+          client.print("}, medidor_3 : { Potencia_Ativa : ");
+          client.print(realPower3);
+          client.print(", Potencia_Aparente : ");
+          client.print(apparentPower3);
+          client.print(", Fator_de_potencia : ");
+          client.print(powerFActor3);
+          client.print(", Tensao : ");
+          client.print(supplyVoltage3);
+          client.print(", Corrente :");
+          client.print(Irms3);
+          client.print("}, medidor_4 : { Potencia_Ativa : ");
+          client.print(realPower4);
+          client.print(", Potencia_Aparente : ");
+          client.print(apparentPower4);
+          client.print(", Fator_de_potencia : ");
+          client.print(powerFActor4);
+          client.print(", Tensao : ");
+          client.print(supplyVoltage4);
+          client.print(", Corrente :");
+          client.print(Irms4);
+          client.print("}, medidor_5 : { Potencia_Ativa : ");
+          client.print(realPower5);
+          client.print(", Potencia_Aparente : ");
+          client.print(apparentPower5);
+          client.print(", Fator_de_potencia : ");
+          client.print(powerFActor5);
+          client.print(", Tensao : ");
+          client.print(supplyVoltage5);
+          client.print(", Corrente :");
+          client.print(Irms5);
+          client.print("}, medidor_6 : { Potencia_Ativa : ");
+          client.print(realPower6);
+          client.print(", Potencia_Aparente : ");
+          client.print(apparentPower6);
+          client.print(", Fator_de_potencia : ");
+          client.print(powerFActor6);
+          client.print(", Tensao : ");
+          client.print(supplyVoltage6);
+          client.print(", Corrente :");
+          client.print(Irms6);
+          client.print("}, medidor_7 : { Potencia_Ativa : ");
+          client.print(realPower7);
+          client.print(", Potencia_Aparente : ");
+          client.print(apparentPower7);
+          client.print(", Fator_de_potencia : ");
+          client.print(powerFActor7);
+          client.print(", Tensao : ");
+          client.print(supplyVoltage7);
+          client.print(", Corrente :");
+          client.print(Irms7);
+          client.print("}, medidor_8 : { Potencia_Ativa : ");
+          client.print(realPower8);
+          client.print(", Potencia_Aparente : ");
+          client.print(apparentPower8);
+          client.print(", Fator_de_potencia : ");
+          client.print(powerFActor8);
+          client.print(", Tensao : ");
+          client.print(supplyVoltage8);
+          client.print(", Corrente :");
+          client.print(Irms8);
+          client.print("}, medidor_9 : { Potencia_Ativa : ");
+          client.print(realPower9);
+          client.print(", Potencia_Aparente : ");
+          client.print(apparentPower9);
+          client.print(", Fator_de_potencia : ");
+          client.print(powerFActor9);
+          client.print(", Tensao : ");
+          client.print(supplyVoltage9);
+          client.print(", Corrente :");
+          client.print(Irms9);
+          client.print("}, medidor_10 : { Potencia_Ativa : ");
+          client.print(realPower10);
+          client.print(", Potencia_Aparente : ");
+          client.print(apparentPower10);
+          client.print(", Fator_de_potencia : ");
+          client.print(powerFActor10);
+          client.print(", Tensao : ");
+          client.print(supplyVoltage10);
+          client.print(", Corrente :");
+          client.print(Irms10);
+          client.print("}})");
+           
+        break;
         }
-        else {
-            found = 0;
-        }
-        index++;
+        if(c == '\n') { continua = true; }
+        else if (c != '\r') { continua = false; }
+      }
     }
-
-    return 0;
-}
+     delay(1);
+     client.stop();
+  }
+}  
 
 //INCIALIZAÇÃO// 
 void setup() {
@@ -904,9 +670,6 @@ void setup() {
   //    BIBLIOTECAS   //
   Wire.begin();  
   Serial.begin(9600);
-  rtc.begin();
-//  rtc.setDateTime(__DATE__, __TIME__);  //  COMENTAR APOS A PRIMEIRA COMPILAÇÃO
-  iniciar_sd_card(); 
   Ethernet.begin(mac, ip);  // initialize Ethernet device
   server.begin();           // start to listen for clients
 
@@ -925,17 +688,13 @@ void loop() {
 
   //    MEDIDOR DE ENERGIA    //
   medir();
-  relogio();
   recebe_dados();
   
   //    EXTRAI OS DADOS DAS STRINGS    //
   subString_para_float(1);
   subString_para_float(2);
   subString_para_float(3);
-  totais();
   
   //    REINICIAR AS MENSAGENS    //
   limpar_string();
 }
-
- 
