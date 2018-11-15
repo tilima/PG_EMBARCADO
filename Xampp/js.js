@@ -83,149 +83,121 @@ var dado_corrente_0x0B = [];
 var n;
 var t;
 
-function verifica_hora() {
-    var d = new Date();
-    n = d.getHours();
-    t = d.getHours() + ":" + d.getMinutes() + ":" + d.getSeconds();
-}
+
 
 var url = 'http://192.168.0.116:81';
+init = 0;
 
     function fazerRequisicao(){
-        $.ajax({
-            url: url,
-            data: { '': ''}, // usaremos em proximas versões
-            dataType: 'jsonp', // IMPORTANTE
+        if(init==0){ 
+            carregarInfosDoBanco();
+            console.log("FUNCIONA");
+            init++;
+        } else {
+            $.ajax({
+                url: url,
+                data: { '': ''}, // usaremos em proximas versões
+                dataType: 'jsonp', // IMPORTANTE
+                crossDomain: true, // IMPORTANTE
+                jsonp: false,
+                jsonpCallback: 'dados', // IMPORTANTE
+                success: function(data,status,xhr) {
+                dadosDeEnvio = data;
+                var atualizaBanco = $.ajax({
+                        url: "salvarDados.php",
+                        type: "POST",
+                        data: { data: dadosDeEnvio }, // usaremos em proximas versões
+                        dataType: 'text', // IMPORTANTE
+                        crossDomain: true, // IMPORTANTE
+                    // jsonp: false,
+                    // jsonpCallback: 'dados', // IMPORTANTE
+                        success: function(data,status,xhr) {
+                        //console.log(data);
+                        }
+                    });
+                    atualizaBanco.error(function() { alert("Something went wrong"); });
+                }
+            });
+            return false;
+        }
+    }
+
+    function carregarInfosDoBanco(){
+        var carregarBanco = $.ajax({
+            url: "carregarDados.php",
+            data: { '' : '' }, // usaremos em proximas versões
+            dataType: 'text', // IMPORTANTE
             crossDomain: true, // IMPORTANTE
             jsonp: false,
             jsonpCallback: 'dados', // IMPORTANTE
             success: function(data,status,xhr) {
-               dadosDeEnvio = data;
-               verifica_hora();
-               /*
-               potencia_ativa_0x01[n] = data.medidor_1.Potencia_Ativa;                     
-               potencia_ativa_0x02[n] = data.medidor_2.Potencia_Ativa;
-               potencia_ativa_0x03[n] = data.medidor_3.Potencia_Ativa;
-               potencia_ativa_0x04[n] = data.medidor_4.Potencia_Ativa;
-               potencia_ativa_0x05[n] = data.medidor_5.Potencia_Ativa;
-               potencia_ativa_0x06[n] = data.medidor_6.Potencia_Ativa;
-               potencia_ativa_0x07[n] = data.medidor_7.Potencia_Ativa;
-               potencia_ativa_0x08[n] = data.medidor_8.Potencia_Ativa;
-               potencia_ativa_0x09[n] = data.medidor_9.Potencia_Ativa;
-               potencia_ativa_0x0A[n] = data.medidor_10.Potencia_Ativa;
-               potencia_aparente_0x01[n] = data.medidor_1.Potencia_Aparente;
-               potencia_aparente_0x02[n] = data.medidor_2.Potencia_Aparente;
-               potencia_aparente_0x03[n] = data.medidor_3.Potencia_Aparente;
-               potencia_aparente_0x04[n] = data.medidor_4.Potencia_Aparente;
-               potencia_aparente_0x05[n] = data.medidor_5.Potencia_Aparente;
-               potencia_aparente_0x06[n] = data.medidor_6.Potencia_Aparente;
-               potencia_aparente_0x07[n] = data.medidor_7.Potencia_Aparente;
-               potencia_aparente_0x08[n] = data.medidor_8.Potencia_Aparente;
-               potencia_aparente_0x09[n] = data.medidor_9.Potencia_Aparente;
-               potencia_aparente_0x0A[n] = data.medidor_10.Potencia_Aparente;
-               fator_de_potencia_0x01 = data.medidor_1.Fator_de_potencia;
-               fator_de_potencia_0x02 = data.medidor_2.Fator_de_potencia;
-               fator_de_potencia_0x03 = data.medidor_3.Fator_de_potencia;
-               fator_de_potencia_0x04 = data.medidor_4.Fator_de_potencia;
-               fator_de_potencia_0x05 = data.medidor_5.Fator_de_potencia;
-               fator_de_potencia_0x06 = data.medidor_6.Fator_de_potencia;
-               fator_de_potencia_0x07 = data.medidor_7.Fator_de_potencia;
-               fator_de_potencia_0x08 = data.medidor_8.Fator_de_potencia;
-               fator_de_potencia_0x09 = data.medidor_9.Fator_de_potencia;
-               fator_de_potencia_0x0A = data.medidor_10.Fator_de_potencia;
-               tensao_0x01 = data.medidor_1.Tensao; 
-               tensao_0x02 = data.medidor_2.Tensao;
-               tensao_0x03 = data.medidor_3.Tensao;
-               tensao_0x04 = data.medidor_4.Tensao;
-               tensao_0x05 = data.medidor_5.Tensao;
-               tensao_0x06 = data.medidor_6.Tensao;
-               tensao_0x07 = data.medidor_7.Tensao;
-               tensao_0x08 = data.medidor_8.Tensao;
-               tensao_0x09 = data.medidor_9.Tensao;
-               tensao_0x0A = data.medidor_10.Tensao;
-               corrente_0x01 = data.medidor_1.Corrente;
-               corrente_0x02 = data.medidor_2.Corrente;
-               corrente_0x03 = data.medidor_3.Corrente;
-               corrente_0x04 = data.medidor_4.Corrente;
-               corrente_0x05 = data.medidor_5.Corrente;
-               corrente_0x06 = data.medidor_6.Corrente;
-               corrente_0x07 = data.medidor_7.Corrente;
-               corrente_0x08 = data.medidor_8.Corrente;
-               corrente_0x09 = data.medidor_9.Corrente;
-               corrente_0x0A = data.medidor_10.Corrente;
-               */
-               potencia_ativa_0x01[n] = data.medidor_1.Potencia_Ativa;                     
-               potencia_ativa_0x02[n] = data.medidor_2.Potencia_Ativa;
-               potencia_ativa_0x03[n] = data.medidor_3.Potencia_Ativa;
-               potencia_ativa_0x04[n] = data.medidor_4.Potencia_Ativa;
-               potencia_ativa_0x05[n] = data.medidor_5.Potencia_Ativa;
-               potencia_ativa_0x06[n] = data.medidor_6.Potencia_Ativa;
-               potencia_ativa_0x07[n] = data.medidor_7.Potencia_Ativa;
-               potencia_ativa_0x08[n] = data.medidor_8.Potencia_Ativa;
-               potencia_ativa_0x09[n] = data.medidor_9.Potencia_Ativa;
-               potencia_ativa_0x0A[n] = data.medidor_10.Potencia_Ativa;
-               potencia_aparente_0x01[n] = data.medidor_1.Potencia_Aparente;
-               potencia_aparente_0x02[n] = data.medidor_2.Potencia_Aparente;
-               potencia_aparente_0x03[n] = data.medidor_3.Potencia_Aparente;
-               potencia_aparente_0x04[n] = data.medidor_4.Potencia_Aparente;
-               potencia_aparente_0x05[n] = data.medidor_5.Potencia_Aparente;
-               potencia_aparente_0x06[n] = data.medidor_6.Potencia_Aparente;
-               potencia_aparente_0x07[n] = data.medidor_7.Potencia_Aparente;
-               potencia_aparente_0x08[n] = data.medidor_8.Potencia_Aparente;
-               potencia_aparente_0x09[n] = data.medidor_9.Potencia_Aparente;
-               potencia_aparente_0x0A[n] = data.medidor_10.Potencia_Aparente;
-               fator_de_potencia_0x01 = data.medidor_1.Fator_de_potencia;
-               fator_de_potencia_0x02 = data.medidor_2.Fator_de_potencia;
-               fator_de_potencia_0x03 = data.medidor_3.Fator_de_potencia;
-               fator_de_potencia_0x04 = data.medidor_4.Fator_de_potencia;
-               fator_de_potencia_0x05 = data.medidor_5.Fator_de_potencia;
-               fator_de_potencia_0x06 = data.medidor_6.Fator_de_potencia;
-               fator_de_potencia_0x07 = data.medidor_7.Fator_de_potencia;
-               fator_de_potencia_0x08 = data.medidor_8.Fator_de_potencia;
-               fator_de_potencia_0x09 = data.medidor_9.Fator_de_potencia;
-               fator_de_potencia_0x0A = data.medidor_10.Fator_de_potencia;
-               tensao_0x01 = data.medidor_1.Tensao; 
-               tensao_0x02 = data.medidor_2.Tensao;
-               tensao_0x03 = data.medidor_3.Tensao;
-               tensao_0x04 = data.medidor_4.Tensao;
-               tensao_0x05 = data.medidor_5.Tensao;
-               tensao_0x06 = data.medidor_6.Tensao;
-               tensao_0x07 = data.medidor_7.Tensao;
-               tensao_0x08 = data.medidor_8.Tensao;
-               tensao_0x09 = data.medidor_9.Tensao;
-               tensao_0x0A = data.medidor_10.Tensao;
-               corrente_0x01 = data.medidor_1.Corrente;
-               corrente_0x02 = data.medidor_2.Corrente;
-               corrente_0x03 = data.medidor_3.Corrente;
-               corrente_0x04 = data.medidor_4.Corrente;
-               corrente_0x05 = data.medidor_5.Corrente;
-               corrente_0x06 = data.medidor_6.Corrente;
-               corrente_0x07 = data.medidor_7.Corrente;
-               corrente_0x08 = data.medidor_8.Corrente;
-               corrente_0x09 = data.medidor_9.Corrente;
-               corrente_0x0A = data.medidor_10.Corrente;
-               //cargas_ativas = data.cargas.valor;
-               atualiza_grafico();
-               newGraph();  
-               var atualizaBanco = $.ajax({
-                    url: "salvarDados.php",
-                    type: "POST",
-                    data: { data: dadosDeEnvio }, // usaremos em proximas versões
-                    dataType: 'text', // IMPORTANTE
-                    crossDomain: true, // IMPORTANTE
-                   // jsonp: false,
-                   // jsonpCallback: 'dados', // IMPORTANTE
-                    success: function(data,status,xhr) {
-                    console.log(data);
-                    }
-                });
-                atualizaBanco.error(function() { alert("Something went wrong"); });
+                var res = $.parseJSON(data);
+                res.forEach(element => {
+                    console.log(element);
+                }); 
             }
-          });
-        return false;
+        });
+        carregarBanco.error(function() { alert("Something went wrong"); });
+        
+    }
+
+    function busca_dados(){
+        potencia_ativa_0x01[n] = data.medidor_1.Potencia_Ativa;                     
+        potencia_ativa_0x02[n] = data.medidor_2.Potencia_Ativa;
+        potencia_ativa_0x03[n] = data.medidor_3.Potencia_Ativa;
+        potencia_ativa_0x04[n] = data.medidor_4.Potencia_Ativa;
+        potencia_ativa_0x05[n] = data.medidor_5.Potencia_Ativa;
+        potencia_ativa_0x06[n] = data.medidor_6.Potencia_Ativa;
+        potencia_ativa_0x07[n] = data.medidor_7.Potencia_Ativa;
+        potencia_ativa_0x08[n] = data.medidor_8.Potencia_Ativa;
+        potencia_ativa_0x09[n] = data.medidor_9.Potencia_Ativa;
+        potencia_ativa_0x0A[n] = data.medidor_10.Potencia_Ativa;
+        potencia_aparente_0x01[n] = data.medidor_1.Potencia_Aparente;
+        potencia_aparente_0x02[n] = data.medidor_2.Potencia_Aparente;
+        potencia_aparente_0x03[n] = data.medidor_3.Potencia_Aparente;
+        potencia_aparente_0x04[n] = data.medidor_4.Potencia_Aparente;
+        potencia_aparente_0x05[n] = data.medidor_5.Potencia_Aparente;
+        potencia_aparente_0x06[n] = data.medidor_6.Potencia_Aparente;
+        potencia_aparente_0x07[n] = data.medidor_7.Potencia_Aparente;
+        potencia_aparente_0x08[n] = data.medidor_8.Potencia_Aparente;
+        potencia_aparente_0x09[n] = data.medidor_9.Potencia_Aparente;
+        potencia_aparente_0x0A[n] = data.medidor_10.Potencia_Aparente;
+        fator_de_potencia_0x01 = data.medidor_1.Fator_de_potencia;
+        fator_de_potencia_0x02 = data.medidor_2.Fator_de_potencia;
+        fator_de_potencia_0x03 = data.medidor_3.Fator_de_potencia;
+        fator_de_potencia_0x04 = data.medidor_4.Fator_de_potencia;
+        fator_de_potencia_0x05 = data.medidor_5.Fator_de_potencia;
+        fator_de_potencia_0x06 = data.medidor_6.Fator_de_potencia;
+        fator_de_potencia_0x07 = data.medidor_7.Fator_de_potencia;
+        fator_de_potencia_0x08 = data.medidor_8.Fator_de_potencia;
+        fator_de_potencia_0x09 = data.medidor_9.Fator_de_potencia;
+        fator_de_potencia_0x0A = data.medidor_10.Fator_de_potencia;
+        tensao_0x01 = data.medidor_1.Tensao; 
+        tensao_0x02 = data.medidor_2.Tensao;
+        tensao_0x03 = data.medidor_3.Tensao;
+        tensao_0x04 = data.medidor_4.Tensao;
+        tensao_0x05 = data.medidor_5.Tensao;
+        tensao_0x06 = data.medidor_6.Tensao;
+        tensao_0x07 = data.medidor_7.Tensao;
+        tensao_0x08 = data.medidor_8.Tensao;
+        tensao_0x09 = data.medidor_9.Tensao;
+        tensao_0x0A = data.medidor_10.Tensao;
+        corrente_0x01 = data.medidor_1.Corrente;
+        corrente_0x02 = data.medidor_2.Corrente;
+        corrente_0x03 = data.medidor_3.Corrente;
+        corrente_0x04 = data.medidor_4.Corrente;
+        corrente_0x05 = data.medidor_5.Corrente;
+        corrente_0x06 = data.medidor_6.Corrente;
+        corrente_0x07 = data.medidor_7.Corrente;
+        corrente_0x08 = data.medidor_8.Corrente;
+        corrente_0x09 = data.medidor_9.Corrente;
+        corrente_0x0A = data.medidor_10.Corrente;
+        //cargas_ativas = data.cargas.valor;
+        atualiza_grafico();
+        newGraph();  
     }
     // A cada 1000 milis (1 segundo), faça uma nova requisição.
-    setInterval(fazerRequisicao, 3000);
+    setInterval(fazerRequisicao, 5000);
       // Acredito que 3000 (3 segundos) ou mais seja o ideal para um serviço online.
       // Caso use local host, arrisco colocar ate 400 milis, você tera uma boa resposta.
 // FUNÇÃO PARA O SELETOR

@@ -12,7 +12,7 @@ if (mysqli_connect_errno())
   }
   
   $json = json_encode($_POST['data']);
-  $sql = "INSERT INTO `leituras` (`id`, `data_leitura`, `dado_leitura`) VALUES (NULL, CURRENT_TIMESTAMP, '{$json}'); ";
+  $sql = "INSERT INTO `leituras` (`id`, `data_leitura`, `dado_leitura`,`potencia_ativa`) VALUES (NULL, CURRENT_TIMESTAMP, '{$json}', NULL); ";
   $con->query($sql);
   
   if ($con->query($sql) === TRUE) {
@@ -20,4 +20,5 @@ if (mysqli_connect_errno())
   } else {
       echo "Error: " . $sql . "<br>" . $con->error;
   }
+  mysql_close($con);
 ?>
