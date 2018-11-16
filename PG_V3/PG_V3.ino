@@ -137,6 +137,15 @@ String dados_arduino_0X03_01;
 String dados_arduino_0X03_02;
 String dados_arduino_0X03_03;
 
+//    TOTAIS    //
+void totais(){
+  realPowert = (realPower1 + realPower2 + realPower3 + realPower4 + realPower5 + realPower6 + realPower7 + realPower8 + realPower9 + realPower10)/10;
+  apparentPowert = (apparentPower1 + apparentPower2 + apparentPower3 + apparentPower4 + apparentPower5 + apparentPower6 + apparentPower7 + apparentPower8 + apparentPower9 + apparentPower10);
+  powerFActort = (powerFActor1 + powerFActor2 + powerFActor3 + powerFActor4 + powerFActor5 + powerFActor6 + powerFActor7 + powerFActor8 + powerFActor9 + powerFActor10)/10;
+  supplyVoltaget = (supplyVoltage1 + supplyVoltage2 + supplyVoltage3 + supplyVoltage4 + supplyVoltage5 + supplyVoltage6 + supplyVoltage7 + supplyVoltage8 + supplyVoltage9 + supplyVoltage10)/10;
+  Irmst = (Irms1 + Irms2 + Irms3 + Irms4 + Irms5 + Irms6 + Irms7 + Irms8 + Irms9 + Irms10);
+}
+
 //    MENSURAR AS GRANDEZAS    //
 void medir(){
   emon1.calcVI(20,2000);
@@ -218,9 +227,9 @@ void subString_para_float(int alterna){
       ind3 = dados_arduino_0X01_03.indexOf(",", ind2 + 1);
       powerFActor4 = dados_arduino_0X01_03.substring(ind2 + 1, ind3).toFloat();
       ind4 = dados_arduino_0X01_03.indexOf(",", ind3 + 1);
-      supplyVoltage5 = dados_arduino_0X01_03.substring(ind3 + 1, ind4).toFloat();
+      supplyVoltage4 = dados_arduino_0X01_03.substring(ind3 + 1, ind4).toFloat();
       ind5 = dados_arduino_0X01_03.indexOf(",", ind4 + 1);
-      Irms5 = dados_arduino_0X01_03.substring(ind4 + 1, ind5).toFloat();
+      Irms4 = dados_arduino_0X01_03.substring(ind4 + 1, ind5).toFloat();
 
       break;
     
@@ -523,7 +532,7 @@ String recebe_escravo_3(int endereco){
 
 // MAC address from Ethernet shield sticker under board
 byte mac[] = { 0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED };
-IPAddress ip(192, 168, 0, 115); // IP address, may need to change depending on network
+IPAddress ip(192, 168, 15, 115); // IP address, may need to change depending on network
 EthernetServer server(80);  // create a server at port 80
 
 void exec_ethernet(){
@@ -547,7 +556,7 @@ void exec_ethernet(){
           client.println("Access-Control-Allow-Origin: *");
           client.println();          
 
-          client.print("dados({medidor_1 : { Potencia_Ativa : ");
+          client.print("dados({ dados_arduino: { medidores: { medidor_1 : { Potencia_Ativa : ");
           client.print(realPower1);
           client.print(", Potencia_Aparente : ");
           client.print(apparentPower1);
@@ -647,7 +656,39 @@ void exec_ethernet(){
           client.print(supplyVoltage10);
           client.print(", Corrente :");
           client.print(Irms10);
-          client.print("}})");
+          client.print("}, total : { Potencia_Ativa : ");
+          client.print(realPowert);
+          client.print(", Potencia_Aparente : ");
+          client.print(apparentPowert);
+          client.print(", Fator_de_potencia : ");
+          client.print(powerFActort);
+          client.print(", Tensao : ");
+          client.print(supplyVoltaget);
+          client.print(", Corrente :");
+          client.print(Irmst);
+          client.print("}}, medias : { medidor_1 : { Potencia_Ativa : ");
+          client.print(realPower1);
+          client.print("}, medidor_2 : { Potencia_Ativa :");
+          client.print(realPower2);
+          client.print("}, medidor_3 : { Potencia_Ativa :");
+          client.print(realPower3);
+          client.print("}, medidor_4 : { Potencia_Ativa :");
+          client.print(realPower4);
+          client.print("}, medidor_5 : { Potencia_Ativa :");
+          client.print(realPower5);
+          client.print("}, medidor_6 : { Potencia_Ativa :");
+          client.print(realPower6);
+          client.print("}, medidor_7 : { Potencia_Ativa :");
+          client.print(realPower7);
+          client.print("}, medidor_8 : { Potencia_Ativa :");
+          client.print(realPower8);
+          client.print("}, medidor_9 : { Potencia_Ativa :");
+          client.print(realPower9);
+          client.print("}, medidor_10 : { Potencia_Ativa :");
+          client.print(realPower10);
+          client.print("}, total : { Potencia_Ativa :");
+          client.print(realPowert);
+          client.print("}}}})");
            
         break;
         }
@@ -694,7 +735,7 @@ void loop() {
   subString_para_float(1);
   subString_para_float(2);
   subString_para_float(3);
-  
+  totais();
   //    REINICIAR AS MENSAGENS    //
   limpar_string();
 }

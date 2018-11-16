@@ -11,8 +11,9 @@ if (mysqli_connect_errno())
   echo "Failed to connect to MySQL: " . mysqli_connect_error();
   }
   
-  $json = json_encode($_POST['data']);
-  $sql = "INSERT INTO `leituras` (`id`, `data_leitura`, `dado_leitura`,`potencia_ativa`) VALUES (NULL, CURRENT_TIMESTAMP, '{$json}', NULL); ";
+  $json1 = json_encode($_POST['data']['dados_arduino']['medidores']);
+  $json2 = json_encode($_POST['data']['dados_arduino']['medias']);
+  $sql = "INSERT INTO `leituras` (`id`, `data_leitura`, `dado_leitura`,`potencia_ativa`) VALUES (NULL, CURRENT_TIMESTAMP, '{$json1}', '{$json2}'); ";
   $con->query($sql);
   
   if ($con->query($sql) === TRUE) {

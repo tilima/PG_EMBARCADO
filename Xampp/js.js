@@ -3,6 +3,19 @@ var data_completa;
 var tempo_tempo;
 var n;
 var dado_tempo = [];
+var tempo_pot = [];
+var dado_tempo_pot = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23];
+var dado_potencia_ativa_0x01 = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
+var dado_potencia_ativa_0x02 = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
+var dado_potencia_ativa_0x03 = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
+var dado_potencia_ativa_0x04 = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
+var dado_potencia_ativa_0x05 = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
+var dado_potencia_ativa_0x06 = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
+var dado_potencia_ativa_0x07 = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
+var dado_potencia_ativa_0x08 = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
+var dado_potencia_ativa_0x09 = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
+var dado_potencia_ativa_0x0A = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
+var dado_potencia_ativa_0x0B = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
 var potencia_ativa_0x01 = [];
 var potencia_ativa_0x02 = [];
 var potencia_ativa_0x03 = [];
@@ -85,7 +98,7 @@ var t;
 
 
 
-var url = 'http://192.168.0.116:81';
+var url = 'http://192.168.15.115';
 init = 0;
 
     function fazerRequisicao(){
@@ -112,7 +125,8 @@ init = 0;
                     // jsonp: false,
                     // jsonpCallback: 'dados', // IMPORTANTE
                         success: function(data,status,xhr) {
-                        //console.log(data);
+                        carregarInfosAtualDoBanco();
+                            //atualiza_grafico(data);    
                         }
                     });
                     atualizaBanco.error(function() { alert("Something went wrong"); });
@@ -132,100 +146,285 @@ init = 0;
             jsonpCallback: 'dados', // IMPORTANTE
             success: function(data,status,xhr) {
                 var res = $.parseJSON(data);
-                res.forEach(element => {
-                    console.log(element);
-                }); 
+                var leitura = [];
+                var z = 0;
+                var l1 = JSON.parse(JSON.parse(res)[0][0]).length;
+                var l3 = JSON.parse(JSON.parse(res)[0][3]).length;
+                for(var y = 0; y<l1; y++){
+                    leitura[z] = JSON.parse(JSON.parse(JSON.parse(res)[0][0])[y]);
+                    z++;
+                }
+                for(var y = 0; y<l1; y++){
+                    leitura[z] = JSON.parse(JSON.parse(res)[0][1])[y];
+                    z++;    
+                }
+                for(var y = 0; y<l3; y++){
+                    leitura[z] = JSON.parse(JSON.parse(JSON.parse(res)[0][2])[y]);
+                        z++;
+                }
+                for(var y = 0; y<l3; y++){
+                    leitura[z] = JSON.parse(JSON.parse(res)[0][3])[y];
+                    z++; 
+                }
+                busca_dados(leitura, l1, l3);
             }
         });
         carregarBanco.error(function() { alert("Something went wrong"); });
-        
     }
 
-    function busca_dados(){
-        potencia_ativa_0x01[n] = data.medidor_1.Potencia_Ativa;                     
-        potencia_ativa_0x02[n] = data.medidor_2.Potencia_Ativa;
-        potencia_ativa_0x03[n] = data.medidor_3.Potencia_Ativa;
-        potencia_ativa_0x04[n] = data.medidor_4.Potencia_Ativa;
-        potencia_ativa_0x05[n] = data.medidor_5.Potencia_Ativa;
-        potencia_ativa_0x06[n] = data.medidor_6.Potencia_Ativa;
-        potencia_ativa_0x07[n] = data.medidor_7.Potencia_Ativa;
-        potencia_ativa_0x08[n] = data.medidor_8.Potencia_Ativa;
-        potencia_ativa_0x09[n] = data.medidor_9.Potencia_Ativa;
-        potencia_ativa_0x0A[n] = data.medidor_10.Potencia_Ativa;
-        potencia_aparente_0x01[n] = data.medidor_1.Potencia_Aparente;
-        potencia_aparente_0x02[n] = data.medidor_2.Potencia_Aparente;
-        potencia_aparente_0x03[n] = data.medidor_3.Potencia_Aparente;
-        potencia_aparente_0x04[n] = data.medidor_4.Potencia_Aparente;
-        potencia_aparente_0x05[n] = data.medidor_5.Potencia_Aparente;
-        potencia_aparente_0x06[n] = data.medidor_6.Potencia_Aparente;
-        potencia_aparente_0x07[n] = data.medidor_7.Potencia_Aparente;
-        potencia_aparente_0x08[n] = data.medidor_8.Potencia_Aparente;
-        potencia_aparente_0x09[n] = data.medidor_9.Potencia_Aparente;
-        potencia_aparente_0x0A[n] = data.medidor_10.Potencia_Aparente;
-        fator_de_potencia_0x01 = data.medidor_1.Fator_de_potencia;
-        fator_de_potencia_0x02 = data.medidor_2.Fator_de_potencia;
-        fator_de_potencia_0x03 = data.medidor_3.Fator_de_potencia;
-        fator_de_potencia_0x04 = data.medidor_4.Fator_de_potencia;
-        fator_de_potencia_0x05 = data.medidor_5.Fator_de_potencia;
-        fator_de_potencia_0x06 = data.medidor_6.Fator_de_potencia;
-        fator_de_potencia_0x07 = data.medidor_7.Fator_de_potencia;
-        fator_de_potencia_0x08 = data.medidor_8.Fator_de_potencia;
-        fator_de_potencia_0x09 = data.medidor_9.Fator_de_potencia;
-        fator_de_potencia_0x0A = data.medidor_10.Fator_de_potencia;
-        tensao_0x01 = data.medidor_1.Tensao; 
-        tensao_0x02 = data.medidor_2.Tensao;
-        tensao_0x03 = data.medidor_3.Tensao;
-        tensao_0x04 = data.medidor_4.Tensao;
-        tensao_0x05 = data.medidor_5.Tensao;
-        tensao_0x06 = data.medidor_6.Tensao;
-        tensao_0x07 = data.medidor_7.Tensao;
-        tensao_0x08 = data.medidor_8.Tensao;
-        tensao_0x09 = data.medidor_9.Tensao;
-        tensao_0x0A = data.medidor_10.Tensao;
-        corrente_0x01 = data.medidor_1.Corrente;
-        corrente_0x02 = data.medidor_2.Corrente;
-        corrente_0x03 = data.medidor_3.Corrente;
-        corrente_0x04 = data.medidor_4.Corrente;
-        corrente_0x05 = data.medidor_5.Corrente;
-        corrente_0x06 = data.medidor_6.Corrente;
-        corrente_0x07 = data.medidor_7.Corrente;
-        corrente_0x08 = data.medidor_8.Corrente;
-        corrente_0x09 = data.medidor_9.Corrente;
-        corrente_0x0A = data.medidor_10.Corrente;
-        //cargas_ativas = data.cargas.valor;
-        atualiza_grafico();
+    function carregarInfosAtualDoBanco(){
+        var carregarBanco = $.ajax({
+            url: "carregarDadosAtual.php",
+            data: { '' : '' }, // usaremos em proximas versões
+            dataType: 'text', // IMPORTANTE
+            crossDomain: true, // IMPORTANTE
+            jsonp: false,
+            jsonpCallback: 'dados', // IMPORTANTE
+            success: function(data,status,xhr) {
+                var res = $.parseJSON(data);
+                var leitura = [];
+                leitura[0] = JSON.parse(JSON.parse(JSON.parse(res)[0][0])[0]);
+                leitura[1] = JSON.parse(JSON.parse(res)[0][1]);            
+                leitura[2] = JSON.parse(JSON.parse(res)[0][2]);
+                atualiza_grafico(leitura);
+            }
+        });
+        carregarBanco.error(function() { alert("Something went wrong"); });
+    }
+
+
+    function busca_dados(leitura, l1, l3){
+        for(var n = 0; n<l3; n++){
+            potencia_ativa_0x01[n] = leitura[2*l1+n].medidor_1.Potencia_Ativa;                     
+            potencia_ativa_0x02[n] = leitura[2*l1+n].medidor_2.Potencia_Ativa;
+            potencia_ativa_0x03[n] = leitura[2*l1+n].medidor_3.Potencia_Ativa;
+            potencia_ativa_0x04[n] = leitura[2*l1+n].medidor_4.Potencia_Ativa;
+            potencia_ativa_0x05[n] = leitura[2*l1+n].medidor_5.Potencia_Ativa;
+            potencia_ativa_0x06[n] = leitura[2*l1+n].medidor_6.Potencia_Ativa;
+            potencia_ativa_0x07[n] = leitura[2*l1+n].medidor_7.Potencia_Ativa;
+            potencia_ativa_0x08[n] = leitura[2*l1+n].medidor_8.Potencia_Ativa;
+            potencia_ativa_0x09[n] = leitura[2*l1+n].medidor_9.Potencia_Ativa;
+            potencia_ativa_0x0A[n] = leitura[2*l1+n].medidor_10.Potencia_Ativa;
+            potencia_ativa_0x0B[n] = leitura[2*l1+n].total.Potencia_Ativa;
+            tempo_pot[n] = leitura[2*l1+l3+n];
+            
+            dado_potencia_ativa_0x01.shift();
+            dado_potencia_ativa_0x01.push(potencia_ativa_0x01[n]);
+            dado_potencia_ativa_0x02.shift();
+            dado_potencia_ativa_0x02.push(potencia_ativa_0x02[n]);
+            dado_potencia_ativa_0x03.shift();
+            dado_potencia_ativa_0x03.push(potencia_ativa_0x03[n]);
+            dado_potencia_ativa_0x04.shift();
+            dado_potencia_ativa_0x04.push(potencia_ativa_0x04[n]);
+            dado_potencia_ativa_0x05.shift();
+            dado_potencia_ativa_0x05.push(potencia_ativa_0x05[n]);
+            dado_potencia_ativa_0x06.shift();
+            dado_potencia_ativa_0x06.push(potencia_ativa_0x06[n]);
+            dado_potencia_ativa_0x07.shift();
+            dado_potencia_ativa_0x07.push(potencia_ativa_0x07[n]);
+            dado_potencia_ativa_0x08.shift();
+            dado_potencia_ativa_0x08.push(potencia_ativa_0x08[n]);
+            dado_potencia_ativa_0x09.shift();
+            dado_potencia_ativa_0x09.push(potencia_ativa_0x09[n]);
+            dado_potencia_ativa_0x0A.shift();
+            dado_potencia_ativa_0x0A.push(potencia_ativa_0x0A[n]);
+            dado_potencia_ativa_0x0B.shift();
+            dado_potencia_ativa_0x0B.push(potencia_ativa_0x0B[n]);
+            dado_tempo_pot.shift();
+            dado_tempo_pot.push(tempo_pot[n]);
+        }
+        for(var n = 0; n<l1; n++){
+            potencia_aparente_0x01[n] = leitura[n].medidor_1.Potencia_Aparente;                     
+            potencia_aparente_0x02[n] = leitura[n].medidor_2.Potencia_Aparente;
+            potencia_aparente_0x03[n] = leitura[n].medidor_3.Potencia_Aparente;
+            potencia_aparente_0x04[n] = leitura[n].medidor_4.Potencia_Aparente;
+            potencia_aparente_0x05[n] = leitura[n].medidor_5.Potencia_Aparente;
+            potencia_aparente_0x06[n] = leitura[n].medidor_6.Potencia_Aparente;
+            potencia_aparente_0x07[n] = leitura[n].medidor_7.Potencia_Aparente;
+            potencia_aparente_0x08[n] = leitura[n].medidor_8.Potencia_Aparente;
+            potencia_aparente_0x09[n] = leitura[n].medidor_9.Potencia_Aparente;
+            potencia_aparente_0x0A[n] = leitura[n].medidor_10.Potencia_Aparente;
+            potencia_aparente_0x0B[n] = leitura[n].total.Potencia_Aparente;
+            dado_tensao_0x01[n] = leitura[n].medidor_1.Tensao;                     
+            dado_tensao_0x02[n] = leitura[n].medidor_2.Tensao;
+            dado_tensao_0x03[n] = leitura[n].medidor_3.Tensao;
+            dado_tensao_0x04[n] = leitura[n].medidor_4.Tensao;
+            dado_tensao_0x05[n] = leitura[n].medidor_5.Tensao;
+            dado_tensao_0x06[n] = leitura[n].medidor_6.Tensao;
+            dado_tensao_0x07[n] = leitura[n].medidor_7.Tensao;
+            dado_tensao_0x08[n] = leitura[n].medidor_8.Tensao;
+            dado_tensao_0x09[n] = leitura[n].medidor_9.Tensao;
+            dado_tensao_0x0A[n] = leitura[n].medidor_10.Tensao;
+            dado_tensao_0x0B[n] = leitura[n].total.Tensao;
+            dado_corrente_0x01[n] = leitura[n].medidor_1.Corrente;                     
+            dado_corrente_0x02[n] = leitura[n].medidor_2.Corrente;
+            dado_corrente_0x03[n] = leitura[n].medidor_3.Corrente;
+            dado_corrente_0x04[n] = leitura[n].medidor_4.Corrente;
+            dado_corrente_0x05[n] = leitura[n].medidor_5.Corrente;
+            dado_corrente_0x06[n] = leitura[n].medidor_6.Corrente;
+            dado_corrente_0x07[n] = leitura[n].medidor_7.Corrente;
+            dado_corrente_0x08[n] = leitura[n].medidor_8.Corrente;
+            dado_corrente_0x09[n] = leitura[n].medidor_9.Corrente;
+            dado_corrente_0x0A[n] = leitura[n].medidor_10.Corrente;
+            dado_corrente_0x0B[n] = leitura[n].total.Corrente;
+            
+            dado_tempo[n] = leitura[l1+n];
+        }
+        fator_de_potencia_0x01 = leitura[l1-1].medidor_1.Fator_de_potencia;
+        fator_de_potencia_0x02 = leitura[l1-1].medidor_2.Fator_de_potencia;
+        fator_de_potencia_0x03 = leitura[l1-1].medidor_3.Fator_de_potencia;
+        fator_de_potencia_0x04 = leitura[l1-1].medidor_4.Fator_de_potencia;
+        fator_de_potencia_0x05 = leitura[l1-1].medidor_5.Fator_de_potencia;
+        fator_de_potencia_0x06 = leitura[l1-1].medidor_6.Fator_de_potencia;
+        fator_de_potencia_0x07 = leitura[l1-1].medidor_7.Fator_de_potencia;
+        fator_de_potencia_0x08 = leitura[l1-1].medidor_8.Fator_de_potencia;
+        fator_de_potencia_0x09 = leitura[l1-1].medidor_9.Fator_de_potencia;
+        fator_de_potencia_0x0A = leitura[l1-1].medidor_10.Fator_de_potencia;
+        fator_de_potencia_0x0B = leitura[l1-1].total.Fator_de_potencia;
+        
+        tensao_0x01 = leitura[l1-1].medidor_1.Tensao;
+        tensao_0x02 = leitura[l1-1].medidor_2.Tensao;
+        tensao_0x03 = leitura[l1-1].medidor_3.Tensao;
+        tensao_0x04 = leitura[l1-1].medidor_4.Tensao;
+        tensao_0x05 = leitura[l1-1].medidor_5.Tensao;
+        tensao_0x06 = leitura[l1-1].medidor_6.Tensao;
+        tensao_0x07 = leitura[l1-1].medidor_7.Tensao;
+        tensao_0x08 = leitura[l1-1].medidor_8.Tensao;
+        tensao_0x09 = leitura[l1-1].medidor_9.Tensao;
+        tensao_0x0A = leitura[l1-1].medidor_10.Tensao;
+        tensao_0x0B = leitura[l1-1].total.Tensao;
+        
+        corrente_0x01 = leitura[l1-1].medidor_1.Corrente;
+        corrente_0x02 = leitura[l1-1].medidor_2.Corrente;
+        corrente_0x03 = leitura[l1-1].medidor_3.Corrente;
+        corrente_0x04 = leitura[l1-1].medidor_4.Corrente;
+        corrente_0x05 = leitura[l1-1].medidor_5.Corrente;
+        corrente_0x06 = leitura[l1-1].medidor_6.Corrente;
+        corrente_0x07 = leitura[l1-1].medidor_7.Corrente;
+        corrente_0x08 = leitura[l1-1].medidor_8.Corrente;
+        corrente_0x09 = leitura[l1-1].medidor_9.Corrente;
+        corrente_0x0A = leitura[l1-1].medidor_10.Corrente;
+        corrente_0x0B = leitura[l1-1].total.Corrente;
+
         newGraph();  
     }
-    // A cada 1000 milis (1 segundo), faça uma nova requisição.
+
     setInterval(fazerRequisicao, 5000);
-      // Acredito que 3000 (3 segundos) ou mais seja o ideal para um serviço online.
-      // Caso use local host, arrisco colocar ate 400 milis, você tera uma boa resposta.
 // FUNÇÃO PARA O SELETOR
 
-function atualiza_grafico(){
-    dado_tempo.push(t);
-    dado_tensao_0x01.push(tensao_0x01);
-    dado_tensao_0x02.push(tensao_0x02);
-    dado_tensao_0x03.push(tensao_0x03);
-    dado_tensao_0x04.push(tensao_0x04);
-    dado_tensao_0x05.push(tensao_0x05);
-    dado_tensao_0x06.push(tensao_0x06);
-    dado_tensao_0x07.push(tensao_0x07);
-    dado_tensao_0x08.push(tensao_0x08);
-    dado_tensao_0x09.push(tensao_0x09);
-    dado_tensao_0x0A.push(tensao_0x0A);
-    dado_tensao_0x0B.push(tensao_0x0B);
-    dado_corrente_0x01.push(corrente_0x01);
-    dado_corrente_0x02.push(corrente_0x02);
-    dado_corrente_0x03.push(corrente_0x03);
-    dado_corrente_0x04.push(corrente_0x04);
-    dado_corrente_0x05.push(corrente_0x05);
-    dado_corrente_0x06.push(corrente_0x06);
-    dado_corrente_0x07.push(corrente_0x07);
-    dado_corrente_0x08.push(corrente_0x08);
-    dado_corrente_0x09.push(corrente_0x09);
-    dado_corrente_0x0A.push(corrente_0x0A);
-    dado_corrente_0x0B.push(corrente_0x0B);
+function atualiza_grafico(leitura){
+
+    dado_potencia_ativa_0x01.shift();
+    dado_potencia_ativa_0x01.push(leitura[0].medidor_1.Potencia_Ativa)
+    dado_potencia_ativa_0x02.shift();
+    dado_potencia_ativa_0x02.push(leitura[0].medidor_2.Potencia_Ativa)
+    dado_potencia_ativa_0x03.shift();
+    dado_potencia_ativa_0x03.push(leitura[0].medidor_3.Potencia_Ativa)
+    dado_potencia_ativa_0x04.shift();
+    dado_potencia_ativa_0x04.push(leitura[0].medidor_4.Potencia_Ativa)
+    dado_potencia_ativa_0x05.shift();
+    dado_potencia_ativa_0x05.push(leitura[0].medidor_5.Potencia_Ativa)
+    dado_potencia_ativa_0x06.shift();
+    dado_potencia_ativa_0x06.push(leitura[0].medidor_6.Potencia_Ativa)
+    dado_potencia_ativa_0x07.shift();
+    dado_potencia_ativa_0x07.push(leitura[0].medidor_7.Potencia_Ativa)
+    dado_potencia_ativa_0x08.shift();
+    dado_potencia_ativa_0x08.push(leitura[0].medidor_8.Potencia_Ativa)
+    dado_potencia_ativa_0x09.shift();
+    dado_potencia_ativa_0x09.push(leitura[0].medidor_9.Potencia_Ativa)
+    dado_potencia_ativa_0x0A.shift();
+    dado_potencia_ativa_0x0A.push(leitura[0].medidor_10.Potencia_Ativa)
+    dado_potencia_ativa_0x0B.shift();
+    dado_potencia_ativa_0x0B.push(leitura[0].total.Potencia_Ativa)
+    
+    dado_tempo_pot.shift();
+    dado_tempo_pot.push(leitura[2]);
+
+    dado_tempo.shift();
+    dado_tempo.push(leitura[1]);
+
+    /*dado_potencia_aparente_0x01.shift();
+    dado_potencia_aparente_0x01.push(leitura[0].medidor_1.Potencia_Aparente);                     
+    dado_potencia_aparente_0x02.shift();
+    dado_potencia_aparente_0x02.push(leitura[0].medidor_2.Potencia_Aparente);                     
+    dado_potencia_aparente_0x03.shift();
+    dado_potencia_aparente_0x03.push(leitura[0].medidor_3.Potencia_Aparente);                     
+    dado_potencia_aparente_0x04.shift();
+    dado_potencia_aparente_0x04.push(leitura[0].medidor_4.Potencia_Aparente);                     
+    dado_potencia_aparente_0x05.shift();
+    dado_potencia_aparente_0x05.push(leitura[0].medidor_5.Potencia_Aparente);                     
+    dado_potencia_aparente_0x06.shift();
+    dado_potencia_aparente_0x06.push(leitura[0].medidor_6.Potencia_Aparente);                     
+    dado_potencia_aparente_0x07.shift();
+    dado_potencia_aparente_0x07.push(leitura[0].medidor_7.Potencia_Aparente);                     
+    dado_potencia_aparente_0x08.shift();
+    dado_potencia_aparente_0x08.push(leitura[0].medidor_8.Potencia_Aparente);                     
+    dado_potencia_aparente_0x09.shift();
+    dado_potencia_aparente_0x09.push(leitura[0].medidor_9.Potencia_Aparente);                     
+    dado_potencia_aparente_0x0A.shift();
+    dado_potencia_aparente_0x0A.push(leitura[0].medidor_10.Potencia_Aparente);                     
+    dado_potencia_aparente_0x0B.shift();
+    dado_potencia_aparente_0x0B.push(leitura[0].total.Potencia_Aparente);                     
+    */
+    dado_tensao_0x01.shift();
+    dado_tensao_0x01.push(leitura[0].medidor_1.Tensao);                     
+    dado_tensao_0x02.shift();
+    dado_tensao_0x02.push(leitura[0].medidor_2.Tensao);                     
+    dado_tensao_0x03.shift();
+    dado_tensao_0x03.push(leitura[0].medidor_3.Tensao);                     
+    dado_tensao_0x04.shift();
+    dado_tensao_0x04.push(leitura[0].medidor_4.Tensao);                     
+    dado_tensao_0x05.shift();
+    dado_tensao_0x05.push(leitura[0].medidor_5.Tensao);                     
+    dado_tensao_0x06.shift();
+    dado_tensao_0x06.push(leitura[0].medidor_6.Tensao);                     
+    dado_tensao_0x07.shift();
+    dado_tensao_0x07.push(leitura[0].medidor_7.Tensao);                     
+    dado_tensao_0x08.shift();
+    dado_tensao_0x08.push(leitura[0].medidor_8.Tensao);                     
+    dado_tensao_0x09.shift();
+    dado_tensao_0x09.push(leitura[0].medidor_9.Tensao);                     
+    dado_tensao_0x0A.shift();
+    dado_tensao_0x0A.push(leitura[0].medidor_10.Tensao);                     
+    dado_tensao_0x0B.shift();
+    dado_tensao_0x0B.push(leitura[0].total.Tensao);                     
+    
+    dado_corrente_0x01.shift();
+    dado_corrente_0x01.push(leitura[0].medidor_1.Corrente);                     
+    dado_corrente_0x02.shift();
+    dado_corrente_0x02.push(leitura[0].medidor_2.Corrente);                     
+    dado_corrente_0x03.shift();
+    dado_corrente_0x03.push(leitura[0].medidor_3.Corrente);                     
+    dado_corrente_0x04.shift();
+    dado_corrente_0x04.push(leitura[0].medidor_4.Corrente);                     
+    dado_corrente_0x05.shift();
+    dado_corrente_0x05.push(leitura[0].medidor_5.Corrente);                     
+    dado_corrente_0x06.shift();
+    dado_corrente_0x06.push(leitura[0].medidor_6.Corrente);                     
+    dado_corrente_0x07.shift();
+    dado_corrente_0x07.push(leitura[0].medidor_7.Corrente);                     
+    dado_corrente_0x08.shift();
+    dado_corrente_0x08.push(leitura[0].medidor_8.Corrente);                     
+    dado_corrente_0x09.shift();
+    dado_corrente_0x09.push(leitura[0].medidor_9.Corrente);                     
+    dado_corrente_0x0A.shift();
+    dado_corrente_0x0A.push(leitura[0].medidor_10.Corrente);                     
+    dado_corrente_0x0B.shift();
+    dado_corrente_0x0B.push(leitura[0].total.Corrente);                        
+    
+    fator_de_potencia_0x01 = leitura[0].medidor_1.Fator_de_potencia;
+    fator_de_potencia_0x02 = leitura[0].medidor_2.Fator_de_potencia;
+    fator_de_potencia_0x03 = leitura[0].medidor_3.Fator_de_potencia;
+    fator_de_potencia_0x04 = leitura[0].medidor_4.Fator_de_potencia;
+    fator_de_potencia_0x05 = leitura[0].medidor_5.Fator_de_potencia;
+    fator_de_potencia_0x06 = leitura[0].medidor_6.Fator_de_potencia;
+    fator_de_potencia_0x07 = leitura[0].medidor_7.Fator_de_potencia;
+    fator_de_potencia_0x08 = leitura[0].medidor_8.Fator_de_potencia;
+    fator_de_potencia_0x09 = leitura[0].medidor_9.Fator_de_potencia;
+    fator_de_potencia_0x0A = leitura[0].medidor_10.Fator_de_potencia;
+    fator_de_potencia_0x0B = leitura[0].total.Fator_de_potencia;
+    
+    newGraph();  
 }
 
         // FUNÇÃO PARA O SELETOR
@@ -241,14 +440,13 @@ function newGraph(){
         var chart = new Chart(ctx, {
         type: 'bar',
         data: {
-            labels: ['01:00', '02:00', '03:00', '04:00', '05:00', '06:00', '07:00', '08:00', '09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00', '20:00', '21:00', '22:00', '23:00', '00:00'
-        ],
+            labels: dado_tempo_pot,
             datasets: [{
                 label: "[Wh]",
                 backgroundColor: 'rgb(255, 99, 132)',
                 borderColor: 'rgb(255, 99, 132)',
                 // data sera atrelhado à uma variável que recebe os dados do arduino
-                data: potencia_ativa_0x0B,
+                data: dado_potencia_ativa_0x0B,
                 fill: false
             }]
         },
@@ -268,14 +466,13 @@ function newGraph(){
         var chart = new Chart(ctx, {
         type: 'bar',
         data: {
-            labels: ['01:00', '02:00', '03:00', '04:00', '05:00', '06:00', '07:00', '08:00', '09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00', '20:00', '21:00', '22:00', '23:00', '00:00'
-        ],
+            labels: dado_tempo_pot,
             datasets: [{
                 label: "[Wh]",
                 backgroundColor: 'rgb(255, 99, 132)',
                 borderColor: 'rgb(255, 99, 132)',
                 // data sera atrelhado à uma variável que recebe os dados do arduino
-                data: potencia_ativa_0x01,
+                data: dado_potencia_ativa_0x01,
                 fill: false
             }]
         },
@@ -295,14 +492,13 @@ function newGraph(){
         var chart = new Chart(ctx, {
         type: 'bar',
         data: {
-            labels: ['01:00', '02:00', '03:00', '04:00', '05:00', '06:00', '07:00', '08:00', '09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00', '20:00', '21:00', '22:00', '23:00', '00:00'
-        ],
+            labels: dado_tempo_pot,
             datasets: [{
                 label: "[Wh]",
                 backgroundColor: 'rgb(255, 99, 132)',
                 borderColor: 'rgb(255, 99, 132)',
                 // data sera atrelhado à uma variável que recebe os dados do arduino
-                data: potencia_ativa_0x02,
+                data: dado_potencia_ativa_0x02,
                 fill: false
             }]
         },
@@ -322,14 +518,13 @@ function newGraph(){
         var chart = new Chart(ctx, {
         type: 'bar',
         data: {
-            labels: ['01:00', '02:00', '03:00', '04:00', '05:00', '06:00', '07:00', '08:00', '09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00', '20:00', '21:00', '22:00', '23:00', '00:00'
-        ],
+            labels: dado_tempo_pot,
             datasets: [{
                 label: "[Wh]",
                 backgroundColor: 'rgb(255, 99, 132)',
                 borderColor: 'rgb(255, 99, 132)',
                 // data sera atrelhado à uma variável que recebe os dados do arduino
-                data: potencia_ativa_0x03,
+                data: dado_potencia_ativa_0x03,
                 fill: false
             }]
         },
@@ -349,14 +544,13 @@ function newGraph(){
         var chart = new Chart(ctx, {
         type: 'bar',
         data: {
-            labels: ['01:00', '02:00', '03:00', '04:00', '05:00', '06:00', '07:00', '08:00', '09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00', '20:00', '21:00', '22:00', '23:00', '00:00'
-        ],
+            labels: dado_tempo_pot,
             datasets: [{
                 label: "[Wh]",
                 backgroundColor: 'rgb(255, 99, 132)',
                 borderColor: 'rgb(255, 99, 132)',
                 // data sera atrelhado à uma variável que recebe os dados do arduino
-                data: potencia_ativa_0x04,
+                data: dado_potencia_ativa_0x04,
                 fill: false
             }]
         },
@@ -376,14 +570,13 @@ function newGraph(){
         var chart = new Chart(ctx, {
         type: 'bar',
         data: {
-            labels: ['01:00', '02:00', '03:00', '04:00', '05:00', '06:00', '07:00', '08:00', '09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00', '20:00', '21:00', '22:00', '23:00', '00:00'
-        ],
+            labels: dado_tempo_pot,
             datasets: [{
                 label: "[Wh]",
                 backgroundColor: 'rgb(255, 99, 132)',
                 borderColor: 'rgb(255, 99, 132)',
                 // data sera atrelhado à uma variável que recebe os dados do arduino
-                data: potencia_ativa_0x05,
+                data: dado_potencia_ativa_0x05,
                 fill: false
             }]
         },
@@ -403,14 +596,13 @@ function newGraph(){
         var chart = new Chart(ctx, {
         type: 'bar',
         data: {
-            labels: ['01:00', '02:00', '03:00', '04:00', '05:00', '06:00', '07:00', '08:00', '09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00', '20:00', '21:00', '22:00', '23:00', '00:00'
-        ],
+            labels: dado_tempo_pot,
             datasets: [{
                 label: "[Wh]",
                 backgroundColor: 'rgb(255, 99, 132)',
                 borderColor: 'rgb(255, 99, 132)',
                 // data sera atrelhado à uma variável que recebe os dados do arduino
-                data: potencia_ativa_0x06,
+                data: dado_potencia_ativa_0x06,
                 fill: false
             }]
         },
@@ -430,14 +622,13 @@ function newGraph(){
         var chart = new Chart(ctx, {
         type: 'bar',
         data: {
-            labels: ['01:00', '02:00', '03:00', '04:00', '05:00', '06:00', '07:00', '08:00', '09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00', '20:00', '21:00', '22:00', '23:00', '00:00'
-        ],
+            labels: dado_tempo_pot,
             datasets: [{
                 label: "[Wh]",
                 backgroundColor: 'rgb(255, 99, 132)',
                 borderColor: 'rgb(255, 99, 132)',
                 // data sera atrelhado à uma variável que recebe os dados do arduino
-                data: potencia_ativa_0x07,
+                data: dado_potencia_ativa_0x07,
                 fill: false
             }]
         },
@@ -457,14 +648,13 @@ function newGraph(){
         var chart = new Chart(ctx, {
         type: 'bar',
         data: {
-            labels: ['01:00', '02:00', '03:00', '04:00', '05:00', '06:00', '07:00', '08:00', '09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00', '20:00', '21:00', '22:00', '23:00', '00:00'
-        ],
+            labels: dado_tempo_pot,
             datasets: [{
                 label: "[Wh]",
                 backgroundColor: 'rgb(255, 99, 132)',
                 borderColor: 'rgb(255, 99, 132)',
                 // data sera atrelhado à uma variável que recebe os dados do arduino
-                data: potencia_ativa_0x08,
+                data: dado_potencia_ativa_0x08,
                 fill: false
             }]
         },
@@ -484,14 +674,13 @@ function newGraph(){
         var chart = new Chart(ctx, {
         type: 'bar',
         data: {
-            labels: ['01:00', '02:00', '03:00', '04:00', '05:00', '06:00', '07:00', '08:00', '09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00', '20:00', '21:00', '22:00', '23:00', '00:00'
-        ],
+            labels: dado_tempo_pot,
             datasets: [{
                 label: "[Wh]",
                 backgroundColor: 'rgb(255, 99, 132)',
                 borderColor: 'rgb(255, 99, 132)',
                 // data sera atrelhado à uma variável que recebe os dados do arduino
-                data: potencia_ativa_0x09,
+                data: dado_potencia_ativa_0x09,
                 fill: false
             }]
         },
@@ -511,14 +700,13 @@ function newGraph(){
         var chart = new Chart(ctx, {
         type: 'bar',
         data: {
-            labels: ['01:00', '02:00', '03:00', '04:00', '05:00', '06:00', '07:00', '08:00', '09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00', '20:00', '21:00', '22:00', '23:00', '00:00'
-        ],
+            labels: dado_tempo_pot,
             datasets: [{
                 label: "[Wh]",
                 backgroundColor: 'rgb(255, 99, 132)',
                 borderColor: 'rgb(255, 99, 132)',
                 // data sera atrelhado à uma variável que recebe os dados do arduino
-                data: potencia_ativa_0x0A,
+                data: dado_potencia_ativa_0x0A,
                 fill: false
             }]
         },
