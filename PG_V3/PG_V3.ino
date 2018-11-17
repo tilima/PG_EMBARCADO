@@ -139,9 +139,23 @@ String dados_arduino_0X03_03;
 
 //    TOTAIS    //
 void totais(){
-  realPowert = (realPower1 + realPower2 + realPower3 + realPower4 + realPower5 + realPower6 + realPower7 + realPower8 + realPower9 + realPower10)/10;
+  
+  int quo = 0;
+  
+  if (Irms1 >= 0.030) { quo++; }
+  if (Irms2 >= 0.030) { quo++; }
+  if (Irms3 >= 0.030) { quo++; }
+  if (Irms4 >= 0.030) { quo++; }
+  if (Irms5 >= 0.030) { quo++; }
+  if (Irms6 >= 0.030) { quo++; }
+  if (Irms7 >= 0.030) { quo++; }
+  if (Irms8 >= 0.030) { quo++; }
+  if (Irms9 >= 0.030) { quo++; }
+  if (Irms10 >= 0.030) { quo++; }
+  
+  realPowert = (realPower1 + realPower2 + realPower3 + realPower4 + realPower5 + realPower6 + realPower7 + realPower8 + realPower9 + realPower10)/quo;
   apparentPowert = (apparentPower1 + apparentPower2 + apparentPower3 + apparentPower4 + apparentPower5 + apparentPower6 + apparentPower7 + apparentPower8 + apparentPower9 + apparentPower10);
-  powerFActort = (powerFActor1 + powerFActor2 + powerFActor3 + powerFActor4 + powerFActor5 + powerFActor6 + powerFActor7 + powerFActor8 + powerFActor9 + powerFActor10)/10;
+  powerFActort = (powerFActor1 + powerFActor2 + powerFActor3 + powerFActor4 + powerFActor5 + powerFActor6 + powerFActor7 + powerFActor8 + powerFActor9 + powerFActor10)/quo;
   supplyVoltaget = (supplyVoltage1 + supplyVoltage2 + supplyVoltage3 + supplyVoltage4 + supplyVoltage5 + supplyVoltage6 + supplyVoltage7 + supplyVoltage8 + supplyVoltage9 + supplyVoltage10)/10;
   Irmst = (Irms1 + Irms2 + Irms3 + Irms4 + Irms5 + Irms6 + Irms7 + Irms8 + Irms9 + Irms10);
 }

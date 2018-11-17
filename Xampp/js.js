@@ -4,6 +4,7 @@ var tempo_tempo;
 var n;
 var dado_tempo = [];
 var tempo_pot = [];
+var antigo_tempo_pot;
 var dado_tempo_pot = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23];
 var dado_potencia_ativa_0x01 = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
 var dado_potencia_ativa_0x02 = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
@@ -184,8 +185,8 @@ init = 0;
                 var res = $.parseJSON(data);
                 var leitura = [];
                 leitura[0] = JSON.parse(JSON.parse(JSON.parse(res)[0][0])[0]);
-                leitura[1] = JSON.parse(JSON.parse(res)[0][1]);            
-                leitura[2] = JSON.parse(JSON.parse(res)[0][2]);
+                leitura[1] = JSON.parse(JSON.parse(res)[0][1])[0];            
+                leitura[2] = JSON.parse(JSON.parse(res)[0][2])[0];
                 atualiza_grafico(leitura);
             }
         });
@@ -314,32 +315,37 @@ init = 0;
 
 function atualiza_grafico(leitura){
 
-    dado_potencia_ativa_0x01.shift();
+    dado_potencia_ativa_0x01.pop();
     dado_potencia_ativa_0x01.push(leitura[0].medidor_1.Potencia_Ativa)
-    dado_potencia_ativa_0x02.shift();
+    dado_potencia_ativa_0x02.pop();
     dado_potencia_ativa_0x02.push(leitura[0].medidor_2.Potencia_Ativa)
-    dado_potencia_ativa_0x03.shift();
+    dado_potencia_ativa_0x03.pop();
     dado_potencia_ativa_0x03.push(leitura[0].medidor_3.Potencia_Ativa)
-    dado_potencia_ativa_0x04.shift();
+    dado_potencia_ativa_0x04.pop();
     dado_potencia_ativa_0x04.push(leitura[0].medidor_4.Potencia_Ativa)
-    dado_potencia_ativa_0x05.shift();
+    dado_potencia_ativa_0x05.pop();
     dado_potencia_ativa_0x05.push(leitura[0].medidor_5.Potencia_Ativa)
-    dado_potencia_ativa_0x06.shift();
+    dado_potencia_ativa_0x06.pop();
     dado_potencia_ativa_0x06.push(leitura[0].medidor_6.Potencia_Ativa)
-    dado_potencia_ativa_0x07.shift();
+    dado_potencia_ativa_0x07.pop();
     dado_potencia_ativa_0x07.push(leitura[0].medidor_7.Potencia_Ativa)
-    dado_potencia_ativa_0x08.shift();
+    dado_potencia_ativa_0x08.pop();
     dado_potencia_ativa_0x08.push(leitura[0].medidor_8.Potencia_Ativa)
-    dado_potencia_ativa_0x09.shift();
+    dado_potencia_ativa_0x09.pop();
     dado_potencia_ativa_0x09.push(leitura[0].medidor_9.Potencia_Ativa)
-    dado_potencia_ativa_0x0A.shift();
+    dado_potencia_ativa_0x0A.pop();
     dado_potencia_ativa_0x0A.push(leitura[0].medidor_10.Potencia_Ativa)
-    dado_potencia_ativa_0x0B.shift();
+    dado_potencia_ativa_0x0B.pop();
     dado_potencia_ativa_0x0B.push(leitura[0].total.Potencia_Ativa)
     
-    dado_tempo_pot.shift();
-    dado_tempo_pot.push(leitura[2]);
-
+    tempo_pot[23] = leitura[2];
+    if(dado_tempo_pot[23]!=tempo_pot[23]){
+        dado_tempo_pot.shift();
+        dado_tempo_pot.push(tempo_pot[23]);
+    } else {
+        dado_tempo_pot.pop();
+        dado_tempo_pot.push(tempo_pot[23]);
+    }
     dado_tempo.shift();
     dado_tempo.push(leitura[1]);
 
@@ -434,8 +440,8 @@ function newGraph(){
     // LOGICA PARA MOSTRAR O GRÁFICO SELECIONADO
     if(x=="Total" && y=="C1"){
         document.getElementById("fp").innerHTML = fator_de_potencia_0x0B;
-        document.getElementById("tensao").innerHTML = tensao_0x0B + "A";
-        document.getElementById("corrente").innerHTML = corrente_0x0B + "V";
+        document.getElementById("tensao").innerHTML = tensao_0x0B + "V";
+        document.getElementById("corrente").innerHTML = corrente_0x0B + "A";
         var ctx = document.getElementById('myChart').getContext('2d');
         var chart = new Chart(ctx, {
         type: 'bar',
@@ -451,6 +457,9 @@ function newGraph(){
             }]
         },
         options: {
+            animation: {
+                duration: 0
+            },
             title: {
                 display: true,
                 text: 'Consumo Horário'
@@ -460,8 +469,8 @@ function newGraph(){
     }
     if(x=="C1" && y=="C1"){
         document.getElementById("fp").innerHTML = fator_de_potencia_0x01;
-        document.getElementById("tensao").innerHTML = tensao_0x01 + "A";
-        document.getElementById("corrente").innerHTML = corrente_0x01 + "V";
+        document.getElementById("tensao").innerHTML = tensao_0x01 + "V";
+        document.getElementById("corrente").innerHTML = corrente_0x01 + "A";
         var ctx = document.getElementById('myChart').getContext('2d');
         var chart = new Chart(ctx, {
         type: 'bar',
@@ -477,6 +486,9 @@ function newGraph(){
             }]
         },
         options: {
+            animation: {
+                duration: 0
+            },
             title: {
                 display: true,
                 text: 'Consumo Horário'
@@ -486,8 +498,8 @@ function newGraph(){
     }
     if(x=="C2" && y=="C1"){
         document.getElementById("fp").innerHTML = fator_de_potencia_0x02;
-        document.getElementById("tensao").innerHTML = tensao_0x02 + "A";
-        document.getElementById("corrente").innerHTML = corrente_0x02 + "V";
+        document.getElementById("tensao").innerHTML = tensao_0x02 + "V";
+        document.getElementById("corrente").innerHTML = corrente_0x02 + "A";
         var ctx = document.getElementById('myChart').getContext('2d');
         var chart = new Chart(ctx, {
         type: 'bar',
@@ -503,6 +515,9 @@ function newGraph(){
             }]
         },
         options: {
+            animation: {
+                duration: 0
+            },
             title: {
                 display: true,
                 text: 'Consumo Horário'
@@ -512,8 +527,8 @@ function newGraph(){
     }
     if(x=="C3" && y=="C1"){
         document.getElementById("fp").innerHTML = fator_de_potencia_0x03;
-        document.getElementById("tensao").innerHTML = tensao_0x03 + "A";
-        document.getElementById("corrente").innerHTML = corrente_0x03 + "V";
+        document.getElementById("tensao").innerHTML = tensao_0x03 + "V";
+        document.getElementById("corrente").innerHTML = corrente_0x03 + "A";
         var ctx = document.getElementById('myChart').getContext('2d');
         var chart = new Chart(ctx, {
         type: 'bar',
@@ -529,6 +544,9 @@ function newGraph(){
             }]
         },
         options: {
+            animation: {
+                duration: 0
+            },
             title: {
                 display: true,
                 text: 'Consumo Horário'
@@ -538,8 +556,8 @@ function newGraph(){
     }
     if(x=="C4" && y=="C1"){
         document.getElementById("fp").innerHTML = fator_de_potencia_0x04;
-        document.getElementById("tensao").innerHTML = tensao_0x04 + "A";
-        document.getElementById("corrente").innerHTML = corrente_0x04 + "V";
+        document.getElementById("tensao").innerHTML = tensao_0x04 + "V";
+        document.getElementById("corrente").innerHTML = corrente_0x04 + "A";
         var ctx = document.getElementById('myChart').getContext('2d');
         var chart = new Chart(ctx, {
         type: 'bar',
@@ -555,6 +573,9 @@ function newGraph(){
             }]
         },
         options: {
+            animation: {
+                duration: 0
+            },
             title: {
                 display: true,
                 text: 'Consumo Horário'
@@ -564,8 +585,8 @@ function newGraph(){
     }
     if(x=="C5" && y=="C1"){
         document.getElementById("fp").innerHTML = fator_de_potencia_0x05;
-        document.getElementById("tensao").innerHTML = tensao_0x05 + "A";
-        document.getElementById("corrente").innerHTML = corrente_0x05 + "V";
+        document.getElementById("tensao").innerHTML = tensao_0x05 + "V";
+        document.getElementById("corrente").innerHTML = corrente_0x05 + "A";
         var ctx = document.getElementById('myChart').getContext('2d');
         var chart = new Chart(ctx, {
         type: 'bar',
@@ -581,6 +602,9 @@ function newGraph(){
             }]
         },
         options: {
+            animation: {
+                duration: 0
+            },
             title: {
                 display: true,
                 text: 'Consumo Horário'
@@ -590,8 +614,8 @@ function newGraph(){
     }
     if(x=="C6" && y=="C1"){
         document.getElementById("fp").innerHTML = fator_de_potencia_0x06;
-        document.getElementById("tensao").innerHTML = tensao_0x06 + "A";
-        document.getElementById("corrente").innerHTML = corrente_0x06 + "V";
+        document.getElementById("tensao").innerHTML = tensao_0x06 + "V";
+        document.getElementById("corrente").innerHTML = corrente_0x06 + "A";
         var ctx = document.getElementById('myChart').getContext('2d');
         var chart = new Chart(ctx, {
         type: 'bar',
@@ -607,6 +631,9 @@ function newGraph(){
             }]
         },
         options: {
+            animation: {
+                duration: 0
+            },
             title: {
                 display: true,
                 text: 'Consumo Horário'
@@ -616,8 +643,8 @@ function newGraph(){
     }
     if(x=="C7" && y=="C1"){
         document.getElementById("fp").innerHTML = fator_de_potencia_0x07;
-        document.getElementById("tensao").innerHTML = tensao_0x07 + "A";
-        document.getElementById("corrente").innerHTML = corrente_0x07 + "V";
+        document.getElementById("tensao").innerHTML = tensao_0x07 + "V";
+        document.getElementById("corrente").innerHTML = corrente_0x07 + "A";
         var ctx = document.getElementById('myChart').getContext('2d');
         var chart = new Chart(ctx, {
         type: 'bar',
@@ -633,6 +660,9 @@ function newGraph(){
             }]
         },
         options: {
+            animation: {
+                duration: 0
+            },
             title: {
                 display: true,
                 text: 'Consumo Horário'
@@ -642,8 +672,8 @@ function newGraph(){
     }
     if(x=="C8" && y=="C1"){
         document.getElementById("fp").innerHTML = fator_de_potencia_0x08;
-        document.getElementById("tensao").innerHTML = tensao_0x08 + "A";
-        document.getElementById("corrente").innerHTML = corrente_0x08 + "V";
+        document.getElementById("tensao").innerHTML = tensao_0x08 + "V";
+        document.getElementById("corrente").innerHTML = corrente_0x08 + "A";
         var ctx = document.getElementById('myChart').getContext('2d');
         var chart = new Chart(ctx, {
         type: 'bar',
@@ -659,6 +689,9 @@ function newGraph(){
             }]
         },
         options: {
+            animation: {
+                duration: 0
+            },
             title: {
                 display: true,
                 text: 'Consumo Horário'
@@ -668,8 +701,8 @@ function newGraph(){
     }
     if(x=="C9" && y=="C1"){
         document.getElementById("fp").innerHTML = fator_de_potencia_0x09;
-        document.getElementById("tensao").innerHTML = tensao_0x09 + "A";
-        document.getElementById("corrente").innerHTML = corrente_0x09 + "V";
+        document.getElementById("tensao").innerHTML = tensao_0x09 + "V";
+        document.getElementById("corrente").innerHTML = corrente_0x09 + "A";
         var ctx = document.getElementById('myChart').getContext('2d');
         var chart = new Chart(ctx, {
         type: 'bar',
@@ -685,6 +718,9 @@ function newGraph(){
             }]
         },
         options: {
+            animation: {
+                duration: 0
+            },
             title: {
                 display: true,
                 text: 'Consumo Horário'
@@ -694,8 +730,8 @@ function newGraph(){
     }
     if(x=="C10" && y=="C1"){
         document.getElementById("fp").innerHTML = fator_de_potencia_0x0A;
-        document.getElementById("tensao").innerHTML = tensao_0x0A + "A";
-        document.getElementById("corrente").innerHTML = corrente_0x0A + "V";
+        document.getElementById("tensao").innerHTML = tensao_0x0A + "V";
+        document.getElementById("corrente").innerHTML = corrente_0x0A + "A";
         var ctx = document.getElementById('myChart').getContext('2d');
         var chart = new Chart(ctx, {
         type: 'bar',
@@ -711,6 +747,9 @@ function newGraph(){
             }]
         },
         options: {
+            animation: {
+                duration: 0
+            },
             title: {
                 display: true,
                 text: 'Consumo Horário'
@@ -720,8 +759,8 @@ function newGraph(){
     }
     if(x=="Total" && y=="C2"){
         document.getElementById("fp").innerHTML = fator_de_potencia_0x0B;
-        document.getElementById("tensao").innerHTML = tensao_0x0B + "A";
-        document.getElementById("corrente").innerHTML = corrente_0x0B + "V";
+        document.getElementById("tensao").innerHTML = tensao_0x0B + "V";
+        document.getElementById("corrente").innerHTML = corrente_0x0B + "A";
         var ctx = document.getElementById('myChart').getContext('2d');
         var chart = new Chart(ctx, {
         type: 'line',
@@ -737,6 +776,9 @@ function newGraph(){
             }]
         },
         options: {
+            animation: {
+                duration: 0
+            },
             title: {
                 display: true,
                 text: 'Corrente'
@@ -746,8 +788,8 @@ function newGraph(){
     }
     if(x=="C1" && y=="C2"){
         document.getElementById("fp").innerHTML = fator_de_potencia_0x01;
-        document.getElementById("tensao").innerHTML = tensao_0x01 + "A";
-        document.getElementById("corrente").innerHTML = corrente_0x01 + "V";
+        document.getElementById("tensao").innerHTML = tensao_0x01 + "V";
+        document.getElementById("corrente").innerHTML = corrente_0x01 + "A";
         var ctx = document.getElementById('myChart').getContext('2d');
         var chart = new Chart(ctx, {
         type: 'line',
@@ -763,6 +805,9 @@ function newGraph(){
             }]
         },
         options: {
+            animation: {
+                duration: 0
+            },
             title: {
                 display: true,
                 text: 'Corrente'
@@ -772,8 +817,8 @@ function newGraph(){
     }
     if(x=="C2" && y=="C2"){
         document.getElementById("fp").innerHTML = fator_de_potencia_0x02;
-        document.getElementById("tensao").innerHTML = tensao_0x02 + "A";
-        document.getElementById("corrente").innerHTML = corrente_0x02 + "V";
+        document.getElementById("tensao").innerHTML = tensao_0x02 + "V";
+        document.getElementById("corrente").innerHTML = corrente_0x02 + "A";
         var ctx = document.getElementById('myChart').getContext('2d');
         var chart = new Chart(ctx, {
         type: 'line',
@@ -789,6 +834,9 @@ function newGraph(){
             }]
         },
         options: {
+            animation: {
+                duration: 0
+            },
             title: {
                 display: true,
                 text: 'Corrente'
@@ -798,8 +846,8 @@ function newGraph(){
     }
     if(x=="C3" && y=="C2"){
         document.getElementById("fp").innerHTML = fator_de_potencia_0x03;
-        document.getElementById("tensao").innerHTML = tensao_0x03 + "A";
-        document.getElementById("corrente").innerHTML = corrente_0x03 + "V";
+        document.getElementById("tensao").innerHTML = tensao_0x03 + "V";
+        document.getElementById("corrente").innerHTML = corrente_0x03 + "A";
         var ctx = document.getElementById('myChart').getContext('2d');
         var chart = new Chart(ctx, {
         type: 'line',
@@ -815,6 +863,9 @@ function newGraph(){
             }]
         },
         options: {
+            animation: {
+                duration: 0
+            },
             title: {
                 display: true,
                 text: 'Corrente'
@@ -824,8 +875,8 @@ function newGraph(){
     }
     if(x=="C4" && y=="C2"){
         document.getElementById("fp").innerHTML = fator_de_potencia_0x04;
-        document.getElementById("tensao").innerHTML = tensao_0x04 + "A";
-        document.getElementById("corrente").innerHTML = corrente_0x04 + "V";
+        document.getElementById("tensao").innerHTML = tensao_0x04 + "V";
+        document.getElementById("corrente").innerHTML = corrente_0x04 + "A";
         var ctx = document.getElementById('myChart').getContext('2d');
         var chart = new Chart(ctx, {
         type: 'line',
@@ -841,6 +892,9 @@ function newGraph(){
             }]
         },
         options: {
+            animation: {
+                duration: 0
+            },
             title: {
                 display: true,
                 text: 'Corrente'
@@ -850,8 +904,8 @@ function newGraph(){
     }
     if(x=="C5" && y=="C2"){
         document.getElementById("fp").innerHTML = fator_de_potencia_0x05;
-        document.getElementById("tensao").innerHTML = tensao_0x05 + "A";
-        document.getElementById("corrente").innerHTML = corrente_0x05 + "V";
+        document.getElementById("tensao").innerHTML = tensao_0x05 + "V";
+        document.getElementById("corrente").innerHTML = corrente_0x05 + "A";
         var ctx = document.getElementById('myChart').getContext('2d');
         var chart = new Chart(ctx, {
         type: 'line',
@@ -867,6 +921,9 @@ function newGraph(){
             }]
         },
         options: {
+            animation: {
+                duration: 0
+            },
             title: {
                 display: true,
                 text: 'Corrente'
@@ -876,8 +933,8 @@ function newGraph(){
     }
     if(x=="C6" && y=="C2"){
         document.getElementById("fp").innerHTML = fator_de_potencia_0x06;
-        document.getElementById("tensao").innerHTML = tensao_0x06 + "A";
-        document.getElementById("corrente").innerHTML = corrente_0x06 + "V";
+        document.getElementById("tensao").innerHTML = tensao_0x06 + "V";
+        document.getElementById("corrente").innerHTML = corrente_0x06 + "A";
         var ctx = document.getElementById('myChart').getContext('2d');
         var chart = new Chart(ctx, {
         type: 'line',
@@ -893,6 +950,9 @@ function newGraph(){
             }]
         },
         options: {
+            animation: {
+                duration: 0
+            },
             title: {
                 display: true,
                 text: 'Corrente'
@@ -902,8 +962,8 @@ function newGraph(){
     }
     if(x=="C7" && y=="C2"){
         document.getElementById("fp").innerHTML = fator_de_potencia_0x07;
-        document.getElementById("tensao").innerHTML = tensao_0x07 + "A";
-        document.getElementById("corrente").innerHTML = corrente_0x07 + "V";
+        document.getElementById("tensao").innerHTML = tensao_0x07 + "V";
+        document.getElementById("corrente").innerHTML = corrente_0x07 + "A";
         var ctx = document.getElementById('myChart').getContext('2d');
         var chart = new Chart(ctx, {
         type: 'line',
@@ -919,6 +979,9 @@ function newGraph(){
             }]
         },
         options: {
+            animation: {
+                duration: 0
+            },
             title: {
                 display: true,
                 text: 'Corrente'
@@ -928,8 +991,8 @@ function newGraph(){
     }
     if(x=="C8" && y=="C2"){
         document.getElementById("fp").innerHTML = fator_de_potencia_0x08;
-        document.getElementById("tensao").innerHTML = tensao_0x08 + "A";
-        document.getElementById("corrente").innerHTML = corrente_0x08 + "V";
+        document.getElementById("tensao").innerHTML = tensao_0x08 + "V";
+        document.getElementById("corrente").innerHTML = corrente_0x08 + "A";
         var ctx = document.getElementById('myChart').getContext('2d');
         var chart = new Chart(ctx, {
         type: 'line',
@@ -945,6 +1008,9 @@ function newGraph(){
             }]
         },
         options: {
+            animation: {
+                duration: 0
+            },
             title: {
                 display: true,
                 text: 'Corrente'
@@ -954,8 +1020,8 @@ function newGraph(){
     }
     if(x=="C9" && y=="C2"){
         document.getElementById("fp").innerHTML = fator_de_potencia_0x09;
-        document.getElementById("tensao").innerHTML = tensao_0x09 + "A";
-        document.getElementById("corrente").innerHTML = corrente_0x09 + "V";
+        document.getElementById("tensao").innerHTML = tensao_0x09 + "V";
+        document.getElementById("corrente").innerHTML = corrente_0x09 + "A";
         var ctx = document.getElementById('myChart').getContext('2d');
         var chart = new Chart(ctx, {
         type: 'line',
@@ -971,6 +1037,9 @@ function newGraph(){
             }]
         },
         options: {
+            animation: {
+                duration: 0
+            },
             title: {
                 display: true,
                 text: 'Corrente'
@@ -980,8 +1049,8 @@ function newGraph(){
     }
     if(x=="C10" && y=="C2"){
         document.getElementById("fp").innerHTML = fator_de_potencia_0x0A;
-        document.getElementById("tensao").innerHTML = tensao_0x0A + "A";
-        document.getElementById("corrente").innerHTML = corrente_0x0A + "V";
+        document.getElementById("tensao").innerHTML = tensao_0x0A + "V";
+        document.getElementById("corrente").innerHTML = corrente_0x0A + "A";
         var ctx = document.getElementById('myChart').getContext('2d');
         var chart = new Chart(ctx, {
         type: 'line',
@@ -997,6 +1066,9 @@ function newGraph(){
             }]
         },
         options: {
+            animation: {
+                duration: 0
+            },
             title: {
                 display: true,
                 text: 'Corrente'
@@ -1006,8 +1078,8 @@ function newGraph(){
     }
     if(x=="Total" && y=="C3"){
         document.getElementById("fp").innerHTML = fator_de_potencia_0x0B;
-        document.getElementById("tensao").innerHTML = tensao_0x0B + "A";
-        document.getElementById("corrente").innerHTML = corrente_0x0B + "V";
+        document.getElementById("tensao").innerHTML = tensao_0x0B + "V";
+        document.getElementById("corrente").innerHTML = corrente_0x0B + "A";
         var ctx = document.getElementById('myChart').getContext('2d');
         var chart = new Chart(ctx, {
         type: 'line',
@@ -1023,6 +1095,9 @@ function newGraph(){
             }]
         },
         options: {
+            animation: {
+                duration: 0
+            },
             title: {
                 display: true,
                 text: 'Tensão'
@@ -1032,8 +1107,8 @@ function newGraph(){
     }
     if(x=="C1" && y=="C3"){
         document.getElementById("fp").innerHTML = fator_de_potencia_0x01;
-        document.getElementById("tensao").innerHTML = tensao_0x01 + "A";
-        document.getElementById("corrente").innerHTML = corrente_0x01 + "V";
+        document.getElementById("tensao").innerHTML = tensao_0x01 + "V";
+        document.getElementById("corrente").innerHTML = corrente_0x01 + "A";
         var ctx = document.getElementById('myChart').getContext('2d');
         var chart = new Chart(ctx, {
         type: 'line',
@@ -1049,6 +1124,9 @@ function newGraph(){
             }]
         },
         options: {
+            animation: {
+                duration: 0
+            },
             title: {
                 display: true,
                 text: 'Tensão'
@@ -1058,8 +1136,8 @@ function newGraph(){
     }
     if(x=="C2" && y=="C3"){
         document.getElementById("fp").innerHTML = fator_de_potencia_0x02;
-        document.getElementById("tensao").innerHTML = tensao_0x02 + "A";
-        document.getElementById("corrente").innerHTML = corrente_0x02 + "V";
+        document.getElementById("tensao").innerHTML = tensao_0x02 + "V";
+        document.getElementById("corrente").innerHTML = corrente_0x02 + "A";
         var ctx = document.getElementById('myChart').getContext('2d');
         var chart = new Chart(ctx, {
         type: 'line',
@@ -1075,6 +1153,9 @@ function newGraph(){
             }]
         },
         options: {
+            animation: {
+                duration: 0
+            },
             title: {
                 display: true,
                 text: 'Tensão'
@@ -1084,8 +1165,8 @@ function newGraph(){
     }
     if(x=="C3" && y=="C3"){
         document.getElementById("fp").innerHTML = fator_de_potencia_0x03;
-        document.getElementById("tensao").innerHTML = tensao_0x03 + "A";
-        document.getElementById("corrente").innerHTML = corrente_0x03 + "V";
+        document.getElementById("tensao").innerHTML = tensao_0x03 + "V";
+        document.getElementById("corrente").innerHTML = corrente_0x03 + "A";
         var ctx = document.getElementById('myChart').getContext('2d');
         var chart = new Chart(ctx, {
         type: 'line',
@@ -1101,6 +1182,9 @@ function newGraph(){
             }]
         },
         options: {
+            animation: {
+                duration: 0
+            },
             title: {
                 display: true,
                 text: 'Tensão'
@@ -1110,8 +1194,8 @@ function newGraph(){
     }
     if(x=="C4" && y=="C3"){
         document.getElementById("fp").innerHTML = fator_de_potencia_0x04;
-        document.getElementById("tensao").innerHTML = tensao_0x04 + "A";
-        document.getElementById("corrente").innerHTML = corrente_0x04 + "V";
+        document.getElementById("tensao").innerHTML = tensao_0x04 + "V";
+        document.getElementById("corrente").innerHTML = corrente_0x04 + "A";
         var ctx = document.getElementById('myChart').getContext('2d');
         var chart = new Chart(ctx, {
         type: 'line',
@@ -1127,6 +1211,9 @@ function newGraph(){
             }]
         },
         options: {
+            animation: {
+                duration: 0
+            },
             title: {
                 display: true,
                 text: 'Tensão'
@@ -1136,8 +1223,8 @@ function newGraph(){
     }
     if(x=="C5" && y=="C3"){
         document.getElementById("fp").innerHTML = fator_de_potencia_0x05;
-        document.getElementById("tensao").innerHTML = tensao_0x05 + "A";
-        document.getElementById("corrente").innerHTML = corrente_0x05 + "V";
+        document.getElementById("tensao").innerHTML = tensao_0x05 + "V";
+        document.getElementById("corrente").innerHTML = corrente_0x05 + "A";
         var ctx = document.getElementById('myChart').getContext('2d');
         var chart = new Chart(ctx, {
         type: 'line',
@@ -1153,6 +1240,9 @@ function newGraph(){
             }]
         },
         options: {
+            animation: {
+                duration: 0
+            },
             title: {
                 display: true,
                 text: 'Tensão'
@@ -1162,8 +1252,8 @@ function newGraph(){
     }
     if(x=="C6" && y=="C3"){
         document.getElementById("fp").innerHTML = fator_de_potencia_0x06;
-        document.getElementById("tensao").innerHTML = tensao_0x06 + "A";
-        document.getElementById("corrente").innerHTML = corrente_0x06 + "V";
+        document.getElementById("tensao").innerHTML = tensao_0x06 + "V";
+        document.getElementById("corrente").innerHTML = corrente_0x06 + "A";
         var ctx = document.getElementById('myChart').getContext('2d');
         var chart = new Chart(ctx, {
         type: 'line',
@@ -1179,6 +1269,9 @@ function newGraph(){
             }]
         },
         options: {
+            animation: {
+                duration: 0
+            },
             title: {
                 display: true,
                 text: 'Tensão'
@@ -1188,8 +1281,8 @@ function newGraph(){
     }
     if(x=="C7" && y=="C3"){
         document.getElementById("fp").innerHTML = fator_de_potencia_0x07;
-        document.getElementById("tensao").innerHTML = tensao_0x07 + "A";
-        document.getElementById("corrente").innerHTML = corrente_0x07 + "V";
+        document.getElementById("tensao").innerHTML = tensao_0x07 + "V";
+        document.getElementById("corrente").innerHTML = corrente_0x07 + "A";
         var ctx = document.getElementById('myChart').getContext('2d');
         var chart = new Chart(ctx, {
         type: 'line',
@@ -1205,6 +1298,9 @@ function newGraph(){
             }]
         },
         options: {
+            animation: {
+                duration: 0
+            },
             title: {
                 display: true,
                 text: 'Tensão'
@@ -1214,8 +1310,8 @@ function newGraph(){
     }
     if(x=="C8" && y=="C3"){
         document.getElementById("fp").innerHTML = fator_de_potencia_0x08;
-        document.getElementById("tensao").innerHTML = tensao_0x08 + "A";
-        document.getElementById("corrente").innerHTML = corrente_0x08 + "V";
+        document.getElementById("tensao").innerHTML = tensao_0x08 + "V";
+        document.getElementById("corrente").innerHTML = corrente_0x08 + "A";
         var ctx = document.getElementById('myChart').getContext('2d');
         var chart = new Chart(ctx, {
         type: 'line',
@@ -1231,6 +1327,9 @@ function newGraph(){
             }]
         },
         options: {
+            animation: {
+                duration: 0
+            },
             title: {
                 display: true,
                 text: 'Tensão'
@@ -1240,8 +1339,8 @@ function newGraph(){
     }
     if(x=="C9" && y=="C3"){
         document.getElementById("fp").innerHTML = fator_de_potencia_0x09;
-        document.getElementById("tensao").innerHTML = tensao_0x09 + "A";
-        document.getElementById("corrente").innerHTML = corrente_0x09 + "V";
+        document.getElementById("tensao").innerHTML = tensao_0x09 + "V";
+        document.getElementById("corrente").innerHTML = corrente_0x09 + "A";
         var ctx = document.getElementById('myChart').getContext('2d');
         var chart = new Chart(ctx, {
         type: 'line',
@@ -1257,6 +1356,9 @@ function newGraph(){
             }]
         },
         options: {
+            animation: {
+                duration: 0
+            },
             title: {
                 display: true,
                 text: 'Tensão'
@@ -1266,8 +1368,8 @@ function newGraph(){
     }      
     if(x=="C10" && y=="C3"){
         document.getElementById("fp").innerHTML = fator_de_potencia_0x0A;
-        document.getElementById("tensao").innerHTML = tensao_0x0A + "A";
-        document.getElementById("corrente").innerHTML = corrente_0x0A + "V";
+        document.getElementById("tensao").innerHTML = tensao_0x0A + "V";
+        document.getElementById("corrente").innerHTML = corrente_0x0A + "A";
         var ctx = document.getElementById('myChart').getContext('2d');
         var chart = new Chart(ctx, {
         type: 'line',
@@ -1283,6 +1385,9 @@ function newGraph(){
             }]
         },
         options: {
+            animation: {
+                duration: 0
+            },
             title: {
                 display: true,
                 text: 'Tensão'
