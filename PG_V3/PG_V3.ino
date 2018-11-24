@@ -95,8 +95,8 @@ float supplyVoltaget;
 float Irmst;
 
 //    SENSORES   //
-const int SensorCorrente_1 = A0;
-const int SensorTensao_1 = A1;
+const int SensorCorrente_1 = A8;
+const int SensorTensao_1 = A9;
 
 //    ENDEREÇO DISPOSITIVOS    //
 int arduino_01 = 0x01;
@@ -152,10 +152,21 @@ void totais(){
   if (Irms8 >= 0.030) { quo++; }
   if (Irms9 >= 0.030) { quo++; }
   if (Irms10 >= 0.030) { quo++; }
-  
-  realPowert = (realPower1 + realPower2 + realPower3 + realPower4 + realPower5 + realPower6 + realPower7 + realPower8 + realPower9 + realPower10)/quo;
+  Serial.println(quo);
+  Serial.println(realPower1);
+  Serial.println(realPower2);
+  Serial.println(realPower3);
+  Serial.println(realPower4);
+  Serial.println(realPower5);
+  Serial.println(realPower6);
+  Serial.println(realPower7);
+  Serial.println(realPower8);
+  Serial.println(realPower9);
+  Serial.println(realPower10);
+  realPowert = (realPower1 + realPower2 + realPower3 + realPower4 + realPower5 + realPower6 + realPower7 + realPower8 + realPower9 + realPower10);
+  Serial.println(realPowert);
   apparentPowert = (apparentPower1 + apparentPower2 + apparentPower3 + apparentPower4 + apparentPower5 + apparentPower6 + apparentPower7 + apparentPower8 + apparentPower9 + apparentPower10);
-  powerFActort = (powerFActor1 + powerFActor2 + powerFActor3 + powerFActor4 + powerFActor5 + powerFActor6 + powerFActor7 + powerFActor8 + powerFActor9 + powerFActor10)/quo;
+  powerFActort = (powerFActor1 + powerFActor2 + powerFActor3 + powerFActor4 + powerFActor5 + powerFActor6 + powerFActor7 + powerFActor8 + powerFActor9 + powerFActor10)/10;
   supplyVoltaget = (supplyVoltage1 + supplyVoltage2 + supplyVoltage3 + supplyVoltage4 + supplyVoltage5 + supplyVoltage6 + supplyVoltage7 + supplyVoltage8 + supplyVoltage9 + supplyVoltage10)/10;
   Irmst = (Irms1 + Irms2 + Irms3 + Irms4 + Irms5 + Irms6 + Irms7 + Irms8 + Irms9 + Irms10);
 }
@@ -163,7 +174,7 @@ void totais(){
 //    MENSURAR AS GRANDEZAS    //
 void medir(){
   emon1.calcVI(20,2000);
-
+  //emon1.serialprint();
    //    MEDIDOR 01    //
   realPower1       = emon1.realPower;        
   apparentPower1   = emon1.apparentPower;    
@@ -209,13 +220,13 @@ void subString_para_float(int alterna){
       Irms2 = dados_arduino_0X01_01.substring(ind4 + 1, ind5).toFloat();
 
       ind1 = dados_arduino_0X01_02.indexOf(",");
-      realPower3 += dados_arduino_0X01_02.substring(0, ind1).toFloat();
+      realPower3 = dados_arduino_0X01_02.substring(0, ind1).toFloat();
       
       if(antigo_realPower3 == 0){
         antigo_realPower3 = realPower3;
       } else {
         realPower3 += antigo_realPower3;
-        realPower3 /= 3;
+        realPower3 /= 2;
         antigo_realPower3 = realPower3;
       }
       ind2 = dados_arduino_0X01_02.indexOf(",", ind1 + 1);
@@ -228,12 +239,12 @@ void subString_para_float(int alterna){
       Irms3 = dados_arduino_0X01_02.substring(ind4 + 1, ind5).toFloat();
 
       ind1 = dados_arduino_0X01_03.indexOf(",");
-      realPower4 += dados_arduino_0X01_03.substring(0, ind1).toFloat();
+      realPower4 = dados_arduino_0X01_03.substring(0, ind1).toFloat();
       if(antigo_realPower4 == 0){
         antigo_realPower4 = realPower4;
       } else {
         realPower4 += antigo_realPower4;
-        realPower4 /= 4;
+        realPower4 /= 2;
         antigo_realPower4 = realPower4;
       }
       ind2 = dados_arduino_0X01_03.indexOf(",", ind1 + 1);
@@ -250,12 +261,12 @@ void subString_para_float(int alterna){
     case 2:
 
       ind1 = dados_arduino_0X02_01.indexOf(",");
-      realPower5 += dados_arduino_0X02_01.substring(0, ind1).toFloat();
+      realPower5 = dados_arduino_0X02_01.substring(0, ind1).toFloat();
       if(antigo_realPower5 == 0){
         antigo_realPower5 = realPower5;
       } else {
         realPower5 += antigo_realPower5;
-        realPower5 /= 5;
+        realPower5 /= 2;
         antigo_realPower5 = realPower5;
       }
       ind2 = dados_arduino_0X02_01.indexOf(",", ind1 + 1);
@@ -268,12 +279,12 @@ void subString_para_float(int alterna){
       Irms5 = dados_arduino_0X02_01.substring(ind4 + 1, ind5).toFloat();
 
       ind1 = dados_arduino_0X02_02.indexOf(",");
-      realPower6 += dados_arduino_0X02_02.substring(0, ind1).toFloat();
+      realPower6 = dados_arduino_0X02_02.substring(0, ind1).toFloat();
       if(antigo_realPower6 == 0){
         antigo_realPower6 = realPower6;
       } else {
         realPower6 += antigo_realPower6;
-        realPower6 /= 6;
+        realPower6 /= 2;
         antigo_realPower6 = realPower6;
       }
       ind2 = dados_arduino_0X02_02.indexOf(",", ind1 + 1);
@@ -286,12 +297,12 @@ void subString_para_float(int alterna){
       Irms6 = dados_arduino_0X02_02.substring(ind4 + 1, ind5).toFloat();
 
       ind1 = dados_arduino_0X02_03.indexOf(",");
-      realPower7 += dados_arduino_0X02_03.substring(0, ind1).toFloat();
+      realPower7 = dados_arduino_0X02_03.substring(0, ind1).toFloat();
       if(antigo_realPower7 == 0){
         antigo_realPower7 = realPower7;
       } else {
         realPower7 += antigo_realPower7;
-        realPower7 /= 7;
+        realPower7 /= 2;
         antigo_realPower7 = realPower7;
       }
       ind2 = dados_arduino_0X02_03.indexOf(",", ind1 + 1);
@@ -308,12 +319,12 @@ void subString_para_float(int alterna){
     case 3:
 
       ind1 = dados_arduino_0X03_01.indexOf(",");
-      realPower8 += dados_arduino_0X03_01.substring(0, ind1).toFloat();
+      realPower8 = dados_arduino_0X03_01.substring(0, ind1).toFloat();
       if(antigo_realPower8 == 0){
         antigo_realPower8 = realPower8;
       } else {
         realPower8 += antigo_realPower8;
-        realPower8 /= 8;
+        realPower8 /= 2;
         antigo_realPower8 = realPower8;
       }
       ind2 = dados_arduino_0X03_01.indexOf(",", ind1 + 1);
@@ -326,12 +337,12 @@ void subString_para_float(int alterna){
       Irms8 = dados_arduino_0X03_01.substring(ind4 + 1, ind5).toFloat();
 
       ind1 = dados_arduino_0X03_02.indexOf(",");
-      realPower9 += dados_arduino_0X03_02.substring(0, ind1).toFloat();
+      realPower9 = dados_arduino_0X03_02.substring(0, ind1).toFloat();
       if(antigo_realPower9 == 0){
         antigo_realPower9 = realPower9;
       } else {
         realPower9 += antigo_realPower9;
-        realPower9 /= 9;
+        realPower9 /= 2;
         antigo_realPower9 = realPower9;
       }
       ind2 = dados_arduino_0X03_02.indexOf(",", ind1 + 1);
@@ -344,12 +355,12 @@ void subString_para_float(int alterna){
       Irms9 = dados_arduino_0X03_02.substring(ind4 + 1, ind5).toFloat();
 
       ind1 = dados_arduino_0X03_03.indexOf(",");
-      realPower10 += dados_arduino_0X03_03.substring(0, ind1).toFloat();
+      realPower10 = dados_arduino_0X03_03.substring(0, ind1).toFloat();
       if(antigo_realPower10 == 0){
         antigo_realPower10 = realPower10;
       } else {
         realPower10 += antigo_realPower10;
-        realPower10 /= 10;
+        realPower10 /= 2;
         antigo_realPower10 = realPower10;
       }
       ind2 = dados_arduino_0X03_03.indexOf(",", ind1 + 1);
@@ -391,7 +402,8 @@ void recebe_dados(){
   dados = "";
   dados_arduino_0X03_03 = recebe_escravo_3(arduino_03);
   dados = "";
-  
+  //Serial.println(dados_arduino_0X03_03);
+  Serial.println();  
 }
 
 //    LIMPAR MENSAGENS    //
@@ -546,7 +558,7 @@ String recebe_escravo_3(int endereco){
 
 // MAC address from Ethernet shield sticker under board
 byte mac[] = { 0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED };
-IPAddress ip(192, 168, 15, 115); // IP address, may need to change depending on network
+IPAddress ip(192, 168, 42, 115); // IP address, may need to change depending on network
 EthernetServer server(80);  // create a server at port 80
 
 void exec_ethernet(){
@@ -719,8 +731,8 @@ void exec_ethernet(){
 void setup() {
   
   //    PINOS ANALÓGICOS    //
-  pinMode(A0,INPUT);
-  pinMode(A1,INPUT);
+  pinMode(A8,INPUT);
+  pinMode(A9,INPUT);
   
   //    BIBLIOTECAS   //
   Wire.begin();  
@@ -729,7 +741,7 @@ void setup() {
   server.begin();           // start to listen for clients
 
   //    MEDIDORES   //
-  emon1.current(SensorCorrente_1,0.98); // (PINO,GANHO/CALIBRAÇÃO)
+  emon1.current(SensorCorrente_1,1.135); // (PINO,GANHO/CALIBRAÇÃO)
   emon1.voltage(SensorTensao_1,475,1.7); // (PINO,GANHO/CALIBRAÇÃO, PHASE SHIFT)
 }
 
@@ -750,6 +762,7 @@ void loop() {
   subString_para_float(2);
   subString_para_float(3);
   totais();
+  Serial.println("");
   //    REINICIAR AS MENSAGENS    //
   limpar_string();
 }

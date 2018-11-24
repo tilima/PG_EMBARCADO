@@ -99,7 +99,8 @@ void medir(){
   emon1.calcVI(20,2000);
   emon2.calcVI(20,2000);
   emon3.calcVI(20,2000);
-
+  emon3.serialprint();
+  Serial.println("");
   //    MEDIDOR 01    //
   realPower1       = emon1.realPower;        
   apparentPower1   = emon1.apparentPower;    
@@ -249,11 +250,11 @@ void setup() {
   Serial.begin(9600);
 
 //   INICIALIZA OS SENSORES   //
-  emon1.current(SensorCorrente_1,0.98); // (PINO,GANHO/CALIBRAÇÃO)
+  emon1.current(SensorCorrente_1,1.17); // (PINO,GANHO/CALIBRAÇÃO)
   emon1.voltage(SensorTensao_1,475,1.7); // (PINO,GANHO/CALIBRAÇÃO, PHASE SHIFT)
-  emon2.current(SensorCorrente_2,0.98); // (PINO,GANHO/CALIBRAÇÃO)
+  emon2.current(SensorCorrente_2,1.16); // (PINO,GANHO/CALIBRAÇÃO)
   emon2.voltage(SensorTensao_2,475,1.7); // (PINO,GANHO/CALIBRAÇÃO, PHASE SHIFT)
-  emon3.current(SensorCorrente_3,0.98); // (PINO,GANHO/CALIBRAÇÃO)
+  emon3.current(SensorCorrente_3,1.22); // (PINO,GANHO/CALIBRAÇÃO)
   emon3.voltage(SensorTensao_3,475,1.7); // (PINO,GANHO/CALIBRAÇÃO, PHASE SHIFT)
 }
 
