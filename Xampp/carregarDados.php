@@ -8,8 +8,9 @@ if (mysqli_connect_errno()){
     echo "Failed to connect to MySQL: " . mysqli_connect_error();
 }
 
-$sql = "SELECT * FROM leituras WHERE id >= (SELECT MAX(id) FROM leituras) - 300 ORDER BY ID";
+$sql = "SELECT * FROM leituras WHERE id >= (SELECT MAX(id) FROM leituras) - 150 GROUP BY data_leitura ORDER BY ID";
 $sql2 = "SELECT MAX(data_leitura),HOUR(data_leitura),potencia_ativa FROM leituras WHERE ID GROUP BY HOUR(data_leitura) ORDER BY ID LIMIT 24";
+//SELECT MAX(data_leitura),HOUR(data_leitura),potencia_ativa FROM leituras WHERE ID AND DATE(data_leitura) = CURRENT_DATE GROUP BY HOUR(data_leitura) ORDER BY ID LIMIT 24
 
 $resp = $con->query($sql);
 $resp2 = $con->query($sql2);

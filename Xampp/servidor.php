@@ -9,13 +9,13 @@
     <script src="./js.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
 </head>
-<body>
+<body onload="grafico()">
         <div class="chart-container" style="width: 85%">
                 <canvas id="myChart"></canvas>
             </div>
         <table>
                 <tr>
-                    <td><select id="carga" onchange="newGraph()">
+                    <td><select id="carga" onchange="seletor()">
                         <option value="Total">Total</option>
                         <option value="C1">Carga 1</option>
                         <option value="C2">Carga 2</option>
@@ -28,15 +28,25 @@
                         <option value="C9">Carga 9</option>
                         <option value="C10">Carga 10</option>
                         </select></td>
-                    <td><select id="informacao" onchange="newGraph()">
+                    <td><select id="informacao" onchange="seletor()">
                         <option value="C1">Consumo</option>
                         <option value="C2">Corrente</option>
                         <option value="C3">Tensão</option>
                         </select></td>
+                    <td id="monomial"></td>
+                    <td id="branca"></td>
+                    <td id="posto"></td>
                 </tr>
             </table>
-            <p>Fator de Potência: <span id="fp"></span></p>
-            <p>Tensão: <span id="tensao"></span></p>
-            <p>Corrente: <span id="corrente"></p>    
+            <table>
+                <tr>
+                    <td id="texto_fp"></td>
+                    <td id="fp"></td>
+                    <td id="texto_tensao"></td>
+                    <td id="tensao"></td>
+                    <td id="texto_corrente"></td>
+                    <td id="corrente"></td>
+                </tr>
+            </table>    
 </body>
 </html>
