@@ -113,6 +113,38 @@
             "total": {
                 "Potência Ativa": "realPowert"
             }
+        },
+        "estado": {
+            "carga_1": {
+                digitalRead(Rele_1);
+            },
+            "carga_2": {
+                digitalRead(Rele_2);
+            },
+            "carga_3": {
+                digitalRead(Rele_3);
+            },
+            "carga_4": {
+                digitalRead(Rele_4);
+            },
+            "carga_5": {
+                digitalRead(Rele_5);
+            },
+            "carga_6": {
+                digitalRead(Rele_6);
+            },
+            "carga_7": {
+                digitalRead(Rele_7);
+            },
+            "carga_8": {
+                digitalRead(Rele_8);
+            },
+            "carga_9": {
+                digitalRead(Rele_9);
+            },
+            "carga_10": {
+                digitalRead(Rele_10);
+            }
         }
     }
 }

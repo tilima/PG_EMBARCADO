@@ -250,11 +250,11 @@ void setup() {
   Serial.begin(9600);
 
 //   INICIALIZA OS SENSORES   //
-  emon1.current(SensorCorrente_1,1.17); // (PINO,GANHO/CALIBRAÇÃO)
+  emon1.current(SensorCorrente_1,1.03); // (PINO,GANHO/CALIBRAÇÃO)
   emon1.voltage(SensorTensao_1,475,1.7); // (PINO,GANHO/CALIBRAÇÃO, PHASE SHIFT)
-  emon2.current(SensorCorrente_2,1.16); // (PINO,GANHO/CALIBRAÇÃO)
+  emon2.current(SensorCorrente_2,1.03); // (PINO,GANHO/CALIBRAÇÃO)
   emon2.voltage(SensorTensao_2,475,1.7); // (PINO,GANHO/CALIBRAÇÃO, PHASE SHIFT)
-  emon3.current(SensorCorrente_3,1.22); // (PINO,GANHO/CALIBRAÇÃO)
+  emon3.current(SensorCorrente_3,1.04); // (PINO,GANHO/CALIBRAÇÃO)
   emon3.voltage(SensorTensao_3,475,1.7); // (PINO,GANHO/CALIBRAÇÃO, PHASE SHIFT)
 }
 

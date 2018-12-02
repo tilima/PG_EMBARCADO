@@ -48,5 +48,99 @@
                     <td id="corrente"></td>
                 </tr>
             </table>    
+			<table>
+                <tr>
+                <td>
+                    Carga 1
+                    <div class="btn-group">
+                    <button type="button" class="btn btn-default botaoEnvia" id="00011">Liga</button>
+                    <button type="button" class="btn btn-default botaoEnvia" id="00010">Desliga</button>
+                    </div>
+                    <span id="resultLUZ1"></span>
+                    <br/>
+                </td>
+                <td>
+                    Carga 2
+                    <div class="btn-group">
+                    <button type="button" class="btn btn-default botaoEnvia" id="00101">Liga</button>
+                    <button type="button" class="btn btn-default botaoEnvia" id="00100">Desliga</button>
+                    </div>
+                    <span id="resultLUZ2"></span>
+                    <br/>
+                </td>
+                <td>
+                    Carga 3
+                    <div class="btn-group">
+                    <button type="button" class="btn btn-default botaoEnvia" id="00111">Liga</button>
+                    <button type="button" class="btn btn-default botaoEnvia" id="00110">Desliga</button>
+                    </div>
+                    <span id="resultLUZ3"></span>
+                    <br/>
+                </td>
+                <td>
+                    Carga 4
+                    <div class="btn-group">
+                    <button type="button" class="btn btn-default botaoEnvia" id="01001">Liga</button>
+                    <button type="button" class="btn btn-default botaoEnvia" id="01000">Desliga</button>
+                    </div>
+                    <span id="resultLUZ4"></span>
+                    <br/>
+                </td>
+                <td>
+                    Carga 5
+                    <div class="btn-group">
+                    <button type="button" class="btn btn-default botaoEnvia" id="01011">Liga</button>
+                    <button type="button" class="btn btn-default botaoEnvia" id="01010">Desliga</button>
+                    </div>
+                    <span id="resultLUZ5"></span>
+                    <br/>
+                </td>
+                <td>
+                    Carga 6
+                    <div class="btn-group">
+                    <button type="button" class="btn btn-default botaoEnvia" id="01101">Liga</button>
+                    <button type="button" class="btn btn-default botaoEnvia" id="01100">Desliga</button>
+                    </div>
+                    <span id="resultLUZ6"></span>
+                    <br/>
+                </td>
+                <td>
+                    Carga 7
+                    <div class="btn-group">
+                    <button type="button" class="btn btn-default botaoEnvia" id="01111">Liga</button>
+                    <button type="button" class="btn btn-default botaoEnvia" id="01110">Desliga</button>
+                    </div>
+                    <span id="resultLUZ7"></span>
+                    <br/>
+                </td>
+                <td>
+                    Carga 8
+                    <div class="btn-group">
+                    <button type="button" class="btn btn-default botaoEnvia" id="10001">Liga</button>
+                    <button type="button" class="btn btn-default botaoEnvia" id="10000">Desliga</button>
+                    </div>
+                    <span id="resultLUZ8"></span>
+                    <br/>
+                </td>
+                <td>
+                    Carga 9
+                    <div class="btn-group">
+                    <button type="button" class="btn btn-default botaoEnvia" id="10011">Liga</button>
+                    <button type="button" class="btn btn-default botaoEnvia" id="10010">Desliga</button>
+                    </div>
+                    <span id="resultLUZ9"></span>
+                    <br/>
+                </td>
+                <td>
+                    Carga 10
+                    <div class="btn-group">
+                    <button type="button" class="btn btn-default botaoEnvia" id="10101">Liga</button>
+                    <button type="button" class="btn btn-default botaoEnvia" id="10100">Desliga</button>
+                    </div>
+                    <span id="resultLUZ10"></span>
+                    <br/>
+                </td>
+                </tr>
+			</table>	
 </body>
 </html>

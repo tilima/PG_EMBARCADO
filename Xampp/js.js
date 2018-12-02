@@ -129,6 +129,95 @@ var t;
 var url = 'http://192.168.42.115'; //'http://192.168.15.115';
 var init = 0;
 
+//////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////
+
+$(document).ready(function(){
+	$('.botaoEnvia').click(function(){
+        var valor = $(this).attr('id');
+        enviaDados(valor);
+    });
+	
+	function enviaDados(dado){		
+    	$.ajax({
+		    url: url,
+		    data: { 'acao': dado},
+		    dataType: 'jsonp',
+		    crossDomain: true,
+		    jsonp: false,
+		    jsonpCallback: 'dados',
+		    success: function(data,status,xhr) {
+				// posso ler dados e retoranar na pagina para avisar se a luz ta ligada ou desligada.
+				$('#resultLUZ1').text(statusReturn(data.dados_arduino.estado.carga_1)); 
+				$('#resultLUZ2').text(statusReturn(data.dados_arduino.estado.carga_2)); 
+				$('#resultLUZ3').text(statusReturn(data.dados_arduino.estado.carga_3)); 
+				$('#resultLUZ4').text(statusReturn(data.dados_arduino.estado.carga_4)); 
+				$('#resultLUZ5').text(statusReturn(data.dados_arduino.estado.carga_5)); 
+				$('#resultLUZ6').text(statusReturn(data.dados_arduino.estado.carga_6)); 
+				$('#resultLUZ7').text(statusReturn(data.dados_arduino.estado.carga_7)); 
+				$('#resultLUZ8').text(statusReturn(data.dados_arduino.estado.carga_8)); 
+				$('#resultLUZ9').text(statusReturn(data.dados_arduino.estado.carga_9)); 
+				$('#resultLUZ10').text(statusReturn(data.dados_arduino.estado.carga_10));
+		    }
+		  });
+        return false;
+    }
+    function statusReturn (valor) {
+    	if(valor == 0) {
+    		return "Ligada";
+    	}
+    	else if(valor == 1) {
+    		return "Desligada";
+    	}
+    	 else { return "Desconhecido";}
+    }
+    var i = 0;
+	function fazerRequisicao(){
+        if(init == 0){ 
+            carregarInfosDoBanco();
+            console.log("FUNCIONA");
+            init++;
+        } else {
+            $.ajax({
+                url: url,
+                data: { '': ''}, // usaremos em proximas versões
+                dataType: 'jsonp', // IMPORTANTE
+                crossDomain: true, // IMPORTANTE
+                jsonp: false,
+                jsonpCallback: 'dados', // IMPORTANTE
+                success: function(data,status,xhr) {
+                dadosDeEnvio = data;
+                var atualizaBanco = $.ajax({
+                        url: "salvarDados.php",
+                        type: "POST",
+                        data: { data: dadosDeEnvio }, // usaremos em proximas versões
+                        dataType: 'text', // IMPORTANTE
+                        crossDomain: true, // IMPORTANTE
+                        success: function(data,status,xhr) {
+                        carregarInfosAtualDoBanco();  
+                        }
+                    });
+                    atualizaBanco.error(function() { alert("Something went wrong"); });
+                }
+            });
+            return false;
+        }
+    }
+    // A cada 1000 milis (1 segundo), faça uma nova requisição.
+    setInterval(fazerRequisicao, 5000);
+  	// Acredito que 3000 (3 segundos) ou mais seja o ideal para um serviço online.
+  	// Caso use local host, arrisco colocar ate 400 milis, você tera uma boa resposta. 
+});
+//////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////
+
+/*
 function fazerRequisicao(){
     if(init == 0){ 
         carregarInfosDoBanco();
@@ -160,7 +249,7 @@ function fazerRequisicao(){
         return false;
     }
 }
-
+*/
 function carregarInfosDoBanco(){
     var carregarBanco = $.ajax({
         url: "carregarDados.php",
@@ -526,8 +615,20 @@ function soma(a,b){
 }
 
 function atualiza_grafico(leitura){
-
-    dado_potencia_ativa_0x01.pop();
+    var ind = parseInt(leitura[2],10);
+    dado_potencia_ativa_0x01[ind] = leitura[0].medidor_1.Potencia_Ativa;
+    dado_potencia_ativa_0x02[ind] = leitura[0].medidor_2.Potencia_Ativa;
+    dado_potencia_ativa_0x03[ind] = leitura[0].medidor_3.Potencia_Ativa;
+    dado_potencia_ativa_0x04[ind] = leitura[0].medidor_4.Potencia_Ativa;
+    dado_potencia_ativa_0x05[ind] = leitura[0].medidor_5.Potencia_Ativa;
+    dado_potencia_ativa_0x06[ind] = leitura[0].medidor_6.Potencia_Ativa;
+    dado_potencia_ativa_0x07[ind] = leitura[0].medidor_7.Potencia_Ativa;
+    dado_potencia_ativa_0x08[ind] = leitura[0].medidor_8.Potencia_Ativa;
+    dado_potencia_ativa_0x09[ind] = leitura[0].medidor_9.Potencia_Ativa;
+    dado_potencia_ativa_0x0A[ind] = leitura[0].medidor_A.Potencia_Ativa;
+    dado_potencia_ativa_0x0B[ind] = leitura[0].total.Potencia_Ativa;
+    
+    /*dado_potencia_ativa_0x01.pop();
     dado_potencia_ativa_0x01.push(leitura[0].medidor_1.Potencia_Ativa)
     dado_potencia_ativa_0x02.pop();
     dado_potencia_ativa_0x02.push(leitura[0].medidor_2.Potencia_Ativa)
@@ -548,9 +649,9 @@ function atualiza_grafico(leitura){
     dado_potencia_ativa_0x0A.pop();
     dado_potencia_ativa_0x0A.push(leitura[0].medidor_10.Potencia_Ativa)
     dado_potencia_ativa_0x0B.pop();
-    dado_potencia_ativa_0x0B.push(leitura[0].total.Potencia_Ativa)
+    dado_potencia_ativa_0x0B.push(leitura[0].total.Potencia_Ativa)*/
     
-    tempo_pot[23] = leitura[2];
+    /*tempo_pot[23] = leitura[2];
     if(dado_tempo_pot[23]!=tempo_pot[23]){
         dado_tempo_pot.shift();
         dado_tempo_pot.push(tempo_pot[23]);
@@ -558,7 +659,8 @@ function atualiza_grafico(leitura){
         dado_tempo_pot.pop();
         dado_tempo_pot.push(tempo_pot[23]);
     }
-
+    */
+   
     dado_tempo.shift();
     dado_tempo.push(leitura[1]);
 
@@ -1189,4 +1291,4 @@ function grafico(){
         });
 }
 
-setInterval(function() { fazerRequisicao() }, 5000);
+//setInterval(function() { fazerRequisicao() }, 5000);

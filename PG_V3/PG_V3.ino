@@ -94,6 +94,19 @@ float powerFActort;
 float supplyVoltaget;             
 float Irmst;
 
+//    RELÉS    //
+
+const int rele_1 = 30;
+const int rele_2 = 31;
+const int rele_3 = 32;
+const int rele_4 = 33;
+const int rele_5 = 34;
+const int rele_6 = 35;
+const int rele_7 = 36;
+const int rele_8 = 37;
+const int rele_9 = 38;
+const int rele_10 = 39;
+
 //    SENSORES   //
 const int SensorCorrente_1 = A8;
 const int SensorTensao_1 = A9;
@@ -152,19 +165,7 @@ void totais(){
   if (Irms8 >= 0.030) { quo++; }
   if (Irms9 >= 0.030) { quo++; }
   if (Irms10 >= 0.030) { quo++; }
-  Serial.println(quo);
-  Serial.println(realPower1);
-  Serial.println(realPower2);
-  Serial.println(realPower3);
-  Serial.println(realPower4);
-  Serial.println(realPower5);
-  Serial.println(realPower6);
-  Serial.println(realPower7);
-  Serial.println(realPower8);
-  Serial.println(realPower9);
-  Serial.println(realPower10);
   realPowert = (realPower1 + realPower2 + realPower3 + realPower4 + realPower5 + realPower6 + realPower7 + realPower8 + realPower9 + realPower10);
-  Serial.println(realPowert);
   apparentPowert = (apparentPower1 + apparentPower2 + apparentPower3 + apparentPower4 + apparentPower5 + apparentPower6 + apparentPower7 + apparentPower8 + apparentPower9 + apparentPower10);
   powerFActort = (powerFActor1 + powerFActor2 + powerFActor3 + powerFActor4 + powerFActor5 + powerFActor6 + powerFActor7 + powerFActor8 + powerFActor9 + powerFActor10)/10;
   supplyVoltaget = (supplyVoltage1 + supplyVoltage2 + supplyVoltage3 + supplyVoltage4 + supplyVoltage5 + supplyVoltage6 + supplyVoltage7 + supplyVoltage8 + supplyVoltage9 + supplyVoltage10)/10;
@@ -402,9 +403,7 @@ void recebe_dados(){
   dados = "";
   dados_arduino_0X03_03 = recebe_escravo_3(arduino_03);
   dados = "";
-  //Serial.println(dados_arduino_0X03_03);
-  Serial.println();  
-}
+  }
 
 //    LIMPAR MENSAGENS    //
 void limpar_string(){
@@ -582,6 +581,49 @@ void exec_ethernet(){
           client.println("Access-Control-Allow-Origin: *");
           client.println();          
 
+          int iniciofrente = linha.indexOf("?");
+                
+          if(iniciofrente>-1){     //verifica se o comando veio
+            iniciofrente     = iniciofrente+6; //pega o caractere seguinte
+            int fimfrente    = iniciofrente+5; //esse comando espero 3 caracteres
+            //Serial.println(iniciofrente);
+            //Serial.println(fimfrente);
+            String acao    = linha.substring(iniciofrente,fimfrente);//recupero o valor do comando
+            //Serial.println(acao);
+ 
+            if      ( acao == "00011"){ digitalWrite(rele_1, LOW); } 
+            else if ( acao == "00010"){ digitalWrite(rele_1, HIGH);}
+
+            else if ( acao == "00101"){ digitalWrite(rele_2, LOW); }
+            else if ( acao == "00100"){ digitalWrite(rele_2, HIGH); } 
+            
+            else if ( acao == "00111"){ digitalWrite(rele_3, LOW); }
+            else if ( acao == "00110"){ digitalWrite(rele_3, HIGH); } 
+            
+            else if ( acao == "01001"){ digitalWrite(rele_4, LOW); }
+            else if ( acao == "01000"){ digitalWrite(rele_4, HIGH); } 
+            
+            else if ( acao == "01011"){ digitalWrite(rele_5, LOW); }
+            else if ( acao == "01010"){ digitalWrite(rele_5, HIGH); } 
+            
+            else if ( acao == "01101"){ digitalWrite(rele_6, LOW); }
+            else if ( acao == "01100"){ digitalWrite(rele_6, HIGH); } 
+            
+            else if ( acao == "01111"){ digitalWrite(rele_7, LOW); }
+            else if ( acao == "01110"){ digitalWrite(rele_7, HIGH); } 
+            
+            else if ( acao == "10001"){ digitalWrite(rele_8, LOW); }
+            else if ( acao == "10000"){ digitalWrite(rele_8, HIGH); } 
+            
+            else if ( acao == "10011"){ digitalWrite(rele_9, LOW); }
+            else if ( acao == "10010"){ digitalWrite(rele_9, HIGH); } 
+            
+            else if ( acao == "10101"){ digitalWrite(rele_10, LOW); }
+            else if ( acao == "10100"){ digitalWrite(rele_10, HIGH); }
+            
+            else {}
+          }
+          //{Status: {Carga_1: digitalRead(rele_1); }}
           client.print("dados({ dados_arduino: { medidores: { medidor_1 : { Potencia_Ativa : ");
           client.print(realPower1);
           client.print(", Potencia_Aparente : ");
@@ -714,7 +756,27 @@ void exec_ethernet(){
           client.print(realPower10);
           client.print("}, total : { Potencia_Ativa :");
           client.print(realPowert);
-          client.print("}}}})");
+          client.print("}},estado : { carga_1 : ");
+          client.print(digitalRead(rele_1));
+          client.print(", carga_2 : ");
+          client.print(digitalRead(rele_2));
+          client.print(", carga_3 : ");
+          client.print(digitalRead(rele_3));
+          client.print(", carga_4 : ");
+          client.print(digitalRead(rele_4));
+          client.print(", carga_5 : ");
+          client.print(digitalRead(rele_5));
+          client.print(", carga_6 : ");
+          client.print(digitalRead(rele_6));
+          client.print(", carga_7 : ");
+          client.print(digitalRead(rele_7));
+          client.print(", carga_8 : ");
+          client.print(digitalRead(rele_8));
+          client.print(", carga_9 : ");
+          client.print(digitalRead(rele_9));
+          client.print(", carga_10 : ");
+          client.print(digitalRead(rele_10));
+          client.print("}}})");
            
         break;
         }
@@ -731,8 +793,28 @@ void exec_ethernet(){
 void setup() {
   
   //    PINOS ANALÓGICOS    //
+  pinMode(rele_1,OUTPUT);
+  pinMode(rele_2,OUTPUT);
+  pinMode(rele_3,OUTPUT);
+  pinMode(rele_4,OUTPUT);
+  pinMode(rele_5,OUTPUT);
+  pinMode(rele_6,OUTPUT);
+  pinMode(rele_7,OUTPUT);
+  pinMode(rele_8,OUTPUT);
+  pinMode(rele_9,OUTPUT);
+  pinMode(rele_10,OUTPUT);
   pinMode(A8,INPUT);
   pinMode(A9,INPUT);
+  digitalWrite(rele_1,HIGH);
+  digitalWrite(rele_2,HIGH);
+  digitalWrite(rele_3,HIGH);
+  digitalWrite(rele_4,HIGH);
+  digitalWrite(rele_5,HIGH);
+  digitalWrite(rele_6,HIGH);
+  digitalWrite(rele_7,HIGH);
+  digitalWrite(rele_8,HIGH);
+  digitalWrite(rele_9,HIGH);
+  digitalWrite(rele_10,HIGH);
   
   //    BIBLIOTECAS   //
   Wire.begin();  
@@ -741,7 +823,7 @@ void setup() {
   server.begin();           // start to listen for clients
 
   //    MEDIDORES   //
-  emon1.current(SensorCorrente_1,1.135); // (PINO,GANHO/CALIBRAÇÃO)
+  emon1.current(SensorCorrente_1,0.998); // (PINO,GANHO/CALIBRAÇÃO)
   emon1.voltage(SensorTensao_1,475,1.7); // (PINO,GANHO/CALIBRAÇÃO, PHASE SHIFT)
 }
 
@@ -762,7 +844,15 @@ void loop() {
   subString_para_float(2);
   subString_para_float(3);
   totais();
-  Serial.println("");
+  //Serial.print("V10:");
+  //Serial.println(supplyVoltage10);
+  //Serial.print("PAp:");
+  //Serial.println(apparentPower1);
+  //Serial.print("Potencia10:");
+  Serial.println(realPowert);
+  //Serial.print("FP:");
+  //Serial.println(powerFActor1);
+  
   //    REINICIAR AS MENSAGENS    //
   limpar_string();
 }
